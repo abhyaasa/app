@@ -1,0 +1,19 @@
+<ion-view>
+    <ion-content padding="true" class="has-header">
+        <div class="list">
+            <ion-radio ng-repeat="item in options" ng-show="item.show" ng-value="item.value" ng-model="selection" ng-change="selected(item)">
+                {{ item.text }}
+            </ion-radio>
+        </div>
+        <div class="warning" ng-hide="hideWarning">
+            <p>
+                Resetting a deck, which cannot be reversed, erases all record of the deck's usage.
+            </p>
+        </div>
+        <div class="button-bar" ng-hide="hideConfirm">
+            <button class="button button-stable button-block" ng-click="confirmed()">
+                Confirm
+            </button>
+        </div>
+    </ion-content>
+</ion-view>

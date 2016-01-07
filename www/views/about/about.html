@@ -1,0 +1,30 @@
+<ion-view>
+    <ion-content padding="true" class="has-header major-text">
+        <div>
+           <h2>{{ config.name }}</h2>
+            <p>
+                <strong>Version:</strong> {{ config.version }}
+            </p>
+            <p><strong>For comments or assistance</strong> contact
+                <a href="mailto:{{ config.email }}">{{ config.email }}</a>.
+            </p>
+            <p>
+                <strong>Donations</strong> are welcome at
+                <a href="http://www.sgsdattadeepam.org"> SGS Datta Deepam</a>.
+            </p>
+            <div class="minor-text">
+                <p>
+                    This app is under development. Interested developers please see
+                    <a href="{{ config.href }}">{{ config.href }}</a>.
+                </p>
+                <div class="fine-print">
+                    <p>Code Copyright &copy; 2015 Christopher Haynes,
+                        <a href="http://opensource.org/licenses/MIT">MIT License</a>.
+                    </p>
+
+                    <p>Card database Copyright &copy; 2015 SGS Datta Deepam, Inc.</p>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

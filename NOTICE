@@ -1,0 +1,22 @@
+Code distributed with this project is Copyright (c) 2015 Christopher
+T. Haynes under the MIT License, see LICENSE file, unless ownership by
+another licensor of code in a directory or file is indicated by a different
+directory LICENSE file or another licensor's copyright notice at the
+beginning of a file.
+
+This project's databases, in data subdirectories, are licensed separately
+as indicated by license statements at the head of a database file or LICENSE
+files in a data directory.
+
+Development started with the Ionic framework, v1.0.0-beta.14, with fragments
+taken from its start apps, Copyright 2014 Drifty Co., http://drifty.com/.
+
+Fragments of code were also adopted under terms of their licenses from:
+
+- https://github.com/kerrishotts/PhoneGap-HotShot-3-x-Code-Bundle,
+  copyright by Kerri Shotts
+
+- PhoneGap Desktop App 0.1.1 for Mac,
+  https://github.com/phonegap/phonegap-app-desktop/releases/download/0.1.1/\
+  PhoneGap-Desktop-Beta-0.1.1-mac.zip, copyright 2012-2014 by Adobe Systems
+  Incorporated under the Apache Software Foundation License, Version 2.0.

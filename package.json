@@ -1,0 +1,53 @@
+{
+  "name": "Abhyaasa",
+  "version": "0.0.1",
+  "description": "Flash card app for SGS Datta Deepam and personal use",
+  "dependencies": {
+    "gulp": "^3.5.6",
+    "gulp-sass": "^0.7.1",
+    "gulp-concat": "^2.2.0",
+    "gulp-minify-css": "^0.3.0",
+    "gulp-rename": "^1.2.0"
+  },
+  "devDependencies": {
+    "angular-jsdoc": "^1.1.5",
+    "angular-marked": "0.0.18",
+    "bower": "^1.3.3",
+    "canonical-path": "0.0.2",
+    "dgeni": "^0.4.1",
+    "dgeni-packages": "^0.10.19",
+    "gulp-help": "^1.6.1",
+    "gulp-inject": "^1.5.0",
+    "gulp-karma": "0.0.4",
+    "gulp-ngdocs": "^0.2.13",
+    "gulp-tsc": "^1.1.4",
+    "gulp-util": "^2.2.14",
+    "jasmine-core": "^2.3.4",
+    "jsdoc": "^3.3.2",
+    "karma": "^0.13.3",
+    "karma-chrome-launcher": "^0.2.0",
+    "karma-jasmine": "^0.3.6",
+    "karma-requirejs": "^0.2.2",
+    "requirejs": "^2.1.20",
+    "scsslint": "0.0.3",
+    "shelljs": "^0.3.0"
+  },
+  "author": "Christopher T. Haynes <vasudeva.chaynes@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "email": "vasudeva.chaynes@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vasudeva-chaynes/Abhyaasa"
+  },
+  "cordovaPlugins": [
+    "cordova-plugin-console",
+    "cordova-plugin-device",
+    "ionic-plugin-keyboard",
+    "cordova-plugin-splashscreen",
+    "cordova-plugin-media",
+    "cordova-plugin-file",
+    "uk.co.whiteoctober.cordova.appversion"
+  ]
+}

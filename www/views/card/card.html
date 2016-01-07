@@ -1,0 +1,65 @@
+<ion-view>
+  <x>on-swipe-left="next()" does not work in
+    <ion-content...>
+  </x>
+  <ion-content id="content" padding="true" class="has-header">
+    <div ng-hide="Card.question">
+      First please select a deck in the library.
+    </div>
+    <div ng-show="Card.question">
+      <p ng-bind-html="Card.text | unsafe"></p>
+      <div ng-switch="Card.question.type">
+        <div ng-switch-when="multiple-choice">
+          <div ng-show="Card.question.matchingEnd">
+            is best associated with
+          </div>
+          <ion-list>
+            <ion-item ng-repeat="item in Card.responseItems" ng-class="item.style" ng-click="response({{ $index }})">
+              {{ item.text }}
+            </ion-item>
+          </ion-list>
+          <button ng-hide="done" class="button button-stable button-block" ng-if="Card.isMA"
+          ng-click="maDone()">
+            Done
+          </button>
+        </div>
+        <div ng-switch-when="mind">
+          <button ng-hide="done" class="button button-stable button-block" ng-click="showAnswer()">
+            Show answer
+          </button>
+
+          <div ng-show="Card.isInput && !done " class="list">
+            <form ng-submit="submitAnswer(Card.submittedAnswer)" name="inputForm">
+              <div class="item item-input-inset">
+                <label class="item-input-wrapper">
+                  <input type="text" placeholder="Enter answer" ng-model="Card.submittedAnswer" required>
+                  </input>
+                </label>
+                <button class="button button-small" ng-disabled="inputForm.$invalid">
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <div ng-show="Deck.data.activeCardIndex" ng-class="Card.answerClass">
+            <p ng-show="done" ng-bind-html="Card.answer | unsafe"></p>
+            <div ng-hide="Card.isInput" class="button-bar">
+              <button class="button button-stable button-block" ng-click="setOutcome('right')">
+                Right
+              </button>
+              <button class="button button-stable button-block" ng-click="setOutcome('wrong')">
+                Wrong
+              </button>
+            </div>
+          </div>
+        </div>
+        <div ng-switch-when="text" ng-init="isText()"></div>
+      </div>
+      <div ng-show="Card.hint">{{ Card.hint }}</div>
+      <button ng-show="Card.haveHint" class="button button-stable button-block" ng-click="hint()">
+        Give me a hint
+      </button>
+    </div>
+  </ion-content>
+</ion-view>

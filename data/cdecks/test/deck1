@@ -1,0 +1,41 @@
+;.iast,.tr;pranava =om
+;.html;<strong>bold html markup</strong>
+;.md;markdown *emphasis* **bold** =**bold answer**
+;.matching
+;;a =1
+;;b =2
+;;c =3
+;;d =4
+;;e =5
+;;f =6
+;/.matching
+;.text;Some text: not a question
+;foo
+;bar;true/false is true =t
+;.text;Some more text with two outcomes?
+;;qtext =a /b
+;;some longer text for a multiple choice question with lots of answers to see if it confuses things a lot or not
+/a
+/b
+/c
+=d
+/e
+/f
+/g
+/h
+/i
+/j
+;.ma;multiple answers on this one =a =b /c
+;a,1;qt
+;;q with
+?    hint \?questionmark
+;/foo
+;;mq
+/a
+=b
+;c;mcq
+;;mind =answer a \= b
+;.lineseq;
+one
+two
+three

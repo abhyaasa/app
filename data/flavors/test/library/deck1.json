@@ -1,0 +1,299 @@
+[
+ {
+  "answer": false, 
+  "id": 0, 
+  "tags": [], 
+  "text": [
+   "\u015braddh\u0101v\u0101~lla", 
+   "\u0936\u094d\u0930\u0926\u094d\u0927\u093e\u0935\u093e\u0901\u0932\u094d\u0932"
+  ], 
+  "type": "true-false"
+ }, 
+ {
+  "answer": "Cs", 
+  "id": 1, 
+  "tags": [
+   ".cs"
+  ], 
+  "text": "case sensitive", 
+  "type": "mind"
+ }, 
+ {
+  "answer": "Ci", 
+  "id": 2, 
+  "tags": [
+   ".ci"
+  ], 
+  "text": "case insensitive", 
+  "type": "mind"
+ }, 
+ {
+  "id": 3, 
+  "tags": [
+   ".html"
+  ], 
+  "text": "<p>image <img alt=\"Buddy\" src=\"data/flavor/media/deck1/buddyShelter.jpg\" title=\"Buddy at shelter\" /></p>", 
+  "type": "mind"
+ }, 
+ {
+  "answer": [
+   "om", 
+   "\u0950"
+  ], 
+  "id": 4, 
+  "tags": [], 
+  "text": "pranava", 
+  "type": "mind"
+ }, 
+ {
+  "id": 5, 
+  "tags": [
+   ".html"
+  ], 
+  "text": "<strong>bold html markup</strong>", 
+  "type": "mind"
+ }, 
+ {
+  "answer": "<p><strong>bold answer</strong></p>", 
+  "id": 6, 
+  "tags": [
+   ".html"
+  ], 
+  "text": "<p>markdown <span class=\"em\">emphasis</span> <strong>bold</strong></p>", 
+  "type": "mind"
+ }, 
+ {
+  "answer": "1", 
+  "id": 7, 
+  "matchingBegin": 7, 
+  "matchingEnd": 12, 
+  "tags": [], 
+  "text": "a", 
+  "type": "matching"
+ }, 
+ {
+  "answer": "2", 
+  "id": 8, 
+  "matchingBegin": 7, 
+  "matchingEnd": 12, 
+  "tags": [], 
+  "text": "b", 
+  "type": "matching"
+ }, 
+ {
+  "answer": "3", 
+  "id": 9, 
+  "matchingBegin": 7, 
+  "matchingEnd": 12, 
+  "tags": [], 
+  "text": "c", 
+  "type": "matching"
+ }, 
+ {
+  "answer": "4", 
+  "id": 10, 
+  "matchingBegin": 7, 
+  "matchingEnd": 12, 
+  "tags": [], 
+  "text": "d", 
+  "type": "matching"
+ }, 
+ {
+  "answer": "5", 
+  "id": 11, 
+  "matchingBegin": 7, 
+  "matchingEnd": 12, 
+  "tags": [], 
+  "text": "e", 
+  "type": "matching"
+ }, 
+ {
+  "answer": "6", 
+  "id": 12, 
+  "matchingBegin": 7, 
+  "matchingEnd": 12, 
+  "tags": [], 
+  "text": "f", 
+  "type": "matching"
+ }, 
+ {
+  "id": 13, 
+  "tags": [], 
+  "text": "Some text: not a question", 
+  "type": "text"
+ }, 
+ {
+  "answer": true, 
+  "id": 14, 
+  "tags": [
+   "foo", 
+   "bar"
+  ], 
+  "text": "true/false is true", 
+  "type": "true-false"
+ }, 
+ {
+  "id": 15, 
+  "tags": [
+   "foo"
+  ], 
+  "text": "Some more text with two outcomes?", 
+  "type": "text"
+ }, 
+ {
+  "id": 16, 
+  "responses": [
+   [
+    true, 
+    "a"
+   ], 
+   [
+    false, 
+    "b"
+   ]
+  ], 
+  "tags": [
+   "foo"
+  ], 
+  "text": "qtext", 
+  "type": "multiple-choice"
+ }, 
+ {
+  "id": 17, 
+  "responses": [
+   [
+    false, 
+    "a"
+   ], 
+   [
+    false, 
+    "b"
+   ], 
+   [
+    false, 
+    "c"
+   ], 
+   [
+    true, 
+    "d"
+   ], 
+   [
+    false, 
+    "e"
+   ], 
+   [
+    false, 
+    "f"
+   ], 
+   [
+    false, 
+    "g"
+   ], 
+   [
+    false, 
+    "h"
+   ], 
+   [
+    false, 
+    "i"
+   ], 
+   [
+    false, 
+    "j"
+   ]
+  ], 
+  "tags": [
+   "foo"
+  ], 
+  "text": "some longer text for a multiple choice question with lots of answers to see if it confuses things a lot or not", 
+  "type": "multiple-choice"
+ }, 
+ {
+  "id": 18, 
+  "responses": [
+   [
+    true, 
+    "a"
+   ], 
+   [
+    true, 
+    "b"
+   ], 
+   [
+    false, 
+    "c"
+   ]
+  ], 
+  "tags": [
+   "foo", 
+   ".ma"
+  ], 
+  "text": "multiple answers on this one", 
+  "type": "multiple-choice"
+ }, 
+ {
+  "id": 19, 
+  "number": 1.0, 
+  "tags": [
+   "a", 
+   "foo"
+  ], 
+  "text": "qt", 
+  "type": "mind"
+ }, 
+ {
+  "hints": [
+   "hint ?questionmark"
+  ], 
+  "id": 20, 
+  "tags": [
+   "foo"
+  ], 
+  "text": "q with", 
+  "type": "mind"
+ }, 
+ {
+  "id": 21, 
+  "responses": [
+   [
+    false, 
+    "a"
+   ], 
+   [
+    true, 
+    "b"
+   ]
+  ], 
+  "tags": [], 
+  "text": "mq", 
+  "type": "multiple-choice"
+ }, 
+ {
+  "id": 22, 
+  "tags": [
+   "c"
+  ], 
+  "text": "mcq", 
+  "type": "mind"
+ }, 
+ {
+  "answer": "answer a = b", 
+  "id": 23, 
+  "tags": [], 
+  "text": "mind", 
+  "type": "mind"
+ }, 
+ {
+  "id": 24, 
+  "tags": [], 
+  "text": "one", 
+  "type": "mind"
+ }, 
+ {
+  "answer": "three", 
+  "id": 25, 
+  "tags": [], 
+  "text": "two", 
+  "type": ""
+ }
+]

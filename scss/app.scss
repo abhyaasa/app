@@ -1,0 +1,44 @@
+// app scss other than variables
+
+.no-response {
+  background-color: $no-color; }
+
+.right-response {
+  background-color: $right-color; }
+
+.wrong-response {
+  background-color: $wrong-color; }
+
+.missed-response {
+  background-color: $missed-color; }
+
+.selected-match {
+  background-color: $selected-color; }
+
+.answer {
+  background-color: $answer-color; }
+
+.major-text {
+  font-size: 120%; }
+
+.minor-text {
+  font-size: 90%; }
+
+.fine-print {
+  font-size: 80%; }
+
+.warning {
+  color: $warning-color; }
+
+.deck-table {
+  margin: auto;
+  width: 90%; }
+
+.em { // needed, since <em> and <i> are not recognized
+  font-style: italic; }
+
+td {
+  padding-left: 10px;
+  padding-right: 5px; }
+
+tr td:nth-child(odd) { font-weight: bold; }

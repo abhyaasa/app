@@ -1,0 +1,23 @@
+<ion-tabs class="tabs-icon-top tabs-positive" ng-class="{'tabs-item-hide': hideTabs}">
+
+    <ion-tab title="Intro" ui-sref="tabs.intro" hidden="true">
+        <ion-nav-view name="intro-tab"></ion-nav-view>
+    </ion-tab>
+
+<ion-tab title="Library" icon="ion-navicon" ui-sref="tabs.library" hidden="{{ config.hideLibrary }}">
+        <ion-nav-view name="library-tab"></ion-nav-view>
+    </ion-tab>
+
+    <ion-tab title="Deck" icon="ion-ios-albums" ui-sref="tabs.deck">
+        <ion-nav-view name="deck-tab"></ion-nav-view>
+    </ion-tab>
+
+    <ion-tab title="Card" icon="ion-university" ui-sref="tabs.card">
+        <ion-nav-view name="card-tab"></ion-nav-view>
+    </ion-tab>
+
+    <ion-tab title="Settings" icon="ion-gear-a" ui-sref="tabs.settings">
+        <ion-nav-view name="settings-tab"></ion-nav-view>
+    </ion-tab>
+
+</ion-tabs>

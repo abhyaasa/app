@@ -1,0 +1,71 @@
+<ion-view>
+  <ion-content padding="true" class="has-header">
+    <div ng-hide="Deck.data">
+      First please select a deck in the library.
+    </div>
+    <div ng-show="Deck.data">
+      <h2 align="center">{{ Deck.data.name.display }}</h2>
+      <div class="deck-table" align="center">
+        <x>REVIEW scss better for alignment</x>
+        <table>
+          <tr>
+            <td>Right</td>
+            <td>{{ getCount('right') }}</td>
+            <td>Wrong</td>
+            <td>{{ getCount('wrong') }}</td>
+            <td>Skipped</td>
+            <td>{{ getCount('skipped') }}</td>
+          </tr>
+          <tr>
+            <td>Removed</td>
+            <td>{{ getCount('removed') }}</td>
+            <td>Hints</td>
+            <td>{{ getCount('hints') }}</td>
+            <td>Remaining</td>
+            <td>{{ getCount('remaining') }}</td>
+          </tr>
+        </table>
+      </div>
+      <ion-list>
+        <ion-toggle toggle-class="toggle-positive" ng-model="Deck.reverseQandA">
+          Reverse Q &amp; A
+        </ion-toggle>
+      </ion-list>
+      <ion-list ng-show="Deck.data.activeCardIndex">
+        <ion-item ng-click="Deck.restart(false)">
+          Restart
+        </ion-item>
+        <ion-item ng-show="Deck.count['removed']" ng-click="Deck.restart(true)">
+          Restore removed cards and restart
+        </ion-item>
+      </ion-list>
+      <x> TODO implemement question filtering
+        <ion-list>
+          <ion-item class="range range-positive">Max
+            <input type="range" value="50" min="0" max="100">
+          </ion-item>
+          <ion-item class="range range-positive">Min
+            <input type="range" value="50" min="0" max="100">
+          </ion-item>
+          <ion-item>Tag 1</ion-item>
+          <ion-item>Tag 2</ion-item>
+          <label class="item item-select">
+            <span class="input-label">And</span>
+            <select></select>
+          </label>
+          <label class="item item-select">
+            <span class="input-label">And_not</span>
+            <select></select>
+          </label>
+          <label class="item item-select">
+            <span class="input-label">Or</span>
+            <select></select>
+          </label>
+        </ion-list>
+        <div class="button-bar">
+          <button class="button button-stable button-block">Done</button>
+        </div>
+      </x>
+    </div>
+  </ion-content>
+</ion-view>
