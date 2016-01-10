@@ -4,8 +4,8 @@
 
 var cmdAliases = {
     cd: 'cd data/cdecks/test; update.sh deck1',
-    ct: 'cd tools; cdeck.py -t -m "prefix"',
-    up: 'tools/upload.sh',
+    ct: 'cd scripts; cdeck.py -t -m "prefix"',
+    up: 'scripts/upload.sh',
     si: 'gulp is -i',
     bi: 'gulp; ionic build ios',
     ei: 'gulp; ionic emulate ios --livereload --consolelogs --serverlogs',
@@ -239,7 +239,7 @@ gulp.task('itest', 'Integration (e-e) tests', function () {
     // TODO itest not working
     var cwd = process.cwd(),
         mkCmd = function (cmd) {
-            return 'tools/term.sh "cd ' + cwd + ';' + cmd + '"';
+            return 'scripts/term.sh "cd ' + cwd + ';' + cmd + '"';
         };
     sh.exec(mkCmd('ionic serve -c -t ios ' + ionicBrowser));
     sh.exec('sleep 10');

@@ -11,7 +11,6 @@ A partial list of additional todo items follows, in approximately chronological 
 - devanagari q, transliteration a
 - deck state copy, rename, reorder, etc
 - ionic 1.2 <label -> <ion-label
-- vasudeva-chaynes/Abhyaasa and vasudeva-chaynes/Svadhaya fix
 - add sound directive
 - show scrollbar when full text not visible
 - deck filtering to subtab

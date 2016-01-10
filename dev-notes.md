@@ -11,9 +11,9 @@ This app is early in development, with plenty to do. See
 
 - `todo.md` file
 - tags listed in `.todo` througout source files
-- GitHub [Issues](https://github.com/vasudeva-chaynes/Abhyaasa/issues) list
+- GitHub [Issues](https://github.com/abhyaasa/app/issues) list
 
-## Environment
+## Tools
 
 REVIEW document setup for development environment
 
@@ -27,7 +27,7 @@ Development tools
 - `cordova`: cross-platform app framework
 - `gulp`: development task manager
 - `node`: development Javascript interpreter
-- `python`: preferred language for stand-alone development tools
+- `python`: preferred language for stand-alone development scripts
 - `bower`: app package manager
 - `karma`: test runner
 - `protractor`: integration text manager
@@ -96,7 +96,7 @@ angular-mocks		ionic
 
 These lists may be a bit out of date, but they indicate most of the modules in use.
 
-### atom editor
+### Atom editor
 
 Atom plugins are indicated by the following list
 ```
@@ -117,6 +117,10 @@ csslint			linter-coffeescript	xml-formatter
 `config.cson` links to `~/.atom/config.cson` for version control.
 
 The atom config files, including those of the plugins, indicates preferred coding and formatting styles.
+
+### Ionic view
+
+[Ionic view](http://view.ionic.io) supports allows convenient iOS and Android testing and sharing of development versions. Each developer used their own account.
 
 ## Config
 
@@ -150,7 +154,7 @@ For each `FLAVOR` there is a `data/flavors/FLAVOR` directory with `library`, `me
 
 `./resources` link points to `data/flavors/<current flavor>/resources/` to keep the `ionic resources` command happy so it can transform splash and icon image files.
 
-## Tools
+## Scripts
 
 Run `gulp help` for annotated list of gulp project management tasks.
 
@@ -158,15 +162,15 @@ Run `gulp help` for annotated list of gulp project management tasks.
 
 The `g` script runs shortcuts in the gulp `cmdAliases` directory. For example, to initiate the most common debugging run, execute `g i`. This runs `gulp cmd i`, which runs `gulp is i`, which runs the default gulp test build tasks and then `ionic serve -c -t ios --browser /Applications/Google\ Chrome\ Canary.app`.
 
-Python and bash scripts are in the `tools` directory.
+Python and bash scripts are in the `scripts` directory.
 
 ### Shell scripts
 
 - `g ALIAS` is a shortcut for invoking via `gulp cmd` the script associated with `ALIAS` in the `cmdAliases` dictionary defined early in `gulpfile.js`.
-- `tools/psclean.sh` removes stray processes that may be created by ionic development. If the message "An uncaught exception occurred and has been reported to Ionic" is seen, try running this script and confirm with the `ps` output that there are no stray processes. Kill them manually if need be.
-- `tools/resources.sh` is run after icon or splash screen images in resources directory are changed.
-- `tools/term.sh` is used by `gulp itest`.
-- `tools/upload.sh` uploads the app for testing with the **ionic view** app.
+- `scripts/psclean.sh` removes stray processes that may be created by ionic development. If the message "An uncaught exception occurred and has been reported to Ionic" is seen, try running this script and confirm with the `ps` output that there are no stray processes. Kill them manually if need be.
+- `scripts/resources.sh` is run after icon or splash screen images in resources directory are changed.
+- `scripts/term.sh` is used by `gulp itest`.
+- `scripts/upload.sh` uploads the app for testing with the **ionic view** app.
 
 ### Python scripts
 
@@ -220,6 +224,6 @@ $ brew update
 
 Ionic version update: download new ionic image and replace `www/lib` with image version.
 
-Node update: http://theholmesoffice.com/node-js-fundamentals-how-to-upgrade-the-node-js-version/
+Node [update instructions]( http://theholmesoffice.com/node-js-fundamentals-how-to-upgrade-the-node-js-version/).
 
 Atom update: Preferences (Settings, cmd-,) > Updates > Update All

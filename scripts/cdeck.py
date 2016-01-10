@@ -390,7 +390,7 @@ three
 ;;b =B
 """
 
-# "gulp cmd -a cdtest" runs 'cd tools; cdeck.py -t -m "prefix"'
+# "gulp cmd -a cdtest" runs 'cd scripts; cdeck.py -t -m "prefix"'
 test = u""";.md;![Alt text](to/img.jpg "Optional title")"""
 
 if __name__ == "__main__":
