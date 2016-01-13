@@ -3,12 +3,13 @@
 angular.module('app')
 
 .controller('LibraryController', function ($rootScope, $scope, $state, $log, _, mode,
-  Library, Deck, indexPromise) {
+  Library, Deck, Card, indexPromise) {
     $scope.selectClosedDeck = function(deckName) {
         Deck.setupClosedDeck(deckName);
     };
 
     $scope.selectOpenDeck = function (displayName) {
+        Card.question = undefined;
         Deck.setupOpenDeck(displayName);
     };
 

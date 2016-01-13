@@ -8,14 +8,14 @@
     </div>
     <div ng-show="Card.question">
       <p ng-bind-html="Card.text | unsafe"></p>
-      <div ng-switch="Card.question.type">
+      <div ng-switch="Card.type">
         <div ng-switch-when="multiple-choice">
           <div ng-show="Card.question.matchingEnd">
             is best associated with
           </div>
           <ion-list>
             <ion-item ng-repeat="item in Card.responseItems" ng-class="item.style" ng-click="response({{ $index }})">
-              {{ item.text }}
+              {{ item.text | unsafe }}
             </ion-item>
           </ion-list>
           <button ng-hide="done" class="button button-stable button-block" ng-if="Card.isMA"
@@ -28,7 +28,7 @@
             Show answer
           </button>
 
-          <div ng-show="Card.isInput && !done " class="list">
+          <div ng-show="Card.isInput && !done" class="list">
             <form ng-submit="submitAnswer(Card.submittedAnswer)" name="inputForm">
               <div class="item item-input-inset">
                 <label class="item-input-wrapper">
@@ -42,8 +42,8 @@
             </form>
           </div>
 
-          <div ng-show="Deck.data.activeCardIndex" ng-class="Card.answerClass">
-            <p ng-show="done" ng-bind-html="Card.answer | unsafe"></p>
+          <div ng-show="done && Deck.data.activeCardIndex" ng-class="Card.answerClass">
+            <p ng-bind-html="Card.answer | unsafe"></p>
             <div ng-hide="Card.isInput" class="button-bar">
               <button class="button button-stable button-block" ng-click="setOutcome('right')">
                 Right

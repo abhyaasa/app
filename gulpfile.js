@@ -3,7 +3,7 @@
 // Configuration constants
 
 var cmdAliases = {
-    cd: 'cd data/cdecks/test; update.sh deck1',
+    cd: 'cd data/cdecks/test; update.sh deck_2',
     ct: 'cd scripts; cdeck.py -t -m "prefix"',
     up: 'scripts/upload.sh',
     si: 'gulp is -i',
@@ -28,7 +28,6 @@ paths.appScripts = paths.indexScripts.concat(
 var configJsonFile = 'www/data/config.json';
 
 var ionicBrowser = ' --browser /Applications/Google\\ Chrome\\ Canary.app';
-
 
 var gulp = require('gulp-help')(require('gulp'));
 var gutil = require('gulp-util');

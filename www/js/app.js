@@ -130,18 +130,6 @@ angular.module('app', ['ionic', 'services'])
             $rootScope.help = function () { $state.go('tabs.card-help'); };
         }
     })
-    .state('tabs.answer', {
-        url: '/answer',
-        views: {
-            'card-tab': {
-                templateUrl: 'views/answer/answer.html',
-                controller: 'AnswerController'
-            }
-        },
-        onEnter: function ($rootScope, $state) {
-            $rootScope.help = function () { $state.go('tabs.card-help'); };
-        }
-    })
     .state('tabs.card-help', {
         url: '/cardHelp',
         views: {

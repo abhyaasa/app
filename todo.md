@@ -7,7 +7,7 @@ A partial list of additional todo items follows, in approximately chronological 
 
 - ios device testing
 - ios ionic view
-- devanagari and transliteration
+- REVIEW sanskrit embedded in text
 - devanagari q, transliteration a
 - deck state copy, rename, reorder, etc
 - ionic 1.2 <label -> <ion-label

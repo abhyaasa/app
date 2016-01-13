@@ -6,7 +6,6 @@
 
 import sys
 import json
-from StringIO import StringIO
 import argparse
 import codecs
 import re
@@ -14,7 +13,7 @@ import re
 from trans import translate
 
 try:
-    import debug
+    # import debug
     from pdb import set_trace as breakpoint
 except:
     pass
@@ -61,8 +60,9 @@ point. A question may not have more than one numeric tag.
 
 SEMANTIC NOTES
 
-If no answer or distractors, then it is a sequence question, whose mind answer
-is the next question. Otherwise, if one or more distractors, then multiple-choice question. If one answer and no distractors, then if answer is True, False, T or F
+If there is no answer or distractor, then it must be a lineseq or transliteration
+question. If there are one or more distractors, then multiple-choice question.
+If one answer and no distractors, then if answer is True, False, T or F
 (case insensitive), then true/false question, and otherwise mind answer question.
 
 HTML (raw or from markdown) is processed by replacing <em> tags with <span class="em">
@@ -78,14 +78,16 @@ Tags interpreted by this program and removed from output:
 .text : question of "text" type, for preferatory text (not a question)
 .md : question, response, and hints text is in ascii markdown format
       (requires markdown module and associated python version, implies .html tag)
-.tr : transliterate responses
-.tq : transliterate question
-.th : transliterate hints
-.iast : IAST source for transliteration
-.itrans : ITRANS source for transliteration (default)
-.harvard-kyoto : Harvard-Kyoto source for transliteration
-.slp1 : SLP1 source for transliteration
-.velthuis : Velthuis source for transliteration
+.sa : sanskrit answer/distractor text
+.sh : sanskrit hints
+.sq : sanskrit question text
+.st : transliteration question, with sanskrit question text and no answer/distractor
+.iast : IAST source for sanskrit
+.itrans : ITRANS source for sanskrit (default)
+.harvard-kyoto : Harvard-Kyoto source for sanskrit
+.slp1 : SLP1 source for sanskrit
+.velthuis : Velthuis source for sanskrit
+.devanagari : Devanagari source for sanskrit
 .matching : only meaningful as a range tag, indicating questions in the range
     belong to a matching group.  Questions in a matching group must each have
     a single answer and no distractors. User preferences may indicate options for
@@ -99,8 +101,11 @@ Tags retained in output, for use by the app, and in the special_apptime_tags lis
 .html : text is in html format
 .ma : multiple right answer (multiple choices) question
 
-Text is in HTML format. The characters <, >, &, ', and " are automatically escaped in
-text unless the .md or .html tags are active.
+Text characters <, >, &, ', and " are automatically escaped unless the .html tag
+is active for html interpretation.
+
+A question with no answer or .st tag is assumed to be a sequence question, whose answer is
+the following question.
 
 .cs and .ci tags are mutually exclusive. An input field is presented if either is present.
 
@@ -111,7 +116,7 @@ JSON FORMAT
 
 Quiz questions json format is list of question dictionaries with keys:
 id: question order number (0-based)
-type: string = text, true-false, multiiple-choice, matching, or mind
+type: string = text, true-false, multiiple-choice, matching, transliteration, or mind
 text: text of question
 responses (absent in text, t/f, sequence and mind question types):
           list of [is_answer, response_text] pairs, where is_answer is boolean
@@ -133,6 +138,8 @@ The answer of a sequence question is automatically the text of the following que
 
 # from https://wiki.python.org/moin/EscapingHtml
 html_escape_table = {"&": "&amp;", '"': "&quot;", "'": "&apos;", ">": "&gt;", "<": "&lt;"}
+
+
 def html_escape(text):
     """Produce entities within text."""
     return "".join(html_escape_table.get(c, c) for c in text)
@@ -143,23 +150,28 @@ isnumber = number_cre.match
 from_tags = set('.iast .harvard-kyoto .itrans .velthuis .slp1 .devanagari'.split())
 special_apptime_tags = '.cs .ci .ma .html'.split()
 
+
 def istag(string):
     return filter(None, [c.isalnum() or c in '._ -' for c in string])
+
 
 def isapptime(tag):
     return not isnumber(tag) and (not tag.startswith('.') or tag in special_apptime_tags)
 
+
 def tag_filter(tags):
     return list(filter(isapptime, tags))
+
 
 def process_html(html, media_prefix):
     # markdown generates <em>, which is not interpreted by browser
     html = html.replace('<em>', '<span class="em">').replace('</em>', '</span>')
-    if media_prefix: # prefix media path to img src
+    if media_prefix:  # prefix media path to img src
         def prefixer(mo):
             return mo.group(0) + media_prefix + '/'
         html = re.sub(r'<img [^>]*src="', prefixer, html)
     return html
+
 
 def main(args):
     """Command line invocation with argparse args."""
@@ -177,7 +189,7 @@ def main(args):
         else:
             exit()
 
-    def unescape(text): # strip text, and remove \ from \= and \/ sequences
+    def unescape(text):  # strip text, and remove \ from \= and \/ sequences
         return re.sub(r'\\([=/]?)', r'\1', text.strip())
 
     def do_text(text, translit=False):
@@ -224,7 +236,6 @@ def main(args):
 
     for elt in _input[1:].split('\n;'):
         markdown_mode = False
-        devanagari = False
         elt = elt.strip()
         if not elt:
             error('bad syntax')
@@ -279,21 +290,25 @@ def main(args):
             if not question:
                 error('no question body')
             qlst = re.split(r'\s\?', question)
-            hints = [do_text(s, '.th' in qtags) for s in qlst[1:]]
+            hints = [do_text(s, '.sh' in qtags) for s in qlst[1:]]
             if hints:
                 q['hints'] = hints
             trlst = re.split(r'\s(?==)|\s(?=/)', qlst[0])
-            q['text'] = do_text(trlst[0], '.tq' in qtags)
-            responses = [(r[0] == '=', do_text(r[1:], '.tr' in qtags))
+            q['text'] = do_text(trlst[0], '.sq' in qtags or '.st' in qtags)
+            responses = [(r[0] == '=', do_text(r[1:], '.sa' in qtags))
                          for r in trlst[1:]]
             if '.text' in qtags:
                 if responses or hints:
                     error('no hints or responses in text mode')
                 q['type'] = 'text'
+            elif '.st' in qtags:
+                if responses:
+                    error('no answers or responses for transliteration question')
+                q['type'] = 'transliteration'
             elif '.lineseq' in qtags:
                 if responses or hints:
                     error('no responses or hints in .lineseq mode')
-                lines = [do_text(line, '.tq' in qtags)
+                lines = [do_text(line, '.sq' in qtags)
                          for line in q['text'].split('\n')]
                 if len(lines) < 2:
                     error('at least two lines in .lineseq mode')
@@ -302,8 +317,8 @@ def main(args):
                           'text': line,
                           'tags': tag_filter(qtags),
                           'type': 'mind'
-                         }
-                    if q.has_key('number'):
+                          }
+                    if 'number' in q:
                         aq['number'] = q['number']
                     quiz.append(aq)
                     id_num += 1
@@ -311,10 +326,11 @@ def main(args):
                 q['text'] = lines[-2]
                 q['answer'] = lines[-1]
             elif not responses:
-                q['type'] = 'mind' # sequence question
+                q['type'] = 'mind'  # sequence question
             elif len(responses) == 1:
                 response = responses[0][1]
-                if type(response) == unicode and response.lower() in ['t', 'f', 'true', 'false']:
+                if (type(response) == unicode
+                   and response.lower() in ['t', 'f', 'true', 'false']):
                     q['type'] = 'true-false'
                     q['answer'] = response.lower() in ['t', 'true']
                 else:
@@ -325,7 +341,7 @@ def main(args):
                 q['type'] = 'multiple-choice'
                 if len(filter(None, map(lambda r: r[0], responses))) != 1:
                     if '.ma' not in qtags:
-                        error('"ma" tag required if not one answer')
+                        error('".ma" tag required if not one answer')
             q['tags'] = tag_filter(qtags)
             q['id'] = id_num
             id_num += 1
@@ -334,6 +350,7 @@ def main(args):
     if '.matching' in tags:
         end_matching()
     json.dump(quiz, writer, indent=1, sort_keys=True)
+
 
 def get_args():
     formatter = argparse.RawDescriptionHelpFormatter
@@ -381,9 +398,9 @@ three
 ;;c =C
 ;/.matching
 ;.devanagari
-;.tq;श्रद्धावाँल्ल =f
+;.sq;श्रद्धावाँल्ल =f
 ;/.devanagari
-;.iast,.tr;pranava =om
+;.iast,.sa;pranava =om
 ;.md;*emphasis* =**bold**
 ;.matching
 ;;a =A
