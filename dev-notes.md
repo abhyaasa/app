@@ -35,7 +35,6 @@ Development tools
 - `protractor`: integration text manager
 - `chrome`: development test browser (`Chrome Canary` preferred)
 - `css` and `scss`: HTML style manager, and syntactically-superior development-time variant
-- `coffee`: (coming soon) cleaner development syntax for Javascript
 - `markdown`: preprocessor for simplified html markup
 - `npm`: development package manager
 - `nvm`: node and nvm version manager
@@ -43,9 +42,9 @@ Development tools
 Recommended development environment
 
 - `OSX`: e.g. Yosemite on Macbook Pro
+- `atom`: preferred for most text editing
 - `GitHub Desktop`: makes routine git operations convenient
 - `iTerm`: better terminal emulator
-- `atom`: preferred for most text editing
 
 ### Modules
 
@@ -126,9 +125,9 @@ The atom config files, including those of the plugins, indicates preferred codin
 
 ### gulp
 
-The gulp CLI command is used only in the project directory.
+Use the gulp CLI command only in the project directory.
 
-Run `gulp help` for annotated list of gulp project management tasks.
+Run `gulp help` for an annotated list of gulp project management tasks.
 
 `gulp index` generates `./www/index.html` from `./index.html`, so edit only the latter. This avoids superfluous version control changes, as script injection order is unpredictable.
 

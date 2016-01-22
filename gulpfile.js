@@ -41,6 +41,7 @@ var sh = require('shelljs');
 var _ = require('underscore');
 var bump = require('gulp-bump');
 var replace = require('gulp-replace');
+var fs = require('fs');
 // var concat = require('gulp-concat');
 
 var argv = require('minimist')(process.argv.slice(2)); // added
@@ -215,14 +216,18 @@ gulp.task('cmd', '[-a ALIAS] : Execute shell command named ALIAS in aliases dict
         }
     });
 
-gulp.task('set-version', '-v VERSION : Changes app version references to VERSION.',
+gulp.task('set-version', '-v VERSION : Change app version references to VERSION.',
     function () {
+        fs.readFile('./package.json', function (err, data) {
+            var version = JSON.parse(data).version;
+            console.log('Setting version ' + version + ' to ' + argv.v);
+        });
         gulp.src(['./bower.json', './www/data/config.json', './package.json'])
         // see https://www.npmjs.com/package/gulp-bump
         .pipe(bump({version: argv.v}))
         .pipe(gulp.dest('./'));
         gulp.src(['./config.xml'])
-        .pipe(resplace(/version=".*"/, 'version="' + argv.v + '"'))
+        .pipe(replace(/(<widget.*version=")[^"]*/, '$1' + argv.v))
         .pipe(gulp.dest('./'));
     });
 

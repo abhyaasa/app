@@ -1,6 +1,6 @@
 {
   "name": "Abhyaasa",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Flash card app for SGS Datta Deepam and personal use",
   "dependencies": {
     "gulp": "^3.5.6",
