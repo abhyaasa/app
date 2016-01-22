@@ -5,6 +5,8 @@ Notes for Developers
 
 To open discussion of collaboration possibilities, please email <abhyaasa108@gmail.com>.
 
+This project uses [semantic versioning](http://semver.org).
+
 ## Tasks
 
 This app is early in development, with plenty to do. See
@@ -20,7 +22,7 @@ REVIEW document setup for development environment
 Development tools
 
 - `git`: version control
-- `ionic`: top-level app framework
+- `ionic`: top-level app framework and CLI command
 - `AngularJS`: base app framework
 - `angular-ui-router`: improved state management
 - `underscore`: Javascript utility library
@@ -120,7 +122,17 @@ The atom config files, including those of the plugins, indicates preferred codin
 
 ### Ionic view
 
-[Ionic view](http://view.ionic.io) supports allows convenient iOS and Android testing and sharing of development versions. Each developer used their own account.
+[Ionic view](http://view.ionic.io) supports allows convenient iOS and Android testing and sharing of development versions an iOS or Android app. Each developer used their own account.
+
+### gulp
+
+The gulp CLI command is used only in the project directory.
+
+Run `gulp help` for annotated list of gulp project management tasks.
+
+`gulp index` generates `./www/index.html` from `./index.html`, so edit only the latter. This avoids superfluous version control changes, as script injection order is unpredictable.
+
+The `g` script runs shortcuts in the gulp `cmdAliases` directory. For example, to initiate the most common debugging run, execute `g i`. This runs `gulp cmd i`, which runs `gulp is i`, which runs the default gulp test build tasks and then `ionic serve -c -t ios --browser /Applications/Google\ Chrome\ Canary.app`. Run `gulp cmd` for alias list.
 
 ## Config
 
@@ -146,7 +158,7 @@ In build mode:
 
 ## Flavors and data directory structure
 
-You test and build with the current **flavor** of your choice. Change the flavor with `gulp flavor --name NAME`. The distribution comes with support for the `test` flavor, but that may not be the current flavor of distribution branches.
+You test and build with the current **flavor** of your choice. Change the flavor with `gulp flavor --name NAME`, which must be run after system download. The distribution comes with support for the `test` flavor, but that may not be the current flavor of distribution branches.
 
 For each `FLAVOR` there is a `data/flavors/FLAVOR` directory with `library`, `media`, and `resources` subdirectories. If the flavor uses cdecks, there is also a `data/cdecks/FLAVOR` directory . If a deck contains media file references, those files are in a subdirectory of the `media` directory named after the deck.
 
@@ -155,12 +167,6 @@ For each `FLAVOR` there is a `data/flavors/FLAVOR` directory with `library`, `me
 `./resources` link points to `data/flavors/<current flavor>/resources/` to keep the `ionic resources` command happy so it can transform splash and icon image files.
 
 ## Scripts
-
-Run `gulp help` for annotated list of gulp project management tasks.
-
-`gulp index` generates `./www/index.html` from `./index.html`, so edit only the latter. This avoids superfluous version control changes, as script injection order is unpredictable.
-
-The `g` script runs shortcuts in the gulp `cmdAliases` directory. For example, to initiate the most common debugging run, execute `g i`. This runs `gulp cmd i`, which runs `gulp is i`, which runs the default gulp test build tasks and then `ionic serve -c -t ios --browser /Applications/Google\ Chrome\ Canary.app`.
 
 Python and bash scripts are in the `scripts` directory.
 

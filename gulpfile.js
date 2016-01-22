@@ -7,10 +7,12 @@ var cmdAliases = {
     ct: 'cd scripts; cdeck.py -t -m "prefix"',
     up: 'scripts/upload.sh',
     si: 'gulp is -i',
-    bi: 'gulp; ionic build ios',
-    ei: 'gulp; ionic emulate ios --livereload --consolelogs --serverlogs',
-    ri: 'gulp; ionic run ios --livereload --consolelogs --serverlogs --device'
+    bi: 'gulp build',
+    ei: 'ionic emulate ios -l -c -s > tee tmp/ei.txt; egrep -i error tmp/ei.txt',
+    ri: 'ionic run ios -l -c -s --device'
 };
+// TODO tee tmp/ei.txt | egrep -i error doesn't work when emulate hangs,
+// ri needs this also
 
 var paths = {
     sass: ['./scss/**/*.scss'],
@@ -36,6 +38,9 @@ var sass = require('gulp-sass');
 var minifyCss = require('gulp-minify-css');
 var rename = require('gulp-rename');
 var sh = require('shelljs');
+var _ = require('underscore');
+var bump = require('gulp-bump');
+var replace = require('gulp-replace');
 // var concat = require('gulp-concat');
 
 var argv = require('minimist')(process.argv.slice(2)); // added
@@ -144,7 +149,8 @@ gulp.task('flavor',
             configJson.flavor = argv.name;
             fs.writeFileSync(configJsonFile, JSON.stringify(configJson, null, 2));
             sh.exec('ln -s -f data/flavors/' + argv.name + '/resources .');
-            sh.exec('ln -s -f ../../data/flavors/' + argv.name + ' www/data/flavor');
+            sh.exec('rm -f www/data/flavor');
+            sh.exec('ln -s -f `pwd`/data/flavors/' + argv.name + ' www/data/flavor');
         }
     });
 
@@ -164,6 +170,8 @@ gulp.task('build', '[-a] for Android, default iOS', ['pre-build'], function () {
 });
 
 gulp.task('pre-build', ['default'], function () {
+    sh.exec('rm -f www/data/flavor');
+    sh.exec('cp -rf data/flavors/test www/data/flavor'); // FIXME flavor specific
     // PUBLISH fill out pre-build
 });
 
@@ -193,11 +201,29 @@ gulp.task('dgeni', 'Generate jsdoc documentation.', function () {
     }
 });
 
-gulp.task('cmd', '-a ALIAS : Execute shell command named ALIAS in aliases dictionary',
+gulp.task('cmd', '[-a ALIAS] : Execute shell command named ALIAS in aliases dictionary' +
+  ', default: list aliases',
     function () {
-        var cmd = cmdAliases[argv.a];
-        console.log('cmd', cmd);
-        sh.exec(cmd);
+        if (!argv.a) {
+            _.forEach(cmdAliases, function (value, key) {
+                console.log(key, ':', value);
+            });
+        } else {
+            var cmd = cmdAliases[argv.a];
+            console.log('cmd', cmd);
+            sh.exec(cmd);
+        }
+    });
+
+gulp.task('set-version', '-v VERSION : Changes app version references to VERSION.',
+    function () {
+        gulp.src(['./bower.json', './www/data/config.json', './package.json'])
+        // see https://www.npmjs.com/package/gulp-bump
+        .pipe(bump({version: argv.v}))
+        .pipe(gulp.dest('./'));
+        gulp.src(['./config.xml'])
+        .pipe(resplace(/version=".*"/, 'version="' + argv.v + '"'))
+        .pipe(gulp.dest('./'));
     });
 
 // ------------------ Testing tasks follow -------------------------------------

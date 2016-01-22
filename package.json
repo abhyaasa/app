@@ -4,10 +4,11 @@
   "description": "Flash card app for SGS Datta Deepam and personal use",
   "dependencies": {
     "gulp": "^3.5.6",
-    "gulp-sass": "^0.7.1",
+    "gulp-bump": "^1.0.0",
     "gulp-concat": "^2.2.0",
     "gulp-minify-css": "^0.3.0",
-    "gulp-rename": "^1.2.0"
+    "gulp-rename": "^1.2.0",
+    "gulp-sass": "^0.7.1"
   },
   "devDependencies": {
     "angular-jsdoc": "^1.1.5",
@@ -20,6 +21,7 @@
     "gulp-inject": "^1.5.0",
     "gulp-karma": "0.0.4",
     "gulp-ngdocs": "^0.2.13",
+    "gulp-replace": "^0.5.4",
     "gulp-tsc": "^1.1.4",
     "gulp-util": "^2.2.14",
     "jasmine-core": "^2.3.4",
@@ -49,5 +51,9 @@
     "cordova-plugin-media",
     "cordova-plugin-file",
     "uk.co.whiteoctober.cordova.appversion"
+  ],
+  "cordovaPlatforms": [
+    "ios",
+    "android"
   ]
 }
