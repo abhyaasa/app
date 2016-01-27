@@ -221,14 +221,14 @@ gulp.task('set-version', '-v VERSION : Change app version references to VERSION.
         fs.readFile('./package.json', function (err, data) {
             var version = JSON.parse(data).version;
             console.log('Setting version ' + version + ' to ' + argv.v);
+            gulp.src(['./bower.json', './www/data/config.json', './package.json'])
+            // see https://www.npmjs.com/package/gulp-bump
+            .pipe(bump({version: argv.v}))
+            .pipe(gulp.dest('./'));
+            gulp.src(['./config.xml'])
+            .pipe(replace(/(<widget.*version=")[^"]*/, '$1' + argv.v))
+            .pipe(gulp.dest('./'));
         });
-        gulp.src(['./bower.json', './www/data/config.json', './package.json'])
-        // see https://www.npmjs.com/package/gulp-bump
-        .pipe(bump({version: argv.v}))
-        .pipe(gulp.dest('./'));
-        gulp.src(['./config.xml'])
-        .pipe(replace(/(<widget.*version=")[^"]*/, '$1' + argv.v))
-        .pipe(gulp.dest('./'));
     });
 
 // ------------------ Testing tasks follow -------------------------------------

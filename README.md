@@ -13,7 +13,7 @@ Some of the app features:
 
 - Question database entry in json or a compact custom format. The latter supports a number of options, including markdown text formatting, sequence questions (in which the answer is the next question), and tag ranges.
 
-- User choice of Devanagari or several Roman alphabet transliteration schemes for display of Sanscrit text.
+- User choice of Devanagari or several Roman alphabet transliteration schemes for display of Sanskrit text.
 
 - User selection of flash card decks from a library.
 

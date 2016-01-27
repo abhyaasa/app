@@ -50,7 +50,8 @@
     "cordova-plugin-splashscreen",
     "cordova-plugin-media",
     "cordova-plugin-file",
-    "uk.co.whiteoctober.cordova.appversion"
+    "uk.co.whiteoctober.cordova.appversion",
+    "ionic-plugin-deploy"
   ],
   "cordovaPlatforms": [
     "ios",
