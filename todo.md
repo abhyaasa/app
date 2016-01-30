@@ -5,7 +5,7 @@ There are lots of things to do. Some are recorded as Atom todo-show (ctrl-shift-
 
 A partial list of additional todo items follows, in approximately chronological and/or  decreasing priority order, with ? flagging questionable items.
 
-- ios device testing
+- ios device testing: stalls on connected device run
 - ios ionic view
 - REVIEW sanskrit embedded in text
 - devanagari q, transliteration a
@@ -17,7 +17,9 @@ A partial list of additional todo items follows, in approximately chronological 
 - fix library search
 - version in data/config.json, bower.json, package.json, and config.xml
 - splash and icon http://learn.ionicframework.com/formulas/adding-an-icon/ and  http://blog.ionic.io/automating-icons-and-splash-screens/
+- README.md OSX emulator installation instructions: http://www.macinstruct.com/node/494
 - android emulator testing
+- android emulation on Windows: genymotion or AMIDuOS? See  http://www.laptopmag.com/articles/run-android-apps-on-pc
 - android device testing
 - unit and integration tests
   - remove .atom/config.cson>"todo-show">ignoreThesePaths>...spec.js

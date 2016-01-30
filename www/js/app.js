@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app', ['ionic', 'ionic.service.core', 'services'])
+angular.module('app', ['ionic', 'services'])
 
 .run(function ($ionicPlatform, $rootScope, $state, restoreSettings, settings, mode) {
 

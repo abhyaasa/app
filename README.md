@@ -23,7 +23,7 @@ Some of the app features:
 
 Early users are invited to email support requests and suggestions to <abhyaasa108@gmail.com>. Also feel free to contribute to this app's GitHub [Issues](https://github.com/abhyaasa/app/issues) list and [Wiki](https://github.com/abhyaasa/app/wiki).
 
-## Preview
+## Preview app
 
 A limited number of users may test development releases on iOS (iPhone or iPad) and Android device using the **Ionic View** app. Visit the [Ionic View](http://view.ionic.io) site for app download.
 
@@ -31,7 +31,7 @@ Open the app and create an account. When logged in, tap the eye icon at upper le
 
 ## Developers
 
-See the `dev-notes.md` file for developer information.
+See the [`dev-notes.md`](https://github.com/abhyaasa/app/blob/master/dev-notes.md) file for developer information.
 
 ## License
 

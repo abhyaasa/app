@@ -38,13 +38,16 @@ Development tools
 - `markdown`: preprocessor for simplified html markup
 - `npm`: development package manager
 - `nvm`: node and nvm version manager
+- `xcode`: iOS app deployment and setup for device testing (only on OSX)
+- `genymotion`: Android app emulation
 
 Recommended development environment
 
-- `OSX`: e.g. Yosemite on Macbook Pro
+- `OSX`: required for iOS development
+- `brew`: Ruby-based OSX package manager
 - `atom`: preferred for most text editing
 - `GitHub Desktop`: makes routine git operations convenient
-- `iTerm`: better terminal emulator
+- `iTerm`: better OSX terminal emulator
 
 ### Modules
 
