@@ -23,15 +23,11 @@ Some of the app features:
 
 Early users are invited to email support requests and suggestions to <abhyaasa108@gmail.com>. Also feel free to contribute to this app's GitHub [Issues](https://github.com/abhyaasa/app/issues) list and [Wiki](https://github.com/abhyaasa/app/wiki).
 
-## Preview app
+## Collaboration support
 
-A limited number of users may test development releases on iOS (iPhone or iPad) and Android device using the **Ionic View** app. Visit the [Ionic View](http://view.ionic.io) site for app download.
+Information for collaborators that is not specific to developers may be found in this project's [google drive](https://drive.google.com/folderview?id=0B0YCA8SjU_Bsfm1yT0VsV1IteUcxVzFGZFM4Nkg0TUNqRFM4R0JKdk9YWFRPbDJEZE5uSkU&usp=sharing).
 
-Open the app and create an account. When logged in, tap the eye icon at upper left and enter the app id sent on request by the developer, or found in the app's `ionic.project` file. The *Abhyaasa* app may take a few minutes to download to the viewing app. When that is finished, tap on it. If a new development version has been released, select *SYNC TO LATEST* and then *CLEAR APP DATA*. Then select *VIEW APP* and begin using it.
-
-## Developers
-
-See the [`dev-notes.md`](https://github.com/abhyaasa/app/blob/master/dev-notes.md) file for developer information.
+Developers, see the [`dev-notes.md`](https://github.com/abhyaasa/app/blob/master/dev-notes.md) file.
 
 ## License
 

@@ -5,6 +5,10 @@ There are lots of things to do. Some are recorded as Atom todo-show (ctrl-shift-
 
 A partial list of additional todo items follows, in approximately chronological and/or  decreasing priority order, with ? flagging questionable items.
 
+- g si partly broken: no tab display and message
+```
+ionic $ 0     402717   error    Uncaught TypeError: Cannot read property 'get' of undefined, http://localhost:8100/lib/ionic-platform-web-client/dist/ionic.io.bundle.min.js, Line: 2
+```
 - ios device testing: launches device app and crashes
 - ios ionic view
 - REVIEW sanskrit embedded in text

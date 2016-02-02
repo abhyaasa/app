@@ -134,7 +134,7 @@ Run `gulp help` for an annotated list of gulp project management tasks.
 
 `gulp index` generates `./www/index.html` from `./index.html`, so edit only the latter. This avoids superfluous version control changes, as script injection order is unpredictable.
 
-The `g` script runs shortcuts in the gulp `cmdAliases` directory. For example, to initiate the most common debugging run, execute `g i`. This runs `gulp cmd i`, which runs `gulp is i`, which runs the default gulp test build tasks and then `ionic serve -c -t ios --browser /Applications/Google\ Chrome\ Canary.app`. Run `gulp cmd` for alias list.
+The `g` script runs shortcuts in the gulp `cmdAliases` directory. For example, to initiate the most common debugging run, execute `g si`. This runs `gulp cmd si | tee tmp/cmd.txt`, which runs `gulp is -i`, which runs the default gulp test build tasks and then `ionic serve -c -t ios --browser /Applications/Google\ Chrome\ Canary.app`, with output appearing on the console and saved in `tmp/cmd.txt`. Run `gulp cmd` for alias list.
 
 ## Config
 
@@ -206,19 +206,11 @@ OPEN_DECK_DISPLAY_NAME: decks's data dictionary
 
 ## Updating
 
-In project directory:
+### Update ruby gems used by gulp (and ionic?)
 ```
-$ npm update -g cordova ionic; ionic platform update ios; ionic platform update android
-$ bower update
-$ npm update
 $ brew update
 ```
-
-In `npm update`, unmet dependency warnings can probably be ignored. If problems, try
-
-  sudo npm uninstall -g ionic && sudo npm install ionic
-
-If `brew update` fails:
+If this fails:
 ```
 $ cd `brew --prefix`
 # can skip next if remote origin already exists
@@ -228,7 +220,32 @@ $ git reset --hard origin/master
 $ brew update
 ```
 
-Ionic version update: download new ionic image and replace `www/lib` with image version.
+### Update runtime libraries, in ./www/lib
+
+```
+$ bower update
+```
+
+### Update development libraries, in ./node_modules and globally
+
+```
+$ npm update # node_modules (development libraries)
+```
+Unmet dependency warnings can probably be ignored. If problems, try
+`sudo npm uninstall -g ionic && sudo npm install ionic`.
+
+```
+$ npm update -g cordova ionic
+```
+The last update above should be followed by platform updates:
+```
+$ ionic platform update ios; ionic platform update android
+```
+If that breaks things, remove platform directory and add platforms again.
+
+After major Ionic version update, download new ionic image and replace `www/lib` with image version.
+
+### Tool updates
 
 Node [update instructions]( http://theholmesoffice.com/node-js-fundamentals-how-to-upgrade-the-node-js-version/).
 
