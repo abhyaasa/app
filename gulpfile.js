@@ -8,7 +8,8 @@ var cmdAliases = {
     up: 'scripts/upload.sh',
     si: 'gulp is -i',
     bi: 'gulp build',
-    ei: 'ionic emulate ios -l -c -s > tee tmp/ei.txt; egrep -i error tmp/ei.txt',
+    ei: 'ionic emulate ios -l -c -s',
+    eit: 'ionic emulate ios -l -c -s > tee tmp/ei.txt; egrep -i error tmp/ei.txt',
     ri: 'ionic run ios -l -c -s --device'
 };
 // TODO tee tmp/ei.txt | egrep -i error doesn't work when emulate hangs,
@@ -211,7 +212,7 @@ gulp.task('cmd', '[-a ALIAS] : Execute shell command named ALIAS in aliases dict
             });
         } else {
             var cmd = cmdAliases[argv.a];
-            console.log('cmd', cmd);
+            console.log('exec command:', cmd);
             sh.exec(cmd);
         }
     });

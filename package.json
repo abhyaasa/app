@@ -51,7 +51,8 @@
     "cordova-plugin-media",
     "cordova-plugin-file",
     "uk.co.whiteoctober.cordova.appversion",
-    "ionic-plugin-deploy"
+    "ionic-plugin-deploy",
+    "org.apache.cordova.console"
   ],
   "cordovaPlatforms": [
     "ios",

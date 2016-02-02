@@ -46,8 +46,8 @@ Recommended development environment
 - `OSX`: required for iOS development
 - `brew`: Ruby-based OSX package manager
 - `atom`: preferred for most text editing
-- `GitHub Desktop`: makes routine git operations convenient
-- `iTerm`: better OSX terminal emulator
+- `GitHub Desktop`: makes routine git operations convenient (`SourceTree` might be preferable)
+- `iTerm`: better OSX upterminal emulator
 
 ### Modules
 
@@ -208,9 +208,7 @@ OPEN_DECK_DISPLAY_NAME: decks's data dictionary
 
 In project directory:
 ```
-$ npm update -g cordova ionic
-$ ionic platform update ios
-$ ionic platform update android
+$ npm update -g cordova ionic; ionic platform update ios; ionic platform update android
 $ bower update
 $ npm update
 $ brew update

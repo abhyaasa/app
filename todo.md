@@ -5,6 +5,7 @@ There are lots of things to do. Some are recorded as Atom todo-show (ctrl-shift-
 
 A partial list of additional todo items follows, in approximately chronological and/or  decreasing priority order, with ? flagging questionable items.
 
+- ionic.plugin-deploy build error
 - ios device testing: stalls on connected device run
 - ios ionic view
 - REVIEW sanskrit embedded in text
