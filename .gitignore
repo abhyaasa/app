@@ -9,6 +9,9 @@ plugins/
 # gulp-generated from scss/
 www/css/
 
+# gulp-generated from index.html
+www/index.html
+
 # development notes
 notes/
 
