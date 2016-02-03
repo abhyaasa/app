@@ -15,6 +15,20 @@ angular.module('services', ['ionic'])
     };
 })
 
+.directive('hideTabs', function ($rootScope) {
+    return {
+        restrict: 'A',
+        link: function ($scope) {
+            $rootScope.hideTabs = 'tabs-item-hide';
+            $scope.$on('$destroy', function () {
+                // This needed in tabs.intro onExit function, maybe not here as in this
+                // directive from http://codepen.io/toddhalfpenny/pen/bNyLYB?editors=1010
+                $rootScope.hideTabs = '';
+            });
+        }
+    };
+})
+
 .constant('mode', 'debug') // 'debug', 'build', or 'normal'
 
 .constant('_', window._) // underscore.js access
@@ -166,5 +180,4 @@ angular.module('services', ['ionic'])
     };
 
     return service;
-})
-;
+});

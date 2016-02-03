@@ -1,10 +1,10 @@
-<ion-tabs class="tabs-icon-top tabs-positive" ng-class="{'tabs-item-hide': hideTabs}">
+<ion-tabs class="tabs-icon-top tabs-positive {{$root.hideTabs}}">
 
     <ion-tab title="Intro" ui-sref="tabs.intro" hidden="true">
         <ion-nav-view name="intro-tab"></ion-nav-view>
     </ion-tab>
 
-<ion-tab title="Library" icon="ion-navicon" ui-sref="tabs.library" hidden="{{ config.hideLibrary }}">
+    <ion-tab title="Library" icon="ion-navicon" ui-sref="tabs.library" hidden="{{ config.hideLibrary }}">
         <ion-nav-view name="library-tab"></ion-nav-view>
     </ion-tab>
 
