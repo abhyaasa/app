@@ -91,7 +91,7 @@ angular.module('app')
             }
         } else {
             var rightIndex = _.findIndex(q.responses, isRight);
-            items[rightIndex].style = 'right-response';
+            items[rightIndex].style = 'right-response'; // FIXME style of undefined
             if (index !== rightIndex) {
                 items[index].style = 'wrong-response';
                 Card.outcome('wrong');

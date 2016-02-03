@@ -10,7 +10,7 @@
       <ion-toggle toggle-class="toggle-positive" ng-model="settings.randomQuestions">
         Randomize questions
       </ion-toggle>
-      <x> hint percent not implemented yet
+      <x> TODO hint percent not implemented yet
         <ion-item class="range range-positive" ng-model="settings.hintPercent">
           Hint percent
           <input type="range" value="50" min="0" max="100">
@@ -20,7 +20,7 @@
     </ion-list>
 
     <hr>
-    
+
     <ion-list>
       <div class="item item-divider">Sanskrit text</div>
       <ion-radio ng-model="settings.devanagari" ng-value="false">Transliteration</ion-radio>
@@ -28,14 +28,16 @@
       <ion-radio ng-model="settings.devanagari" ng-value="'both'">Both</ion-radio>
     </ion-list>
 
-    <x>from http://docs.ionic.io/v1.0/docs/deploy-install</x>
-    <button class="button button-primary button-block " ng-click="checkForUpdates()">
-      Check for updates
-    </button>
-    <button class="button button-stable button-block button-pulse" ng-if="hasUpdate"
-    ng-click="doUpdate()">
-      Download update
-    </button>
+    <x>TODO add ionic-platform-web-client and test update check
+      <x>from http://docs.ionic.io/v1.0/docs/deploy-install</x>
+      <button class="button button-primary button-block " ng-click="checkForUpdates()">
+        Check for updates
+      </button>
+      <button class="button button-stable button-block button-pulse" ng-if="hasUpdate"
+      ng-click="doUpdate()">
+        Download update
+      </button>
+    </x>
 
   </ion-content>
 </ion-view>

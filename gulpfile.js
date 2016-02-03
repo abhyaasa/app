@@ -150,9 +150,9 @@ gulp.task('flavor',
             var configJson = JSON.parse(fs.readFileSync(configJsonFile).toString());
             configJson.flavor = argv.name;
             fs.writeFileSync(configJsonFile, JSON.stringify(configJson, null, 2));
-            sh.exec('ln -s -f data/flavors/' + argv.name + '/resources .');
-            sh.exec('rm -f www/data/flavor');
-            sh.exec('ln -s -f `pwd`/data/flavors/' + argv.name + ' www/data/flavor');
+            sh.exec('ln -sf data/flavors/' + argv.name + '/resources .');
+            sh.exec('rm -rf www/data/flavor');
+            sh.exec('ln -sf `pwd`/data/flavors/' + argv.name + ' www/data/flavor');
         }
     });
 
