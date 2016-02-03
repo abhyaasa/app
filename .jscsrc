@@ -14,7 +14,7 @@
     "beforeAlternate": true
   },
   "requireBlocksOnNewline": 1,
-  "disallowEmptyBlocks": true,
+  "disallowEmptyBlocks": false,
   "requireCommaBeforeLineBreak": true,
   "disallowSpaceAfterPrefixUnaryOperators": ["++", "--", "+", "-", "~", "!"],
   "disallowSpaceBeforePostfixUnaryOperators": ["++", "--"],
