@@ -172,8 +172,6 @@ gulp.task('build', '[-a] for Android, default iOS', ['pre-build'], function () {
 });
 
 gulp.task('pre-build', ['default'], function () {
-    sh.exec('rm -f www/data/flavor');
-    sh.exec('cp -rf data/flavors/test www/data/flavor'); // FIXME flavor specific
     // PUBLISH fill out pre-build
 });
 
@@ -267,7 +265,7 @@ gulp.task('karma', 'Run karma in watch mode.', function () {
 });
 
 gulp.task('itest', 'Integration (e-e) tests', function () {
-    // TODO itest not working
+    // FUTURE itest not working
     var cwd = process.cwd(),
         mkCmd = function (cmd) {
             return 'scripts/term.sh "cd ' + cwd + ';' + cmd + '"';

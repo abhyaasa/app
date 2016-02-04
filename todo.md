@@ -5,9 +5,9 @@ There are lots of things to do. Some are recorded as Atom todo-show (ctrl-shift-
 
 A partial list of additional todo items follows, in approximately chronological and/or  decreasing priority order, with ? flagging questionable items.
 
-- before deck selected, card tab goes to library
-- ios device testing: launches device app and crashes
-- ios ionic view
+- FIXME g si console 404 message
+- FIXME ios device testing: launches device app and crashes
+- FIXME ionic view
 - REVIEW sanskrit embedded in text
 - devanagari q, transliteration a
 - deck state copy, rename, reorder, etc

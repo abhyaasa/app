@@ -3,14 +3,14 @@
 angular.module('app')
 
 .controller('CardController', function ($scope, $state, $log, $ionicGesture, _,
-  Deck, Card) {
+    Deck, Card) {
 
     $scope.done = false;
     $scope.Card = Card;
     $scope.Deck = Deck;
     $scope.$on('$ionicView.enter', function () {
         if (!Deck.data) { // Deck.data undefined by source auto-reload
-            $state.go('tabs.library');
+            $state.go('tabs.library'); // FIXME causes library message to be missed
         } else if (!Deck.data.activeCardIndex) {
             Card.setup(0);
         } else if (!Card.question) {
