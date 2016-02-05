@@ -259,8 +259,8 @@ angular.module('app')
 
     this.nextCard = function () {
         if (Deck.data.activeCardIndex === Deck.data.active.length - 1) {
-            Deck.data.done = true;
-            Deck.save();
+            Deck.restart(false);
+            Card.question = undefined;
             $state.go('tabs.deck');
         } else {
             Card.setup(Deck.data.activeCardIndex + 1);
@@ -280,5 +280,10 @@ angular.module('app')
             Card.setup(Deck.data.activeCardIndex - 1);
             $state.go('tabs.card');
         }
+    };
+
+    this.reset = function () {
+        Card.question = undefined;
+        Deck.reset();
     };
 });

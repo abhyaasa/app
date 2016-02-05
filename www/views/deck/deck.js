@@ -51,10 +51,9 @@ angular.module('app')
                 name: deckName,
                 history: _.map(Deck.questions, function () { return []; }),
                 filter: copy(initialFilterSettings),
-                reverse: false, // TODO reverseQandA variable connection
+                reverse: false, // FIXME reverseQandA variable connection
                 active: filter(Deck.questions), // indices of active quesitons
-                activeCardIndex: undefined, // current card active index list pointer
-                done: false
+                activeCardIndex: undefined // current card active index list pointer
             };
             Deck.data.outcomes = new Array(Deck.data.active.length);
             Deck.save();

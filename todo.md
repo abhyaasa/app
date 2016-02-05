@@ -1,7 +1,7 @@
 Things To Do
 ============
 
-There are lots of things to do. Some are recorded as Atom todo-show (ctrl-shift-T) comments. The following tags are in use, in approximately decreasing order of priority: XX-X (used without the dash to indicate temporary fixtures to be removed), FIXME, TODO, HACK, REVIEW, ANDROID, PUBLISH, FUTURE.
+There are lots of things to do. Some are recorded as Atom todo-show (ctrl-shift-T) comments. The following tags are in use, in approximately decreasing order of priority: XX-X (used without the dash to indicate temporary fixtures to be removed), FIXME, CHANGED, PRIORITY, TODO, IDEAs, HACK, NOTE, REVIEW, PUBLISH, ANDROID, FUTURE.
 
 A partial list of additional todo items follows, in approximately chronological and/or  decreasing priority order, with ? flagging questionable items.
 

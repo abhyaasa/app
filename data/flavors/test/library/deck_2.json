@@ -43,5 +43,13 @@
   ], 
   "text": "<p>image <img alt=\"Buddy\" src=\"data/flavor/media/deck_2/buddyShelter.jpg\" title=\"Buddy at shelter\" /></p>", 
   "type": "mind"
+ }, 
+ {
+  "id": 5, 
+  "tags": [
+   ".html"
+  ], 
+  "text": "<p>image <img alt=\"Buddy\" src=\"data/flavor/media/deck_2/buddyShelter550w.jpg\" title=\"Buddy 550px wide\" /></p>", 
+  "type": "mind"
  }
 ]
