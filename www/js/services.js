@@ -100,6 +100,7 @@ angular.module('services', ['ionic'])
 //   MediaSrv.loadMedia('sounds/mysound.mp3').then(function (media) {
 //    media.play();
 //   });
+// Requires cordova-plugin-media
 // Also see mawarnes version in forum thread above
 // Alternatives: https://www.npmjs.com/package/cordova-plugin-nativeaudio or
 // http://goldfirestudios.com/blog/104/howler.js-Modern-Web-Audio-Javascript-Library

@@ -46,16 +46,11 @@
   "cordovaPlugins": [
     "cordova-plugin-console",
     "cordova-plugin-device",
-    "ionic-plugin-keyboard",
-    "cordova-plugin-splashscreen",
-    "cordova-plugin-media",
     "cordova-plugin-file",
-    "uk.co.whiteoctober.cordova.appversion",
-    "ionic-plugin-deploy",
-    "org.apache.cordova.console"
+    "cordova-plugin-splashscreen",
+    "ionic-plugin-keyboard"
   ],
   "cordovaPlatforms": [
-    "ios",
-    "android"
+    "ios"
   ]
 }
