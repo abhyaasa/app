@@ -33,9 +33,6 @@ angular.module('app', ['ionic', 'services'])
 .controller('TabsController', function ($rootScope, configPromise, $log) {
     // promise is resolved: https://github.com/angular-ui/ui-router/wiki
     $rootScope.config = configPromise.data;
-    if ($rootScope.config.flavor === 'datta-deepam') {
-        // FIXME add to ion-nav-title <img src="data/flavor/media/logo-44.png"
-    }
     $log.debug('config', JSON.stringify($rootScope.config));
 })
 

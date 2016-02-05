@@ -79,19 +79,18 @@ angular.module('app')
         return response[0];
     };
     $scope.response = function (index) {
-        var q = Card.question;
         var items = Card.responseItems;
-        if (_.contains(q.tags, '.ma')) {
-            $log.debug('multiple answer', index, JSON.stringify(q.responses));
-            if (q.responses[index][0]) {
+        if (_.contains(Card.question.tags, '.ma')) {
+            $log.debug('multiple answer', index, JSON.stringify(Card.responses));
+            if (Card.responses[index][0]) {
                 items[index].style = 'right-response';
             } else {
                 items[index].style = 'wrong-response';
                 Card.numWrong += 1;
             }
         } else {
-            var rightIndex = _.findIndex(q.responses, isRight);
-            items[rightIndex].style = 'right-response'; // FIXME style of undefined
+            var rightIndex = _.findIndex(Card.responses, isRight);
+            items[rightIndex].style = 'right-response';
             if (index !== rightIndex) {
                 items[index].style = 'wrong-response';
                 Card.outcome('wrong');

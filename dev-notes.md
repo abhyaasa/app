@@ -48,6 +48,7 @@ Recommended development environment
 - `atom`: preferred for most text editing
 - `GitHub Desktop`: makes routine git operations convenient (`SourceTree` might be preferable)
 - `iTerm`: better OSX upterminal emulator
+- `inkscape`: svg to png conversion and other vector graphic editing
 
 ### Modules
 
