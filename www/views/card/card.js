@@ -10,7 +10,7 @@ angular.module('app')
     $scope.Deck = Deck;
     $scope.$on('$ionicView.enter', function () {
         if (!Deck.data) { // Deck.data undefined by source auto-reload
-            $state.go('tabs.library'); // FIXME causes library message to be missed
+            Card.question = undefined;
         } else if (!Deck.data.activeCardIndex) {
             Card.setup(0);
         } else if (!Card.question) {
