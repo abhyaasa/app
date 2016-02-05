@@ -148,7 +148,7 @@ Early in app initialization, the config object is stored stored as `$rootScope.c
 
 ## Debugging and building
 
-The `mode` constant in `util.js` may be set to `'debug'`, `'build'`, or `'normal'`.
+The `mode` constant in `services.js` may be set to `'debug'`, `'build'`, or `'normal'`.
 
 In debug mode:
 

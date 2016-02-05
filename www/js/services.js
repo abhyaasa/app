@@ -92,7 +92,7 @@ angular.module('services', ['ionic'])
     };
 }])
 
-// TODO test media service: Adapted from
+// FUTURE test media service: Adapted from
 // http://forum.ionicframework.com/t/how-to-play-local-audio-files/7479/5
 // for media plugin :
 // http://plugins.cordova.io/#/package/org.apache.cordova.media

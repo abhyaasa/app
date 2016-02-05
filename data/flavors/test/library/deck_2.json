@@ -37,6 +37,7 @@
   "type": "mind"
  }, 
  {
+  "answer": "<p>Buddy at shelter</p>", 
   "id": 4, 
   "tags": [
    ".html"
@@ -45,6 +46,7 @@
   "type": "mind"
  }, 
  {
+  "answer": "<p>Big Buddy</p>", 
   "id": 5, 
   "tags": [
    ".html"

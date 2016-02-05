@@ -16,7 +16,6 @@ angular.module('app')
 .service('Deck', function ($log, $state, $rootScope, settings, getData, Library, _,
   LocalStorage) {
     var Deck = this;
-    this.reverseQandA = false;
     this.count = undefined; // maintained by this.setCount()
 
     var setupQuestions = function (fileName) {
@@ -51,7 +50,7 @@ angular.module('app')
                 name: deckName,
                 history: _.map(Deck.questions, function () { return []; }),
                 filter: copy(initialFilterSettings),
-                reverse: false, // FIXME reverseQandA variable connection
+                reverseQandA: false, // FIXME reverseQandA variable connection
                 active: filter(Deck.questions), // indices of active quesitons
                 activeCardIndex: undefined // current card active index list pointer
             };

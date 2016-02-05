@@ -6,7 +6,7 @@ angular.module('app')
     $scope.settings = settings;
 
     // // from http://docs.ionic.io/v1.0/docs/deploy-install
-    // // TODO test deploy
+    // // FUTURE implement and test deploy
     // var deploy = new Ionic.Deploy();
     // // Update app code with new release from Ionic Deploy
     // $scope.doUpdate = function () {

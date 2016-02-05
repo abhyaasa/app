@@ -4,5 +4,5 @@
 ;.st;a
 ;.cs;case sensitive =Cs
 ;.ci;case insensitive =Ci
-;.md;image ![Buddy](buddyShelter.jpg "Buddy at shelter")
-;.md;image ![Buddy](buddyShelter550w.jpg "Buddy 550px wide")
+;.md;image ![Buddy](buddyShelter.jpg "Buddy at shelter") =Buddy at shelter
+;.md;image ![Buddy](buddyShelter550w.jpg "Buddy 550px wide") =Big Buddy

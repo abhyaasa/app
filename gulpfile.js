@@ -12,7 +12,7 @@ var cmdAliases = {
     eit: 'ionic emulate ios -l -c -s > tee tmp/ei.txt; egrep -i error tmp/ei.txt',
     ri: 'ionic run ios -l -c -s --device'
 };
-// TODO tee tmp/ei.txt | egrep -i error doesn't work when emulate hangs,
+// REVIEW tee tmp/ei.txt | egrep -i error doesn't work when emulate hangs,
 // ri needs this also
 
 var paths = {

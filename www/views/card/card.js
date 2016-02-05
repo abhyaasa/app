@@ -228,7 +228,7 @@ angular.module('app')
             Card.responseItems = _.map(Card.responses, makeItem);
             Card.numWrong = 0;
         }
-        if (Deck.reverseQandA) {
+        if (Deck.data.reverseQandA) {
             Card.haveHint = false;
             var answer = Card.text;
             if (Card.type === 'mind' && Card.question.answer) {
@@ -241,6 +241,7 @@ angular.module('app')
                 if (rightAnswers) {
                     var text = _.sample(rightAnswers)[1];
                     if (!_.contains(['True', 'False'], text)) {
+                        Card.type = 'mind';
                         Card.text = text;
                         Card.answer = answer;
                     }
