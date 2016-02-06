@@ -15,6 +15,16 @@ This app is early in development, with plenty to do. See
 - tags listed in `.todo` througout source files
 - GitHub [Issues](https://github.com/abhyaasa/app/issues) list
 
+## Repository setup
+
+Clone repository from https://github.com/abhyaasa/app/.
+
+Download `ionic`.
+
+Run `$ ionic start restore`.
+
+[FUTURE: Complete repository setup documentation]
+
 ## Tools
 
 REVIEW document setup for development environment
@@ -139,10 +149,7 @@ The `g` script runs shortcuts in the gulp `cmdAliases` directory. For example, t
 
 ## Config
 
-The `www/data/config.json` file object has the following attributes, managed as indicated:
-
-- `name`, `email`, `href`, and `version`: transferred from `config.xml` by `gulp config`
-- `flavor`: set by `gulp flavor`
+The `www/data/config.json` file object has the keys `name`, `email`, `href`, `version`, and `flavor`. The last should only be changed by `gulp flavor`.
 
 Early in app initialization, the config object is stored stored as `$rootScope.config`.
 
@@ -242,7 +249,13 @@ The last update above should be followed by platform updates:
 ```
 $ ionic platform update ios; ionic platform update android
 ```
-If that breaks things, remove platform directory and add platforms again.
+If that breaks things, remove platform directory and add platforms again. One way to do this is:
+```
+$ ionic state reset
+```
+This rebuilds plugin and platform directories using `package.json` information.
+
+### Ionic libraries
 
 After major Ionic version update, download new ionic image and replace `www/lib` with image version.
 

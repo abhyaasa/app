@@ -1,5 +1,5 @@
 {
-  "name": "Abhyaasa",
+  "name": "abhyaasa",
   "version": "0.0.2",
   "description": "Flash card app for SGS Datta Deepam and personal use",
   "dependencies": {
@@ -37,7 +37,8 @@
   "author": "Christopher T. Haynes <vasudeva.chaynes@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "email": "vasudeva.chaynes@gmail.com"
+    "email": "vasudeva.chaynes@gmail.com",
+    "url": "https://github.com/abhyaasa/app/issues"
   },
   "repository": {
     "type": "git",
@@ -46,7 +47,6 @@
   "cordovaPlugins": [
     "cordova-plugin-console",
     "cordova-plugin-device",
-    "cordova-plugin-file",
     "cordova-plugin-splashscreen",
     "ionic-plugin-keyboard"
   ],

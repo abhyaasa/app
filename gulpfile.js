@@ -48,7 +48,7 @@ var argv = require('minimist')(process.argv.slice(2)); // added
 
 // Tasks from the ionic starter
 
-gulp.task('default', ['sass', 'index', 'config']); // added index and config
+gulp.task('default', ['sass', 'index']); // added index
 
 gulp.task('sass', function (done) {
     gulp.src('./scss/ionic.app.scss')
@@ -114,27 +114,6 @@ gulp.task('index', 'Inject script and css elements into www/index.html',
                     relative: true
                 }))
             .pipe(gulp.dest('./www'));
-    });
-
-gulp.task('config',
-    'Transfer some config data from config.xml to www/data/config.json.',
-    // Adapted from https://github.com/Leonidas-from-XIV/node-xml2js
-    function () {
-        var fs = require('fs'),
-            xml2js = require('xml2js'),
-            parser = new xml2js.Parser(),
-            xmlstr = fs.readFileSync(__dirname + '/config.xml').toString(),
-            jsonFileName = __dirname + '/' + configJsonFile,
-            jsonstr = fs.readFileSync(jsonFileName).toString();
-        parser.parseString(xmlstr, function (err, xconfig) {
-            var widget = xconfig.widget,
-                config = JSON.parse(jsonstr);
-            config.version = widget.$.version;
-            config.name = widget.name[0];
-            config.email = widget.author[0].$.email;
-            config.href = widget.author[0].$.href;
-            fs.writeFileSync(jsonFileName, JSON.stringify(config, null, 2));
-        });
     });
 
 gulp.task('flavor',

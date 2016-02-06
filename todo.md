@@ -5,14 +5,9 @@ There are lots of things to do. Some are recorded as Atom todo-show (ctrl-shift-
 
 A partial list of additional todo items follows, in approximately chronological and/or  decreasing priority order, with ? flagging questionable items.
 
-- FIXME xcode simulator and device run launches device app, only shows good nav and tab bar without icons, debug window output end:```
-2016-02-05 16:21:21.416 Abhyaasa[605:175524] Finished load of: file:///var/mobile/Containers/Bundle/Application/D8244F70-6991-4357-914B-8B680B343C5C/Abhyaasa.app/www/index.html#/tabs/library
-2016-02-05 16:21:21.586 Abhyaasa[605:175524] ERROR: Plugin 'Keyboard' not found, or is not a CDVPlugin. Check your plugin mapping in config.xml.
-2016-02-05 16:21:21.586 Abhyaasa[605:175524] -[CDVCommandQueue executePending] [Line 142] FAILED pluginJSON = ["INVALID","Keyboard","hideKeyboardAccessoryBar",[true]]```
-- FIXME g ri testing
+- FIXME xcode simulator and device run launches device app, only shows good nav and tab bar without icons, no bad log messages
+- FIXME ionic opens emulator and hangs with ionic twerler
 - FIXME ionic view
-- FIXME xcode output window Error:```
-2016-02-05 15:15:24.334 Abhyaasa[563:163394] ERROR: Plugin 'Keyboard' not found, or is not a CDVPlugin. Check your plugin mapping in config.xml.```
 - REVIEW xcode warning also in tabtest (along with 4 status bar warnings): CDVSplashScreen.m: 'interfaceOrientation' is deprecated: first deprecated in iOS 8.0, updateBounds method line
     UIInterfaceOrientation orientation = self.viewController.interfaceOrientation;
 - REVIEW build warnings, also in tabtest:```
