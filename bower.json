@@ -1,5 +1,6 @@
 {
-  "name": "Abhyaasa",
+  "name": "abhyaasa",
+  "version": "0.0.2",
   "private": "true",
   "devDependencies": {
     "ionic": "driftyco/ionic-bower#1.2.4"
@@ -7,7 +8,6 @@
   "resolutions": {
     "angular": "1.4.3"
   },
-  "version": "0.0.2",
   "homepage": "https://github.com/abhyaasa/app",
   "repository": {
     "type": "git",

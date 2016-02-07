@@ -15,16 +15,6 @@ This app is early in development, with plenty to do. See
 - tags listed in `.todo` througout source files
 - GitHub [Issues](https://github.com/abhyaasa/app/issues) list
 
-## Repository setup
-
-Clone repository from https://github.com/abhyaasa/app/.
-
-Download `ionic`.
-
-Run `$ ionic start restore`.
-
-[FUTURE: Complete repository setup documentation]
-
 ## Tools
 
 REVIEW document setup for development environment
@@ -47,7 +37,7 @@ Development tools
 - `css` and `scss`: HTML style manager, and syntactically-superior development-time variant
 - `markdown`: preprocessor for simplified html markup
 - `npm`: development package manager
-- `nvm`: node and nvm version manager
+- `nvm`: node and nvm version manager (very helpful in some environments)
 - `xcode`: iOS app deployment and setup for device testing (only on OSX)
 - `genymotion`: Android app emulation
 
@@ -146,6 +136,25 @@ Run `gulp help` for an annotated list of gulp project management tasks.
 `gulp index` generates `./www/index.html` from `./index.html`, so edit only the latter. This avoids superfluous version control changes, as script injection order is unpredictable.
 
 The `g` script runs shortcuts in the gulp `cmdAliases` directory. For example, to initiate the most common debugging run, execute `g si`. This runs `gulp cmd si | tee tmp/cmd.txt`, which runs `gulp is -i`, which runs the default gulp test build tasks and then `ionic serve -c -t ios --browser /Applications/Google\ Chrome\ Canary.app`, with output appearing on the console and saved in `tmp/cmd.txt`. Run `gulp cmd` for alias list.
+
+## Repository setup and test
+
+The following assumes OSX development platform.
+
+Install [xcode](https://developer.apple.com/xcode/download/).
+
+Clone the [app repository](https://github.com/abhyaasa/app/) to directory `app`.
+
+Shell commands are indicated by `$` and are to be executed in this directory unless otherwise indicated. The following completes a minimal app development installation and starts emulation/simulation test.
+
+```
+$ brew install node # also installs npm
+$ npm install -g cordova ionic # install global commands
+$ npm install # install local dependencies in node_modules/
+$ ionic state restore # creates plugins and platforms directories specified in package.json
+$ gulp flavor --name test # make sure we're using the test flavor
+$ gulp cmd ei # builds ios app and invokes emulator
+```
 
 ## Config
 

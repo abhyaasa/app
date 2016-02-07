@@ -6,7 +6,7 @@ There are lots of things to do. Some are recorded as Atom todo-show (ctrl-shift-
 A partial list of additional todo items follows, in approximately chronological and/or  decreasing priority order, with ? flagging questionable items.
 
 - FIXME xcode simulator and device run launches device app, only shows good nav and tab bar without icons, no bad log messages
-- FIXME ionic opens emulator and hangs with ionic twerler
+- FIXME ionic opens emulator and hangs with ionic spinner
 - FIXME ionic view
 - REVIEW xcode warning also in tabtest (along with 4 status bar warnings): CDVSplashScreen.m: 'interfaceOrientation' is deprecated: first deprecated in iOS 8.0, updateBounds method line
     UIInterfaceOrientation orientation = self.viewController.interfaceOrientation;

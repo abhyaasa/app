@@ -9,7 +9,6 @@ var cmdAliases = {
     si: 'gulp is -i',
     bi: 'gulp build',
     ei: 'ionic emulate ios -l -c -s',
-    eit: 'ionic emulate ios -l -c -s > tee tmp/ei.txt; egrep -i error tmp/ei.txt',
     ri: 'ionic run ios -l -c -s --device'
 };
 
