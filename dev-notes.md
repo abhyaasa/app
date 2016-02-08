@@ -7,13 +7,26 @@ To open discussion of collaboration possibilities, please email <abhyaasa108@gma
 
 This project uses [semantic versioning](http://semver.org).
 
-## Tasks
 
-This app is early in development, with plenty to do. See
+## Repository setup and test
 
-- `todo.md` file
-- tags listed in `.todo` througout source files
-- GitHub [Issues](https://github.com/abhyaasa/app/issues) list
+The following assumes an OSX development platform.
+
+Install [xcode](https://developer.apple.com/xcode/download/): needed for emulator and USB-connected device testing. See http://www.macinstruct.com/node/494.
+
+The following first clones the app repository, creating an `app` directory in the current directory. The setup script is then run in that directory. If some development tools are already installed, you may wish to create a modified script for execution. It completes a minimal app development installation and starts emulation/simulation test.
+```
+$ git clone https://github.com/abhyaasa/app/
+$ cd app
+$ ./scripts/setup.sh
+```
+
+Install [Chrome Canary](https://www.google.com/chrome/browser/canary.html) for "server" app testing in local browser.
+
+Install [Atom](https://atom.io), or other development editor, as needed.
+
+This completes a minimal development environment. The following section lists the development tools required or recommended for this project, some of which require further installation.
+
 
 ## Tools
 
@@ -49,6 +62,15 @@ Recommended development environment
 - `GitHub Desktop`: makes routine git operations convenient (`SourceTree` might be preferable)
 - `iTerm`: better OSX upterminal emulator
 - `inkscape`: svg to png conversion and other vector graphic editing
+
+
+## Tasks
+
+This app is early in development, with plenty to do. See
+
+- `todo.md` file
+- tags listed in `.todo` througout source files
+- GitHub [Issues](https://github.com/abhyaasa/app/issues) list
 
 ### Modules
 
@@ -103,6 +125,8 @@ These lists may be a bit out of date, but they indicate most of the modules in u
 
 ### Atom editor
 
+`.atom_config.cson` has recommended `~/.atom/config.cson` contents.
+
 Atom plugins are indicated by the following list
 ```
 ~/.atom/packages$ /bin/ls
@@ -137,30 +161,13 @@ Run `gulp help` for an annotated list of gulp project management tasks.
 
 The `g` script runs shortcuts in the gulp `cmdAliases` directory. For example, to initiate the most common debugging run, execute `g si`. This runs `gulp cmd si | tee tmp/cmd.txt`, which runs `gulp is -i`, which runs the default gulp test build tasks and then `ionic serve -c -t ios --browser /Applications/Google\ Chrome\ Canary.app`, with output appearing on the console and saved in `tmp/cmd.txt`. Run `gulp cmd` for alias list.
 
-## Repository setup and test
-
-The following assumes OSX development platform.
-
-Install [xcode](https://developer.apple.com/xcode/download/).
-
-Clone the [app repository](https://github.com/abhyaasa/app/) to directory `app`.
-
-Shell commands are indicated by `$` and are to be executed in this directory unless otherwise indicated. The following completes a minimal app development installation and starts emulation/simulation test.
-
-```
-$ brew install node # also installs npm
-$ npm install -g cordova ionic # install global commands
-$ npm install # install local dependencies in node_modules/
-$ ionic state restore # creates plugins and platforms directories specified in package.json
-$ gulp flavor --name test # make sure we're using the test flavor
-$ gulp cmd ei # builds ios app and invokes emulator
-```
 
 ## Config
 
 The `www/data/config.json` file object has the keys `name`, `email`, `href`, `version`, and `flavor`. The last should only be changed by `gulp flavor`.
 
 Early in app initialization, the config object is stored stored as `$rootScope.config`.
+
 
 ## Debugging and building
 
@@ -175,6 +182,7 @@ In build mode:
 
 - the angular compiler is told not to include debug information, such as dom state links
 
+
 ## Flavors and data directory structure
 
 You test and build with the current **flavor** of your choice. Change the flavor with `gulp flavor --name NAME`, which must be run after system download. The distribution comes with support for the `test` flavor, but that may not be the current flavor of distribution branches.
@@ -185,13 +193,15 @@ For each `FLAVOR` there is a `data/flavors/FLAVOR` directory with `library`, `me
 
 `./resources` link points to `data/flavors/<current flavor>/resources/` to keep the `ionic resources` command happy so it can transform splash and icon image files.
 
+
 ## Scripts
 
-Python and bash scripts are in the `scripts` directory.
+Python and shell scripts: `g` is in the app directory, others in the `scripts` directory.
 
 ### Shell scripts
 
 - `g ALIAS` is a shortcut for invoking via `gulp cmd` the script associated with `ALIAS` in the `cmdAliases` dictionary defined early in `gulpfile.js`.
+- `setup.sh` facilitates initial setup and testing of the development environment.
 - `scripts/psclean.sh` removes stray processes that may be created by ionic development. If the message "An uncaught exception occurred and has been reported to Ionic" is seen, try running this script and confirm with the `ps` output that there are no stray processes. Kill them manually if need be.
 - `scripts/resources.sh` is run after icon or splash screen images in resources directory are changed.
 - `scripts/term.sh` is used by `gulp itest`.
@@ -207,6 +217,7 @@ Python 2.6+ (maybe earlier) is needed to run `.py` scripts. Use `-h` argument fo
 
 REVIEW flesh out this documentation
 
+
 ## `$rootScope` variables
 
 - `config`: configuration represented by `www/data/config.json`, with the following possible additional attributes:
@@ -215,11 +226,13 @@ REVIEW flesh out this documentation
 - `debug`: true when `mode` is `'debug'`
 - `help`: points to help controller of current context
 
+
 ## `localStorage` key map
 
 `*settings*`: `settings` service dictionary
 `*openDecks*`: array of open deck display names
 OPEN_DECK_DISPLAY_NAME: decks's data dictionary
+
 
 ## Updating
 

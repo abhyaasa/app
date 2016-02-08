@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 /usr/bin/expect <<EOD
 spawn ionic upload
 expect "Email:"
