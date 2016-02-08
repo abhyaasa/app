@@ -28,4 +28,4 @@ www/index.html
 www/data/flavor
 
 # temporary files: message output, etc.
-tmp/
+temp/**

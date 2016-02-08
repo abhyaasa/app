@@ -4,7 +4,7 @@
     html_indent_inner_html: true
   "atom-lint":
     ignoredNames: [
-      "tmp/**"
+      "temp/**"
     ]
     showViolationMetadata: true
   autoprefixer: {}
