@@ -5,12 +5,13 @@
 var cmdAliases = {
     cd: 'cd data/cdecks/test; update.sh deck_2',
     ct: 'cd scripts; cdeck.py -t -m "prefix"',
-    up: 'scripts/upload.sh',
+    up: './scripts/upload.sh',
     si: 'gulp is -i',
     bi: 'gulp build ios',
     ei: 'ionic emulate ios -l -c -s',
     ri: 'ionic run ios -l -c -s --device',
-    ta: 'scripts/testapp.sh'
+    ta: './scripts/testapp.sh',
+    sc: './scripts/scapp.sh'
 };
 
 var paths = {
@@ -143,7 +144,7 @@ gulp.task('build', '[-a] for Android, default iOS', ['pre-build'], function () {
     sh.exec('ionic build ' + (argv.a ? 'android' : 'ios'));
 });
 
-gulp.task('pre-build', ['default'], function () {
+gulp.task('pre-build', ['default', 'jscs'], function () {
     // PUBLISH fill out pre-build
 });
 

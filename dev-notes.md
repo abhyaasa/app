@@ -16,7 +16,7 @@ Install [xcode](https://developer.apple.com/xcode/download/): needed for emulato
 
 Clone the app repository, creating an `app` directory in the current directory. Unless noted otherwise, throughout the development process all subsequent CLI commands are to be executed in the project directory.
 ```
-$ git clone https://github.com/abhyaasa/app/
+$ git clone https://github.com/abhyaasa/app
 $ cd app
 ```
 
