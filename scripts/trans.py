@@ -10,11 +10,11 @@ from StringIO import StringIO
 import argparse
 import codecs
 
-try:
-    import debug
-    from pdb import set_trace as breakpoint
-except:
-    pass
+# try:
+#     # import debug
+#     from pdb import set_trace as breakpoint
+# except:
+#     pass
 
 
 UTF8Writer = codecs.getwriter('utf8')
@@ -35,7 +35,7 @@ Shell command examples:
 # Unicode control character dictionary
 uccd = {'zwj': u'\200D',
         'zwnj': u'\200C',
-       }
+        }
 uccs = uccd.values()
 
 # Devanagari Unicode character name Dictionary
@@ -175,7 +175,7 @@ def make_trans_dict(trans):
         if len(k) == 1:
             result[k] = [('', dict[k])]
         else:
-            if not result.has_key(k[0]):
+            if not (k[0] in result):
                 # no single letter encoding for the first char of k
                 result[k[0]] = []
             result[k[0]][0:0] = [(k[1:], dict[k])]
@@ -197,7 +197,7 @@ def translate(text, from_, to):
         tuples = trans_dict.get(char)
         if tuples:
             for (suffix, trow) in tuples:
-                if text[i+1:].startswith(suffix):
+                if text[i + 1 : ].startswith(suffix):
                     #  if multiple /-separated choices (ITRANS), use the first
                     to_char = trow[col].split('/')[0]
                     output.write(to_char)
@@ -256,10 +256,10 @@ def to_devanagari(text):
 
     # replace word Om with its unicode symbol
     om_lst = list(unicode("ओम्", 'utf-8'))
-    for i in range(len(lst)-1-len(om_lst), 0, -1):
-        if lst[i:i+len(om_lst)] == om_lst:
-            if not is_letter(lst[i-1]) and not is_letter(lst[i+len(om_lst)]):
-                lst[i:i+len(om_lst)] = [dud['om']]
+    for i in range(len(lst) - 1 - len(om_lst), 0, -1):
+        if lst[i : i + len(om_lst)] == om_lst:
+            if not is_letter(lst[i - 1]) and not is_letter(lst[i + len(om_lst)]):
+                lst[i : i + len(om_lst)] = [dud['om']]
 
     return ''.join(lst[1:-1])  # strip first and last (None) values
 
@@ -291,7 +291,7 @@ def from_devanagari(text):
 
 def make_table():
     return (json.loads(table_json)
-            + [[dev_char] + [roman_char]*5
+            + [[dev_char] + [roman_char] * 5
                for (dev_char, roman_char) in digits + signs_and_punctuation])
 
 
@@ -325,6 +325,7 @@ def test():
     textft("अथ योगानुशासनम्॥१॥", 'devanagari', 'iast')
     textft("योगश्चित्तवृत्तिनिरोधः॥२॥", 'devanagari', 'iast')
     sys.exit()
+
 
 def main(args):
     """Command line invocation with argparse args."""

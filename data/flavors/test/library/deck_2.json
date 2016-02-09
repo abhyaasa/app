@@ -10,8 +10,17 @@
   "type": "true-false"
  }, 
  {
-  "answer": "Cs", 
   "id": 1, 
+  "tags": [], 
+  "text": [
+   "a", 
+   "\u0905"
+  ], 
+  "type": "transliteration"
+ }, 
+ {
+  "answer": "Cs", 
+  "id": 2, 
   "tags": [
    ".cs"
   ], 
@@ -20,7 +29,7 @@
  }, 
  {
   "answer": "Ci", 
-  "id": 2, 
+  "id": 3, 
   "tags": [
    ".ci"
   ], 
@@ -28,11 +37,21 @@
   "type": "mind"
  }, 
  {
-  "id": 3, 
+  "answer": "<p>Buddy at shelter</p>", 
+  "id": 4, 
   "tags": [
    ".html"
   ], 
   "text": "<p>image <img alt=\"Buddy\" src=\"data/flavor/media/deck_2/buddyShelter.jpg\" title=\"Buddy at shelter\" /></p>", 
+  "type": "mind"
+ }, 
+ {
+  "answer": "<p>Big Buddy</p>", 
+  "id": 5, 
+  "tags": [
+   ".html"
+  ], 
+  "text": "<p>image <img alt=\"Buddy\" src=\"data/flavor/media/deck_2/buddyShelter550w.jpg\" title=\"Buddy 550px wide\" /></p>", 
   "type": "mind"
  }
 ]

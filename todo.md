@@ -1,37 +1,60 @@
 Things To Do
 ============
 
-There are lots of things to do. Some are recorded as Atom todo-show (ctrl-shift-T) comments. The following tags are in use, in approximately decreasing order of priority: XX-X (used without the dash to indicate temporary fixtures to be removed), FIXME, TODO, HACK, REVIEW, ANDROID, PUBLISH, FUTURE.
+There are lots of things to do. Some are recorded as Atom todo-show (ctrl-shift-T) tagged entries (mostly in comments). See the `todo-show` attribute list in `.atom_config.cson` for the tag list, in roughly decreasing order of priority.
 
-A partial list of additional todo items follows, in approximately chronological and/or  decreasing priority order, with ? flagging questionable items.
+A partial list of additional todo items follows, grouped in approximately decreasing priority order reflected by todo-show group tags. Order within groups sometimes reflects decreasing priority.
 
-- ios device testing
-- ios ionic view
-- devanagari and transliteration
-- devanagari q, transliteration a
-- deck state copy, rename, reorder, etc
-- ionic 1.2 <label -> <ion-label
-- add sound directive
-- show scrollbar when full text not visible
-- deck filtering to subtab
-- fix library search
-- version in data/config.json, bower.json, package.json, and config.xml
-- splash and icon http://learn.ionicframework.com/formulas/adding-an-icon/ and  http://blog.ionic.io/automating-icons-and-splash-screens/
-- android emulator testing
-- android device testing
-- unit and integration tests
-  - remove .atom/config.cson>"todo-show">ignoreThesePaths>...spec.js
-- ? typescript http://blog.ionic.io/ionic-and-typescript-part-2/
-- ? Coffee, jade, NOT stylus
-  - https://github.com/CaryLandholt/ng-classify
-  - install https://www.npmjs.com/package/gulp-ng-classify#coffeescript
-  - install https://github.com/js2coffee/js2coffee
-  - install http://compass-style.org
-  - test angular-marked with coffee
-- document code, e.g. https://www.npmjs.com/package/gulp-ngdocs
-- flesh out jsdoc documentation and improve dgeni formatting
-- consider adding other features, as in notes/features.txt
-- Chrome developer > angularjs > hints
-- PUBLISH remove $log.debug calls
-- make injected functions minifiable, e.g. function (a, b){} => ['a', 'b', function (a, b){}, use ng-strict-di: AngularJS Web Application Development Cookbook p 281
-- publish app
+- FIXME bugs with unknown location
+  - xcode simulator and device run launches device app, only shows good nav and tab bar without icons, no bad log messages, last is ```
+    2016-02-06 19:39:32.567 Abhyaasa[22191:1285789] Finished load of: file:///Users/home/Library/Developer/CoreSimulator/Devices/2857D4DE-23C4-464B-B9EF-E14D33127588/data/Containers/Bundle/Application/95671FA2-F1B1-45A1-A1AE-22EFA0537996/Abhyaasa.app/www/index.html#/tabs/library```
+  - ionic run emulator and hangs with ionic spinner
+  - ionic view similar app haning to ionic run
+
+
+- REVIEW items for periodic consideration
+  - xcode warning also in tabtest (along with 4 status bar warnings): CDVSplashScreen.m: 'interfaceOrientation' is deprecated: first deprecated in iOS 8.0, updateBounds method line
+    UIInterfaceOrientation orientation = self.viewController.interfaceOrientation;
+  - build warnings, also in tabtest:```
+    /* com.apple.actool.document.warnings */
+    /Users/home/DD/app/platforms/ios/Abhyaasa/Images.xcassets:./AppIcon.appiconset: warning: A 83.5x83.5@2x app icon is required for iPad apps targeting iOS 9.0 and later
+    /Users/home/DD/app/platforms/ios/Abhyaasa/Images.xcassets:./AppIcon.appiconset/(null)[2d][icon-60.png]: warning: The app icon set "AppIcon" has an unassigned child.```
+  - xcode tabtest runs in simulator, and on device app shows start screen, but is unresponsive. Output window ends with:```
+    2016-02-05 16:02:46.606 tabtest[586:171577] THREAD WARNING: ['Device'] took '11.128906' ms. Plugin should use a background thread.```
+  - sanskrit embedded in text
+  - typescript http://blog.ionic.io/ionic-and-typescript-part-2/
+  - Coffee, jade, NOT stylus
+  - Chrome developer > angularjs > hints
+
+
+- PUBLISH tasks
+  - make injected functions minifiable, e.g. function (a, b){} => ['a', 'b', function (a, b){}, use ng-strict-di: AngularJS Web Application Development Cookbook p 281
+  - remove $log.debug calls
+  - iTunes publication
+
+
+- FUTURE for consideration at a later time
+  - splash and icon http://learn.ionicframework.com/formulas/adding-an-icon/ and  http://blog.ionic.io/automating-icons-and-splash-screens/  - Leitner learning algorithm https://en.wikipedia.org/wiki/Leitner_system
+  - devanagari q, transliteration a
+  - deck state copy, rename, reorder, etc
+  - document code, e.g. https://www.npmjs.com/package/gulp-ngdocs
+  - flesh out jsdoc documentation and improve dgeni formatting
+  - consider adding other features, as in notes/features.txt
+  - ionic 1.2 issues
+    - `<label -> <ion-label`
+  - add sound directive
+  - show scrollbar when full text not visible
+  - deck filtering to subtab
+  - unit and integration tests
+    - remove .atom/config.cson>"todo-show">ignoreThesePaths>...spec.js
+    - https://github.com/CaryLandholt/ng-classify
+    - install https://www.npmjs.com/package/gulp-ng-classify#coffeescript
+    - install https://github.com/js2coffee/js2coffee
+    - install http://compass-style.org
+    - test angular-marked with coffee
+
+
+- ANDROID future implementation
+  - emulator testing
+  - emulation on Windows: genymotion or AMIDuOS? See  http://www.laptopmag.com/articles/run-android-apps-on-pc
+  - device testing

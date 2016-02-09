@@ -2,7 +2,8 @@
 
 angular.module('app', ['ionic', 'services'])
 
-.run(function ($ionicPlatform, $rootScope, $state, restoreSettings, settings, mode) {
+.run(function ($log, $ionicPlatform, $rootScope, $state, restoreSettings, settings,
+    mode) {
 
     // https://github.com/angular-ui/ui-router/wiki/Frequently-Asked-Questions\
     // #issue-im-getting-a-blank-screen-and-there-are-no-errors
@@ -20,7 +21,6 @@ angular.module('app', ['ionic', 'services'])
         }
     });
 
-    $rootScope.hideTabs = true;
     $rootScope.debug = mode === 'debug';
     $rootScope.settings = settings;
 
@@ -37,176 +37,193 @@ angular.module('app', ['ionic', 'services'])
 })
 
 .config(function ($stateProvider, $urlRouterProvider, $logProvider, getDataProvider,
-  mode, $compileProvider) {
+    mode, $compileProvider) {
     $logProvider.debugEnabled(mode === 'debug');
     $compileProvider.debugInfoEnabled(mode !== 'build');
 
     $stateProvider
-    .state('tabs', {
-        url: '/tabs',
-        abstract: true,
-        templateUrl: 'views/tabs.html',
-        resolve: {
-            configPromise: function () {
-                return getDataProvider.$get()('config.json');
-            }},
-        controller: 'TabsController'
-    })
-    .state('tabs.intro', {
-        url: '/intro',
-        views: {
-            'intro-tab': {
-                templateUrl: 'views/intro/intro.html',
-                controller: 'IntroController'
+        .state('tabs', {
+            url: '/tabs',
+            abstract: true,
+            templateUrl: 'views/tabs.html',
+            resolve: {
+                configPromise: function () {
+                    return getDataProvider.$get()('config.json');
+                }
+            },
+            controller: 'TabsController'
+        })
+        .state('tabs.intro', {
+            url: '/intro',
+            views: {
+                'intro-tab': {
+                    templateUrl: 'views/intro/intro.html',
+                    controller: 'IntroController'
+                }
+            },
+            onEnter: function ($rootScope, $state) {
+                $rootScope.help = function () {
+                    $state.go('tabs.intro');
+                };
+            },
+            onExit: function ($rootScope) {
+                $rootScope.hideTabs = '';
             }
-        },
-        onEnter: function ($rootScope, $state) {
-            $rootScope.help = function () { $state.go('tabs.intro'); };
-        }
-    })
-    .state('tabs.library', {
-        url: '/library',
-        resolve: {
-            indexPromise: function () {
-                return getDataProvider.$get()('flavor/library/index.json');
-            }},
-        views: {
-            'library-tab': {
-                templateUrl: 'views/library/library.html',
-                controller: 'LibraryController'
+        })
+        .state('tabs.library', {
+            url: '/library',
+            resolve: {
+                indexPromise: function () {
+                    return getDataProvider.$get()('flavor/library/index.json');
+                }
+            },
+            views: {
+                'library-tab': {
+                    templateUrl: 'views/library/library.html',
+                    controller: 'LibraryController'
+                }
+            },
+            onEnter: function ($rootScope, $state, Library) {
+                Library.updateDeckLists();
+                $rootScope.help = function () {
+                    $state.go('tabs.library-help');
+                };
             }
-        },
-        onEnter: function ($rootScope, $state, Library) {
-            Library.updateDeckLists();
-            $rootScope.help = function () { $state.go('tabs.library-help'); };
-        }
-    })
-    .state('tabs.library-help', {
-        url: '/libraryHelp',
-        views: {
-            'library-tab': {
-                templateUrl: 'views/library/help.html',
-                controller: 'LibraryHelpController'
+        })
+        .state('tabs.library-help', {
+            url: '/libraryHelp',
+            views: {
+                'library-tab': {
+                    templateUrl: 'views/library/help.html',
+                    controller: 'LibraryHelpController'
+                }
+            },
+            onEnter: function ($rootScope, $state) {
+                $rootScope.help = function () {
+                    $state.go('tabs.library-help');
+                };
             }
-        },
-        onEnter: function ($rootScope, $state) {
-            $rootScope.help = function () { $state.go('tabs.library-help'); };
-        }
-    })
-    .state('tabs.deck', {
-        url: '/deck',
-        views: {
-            'deck-tab': {
-                templateUrl: 'views/deck/deck.html',
-                controller: 'DeckController'
+        })
+        .state('tabs.deck', {
+            url: '/deck',
+            views: {
+                'deck-tab': {
+                    templateUrl: 'views/deck/deck.html',
+                    controller: 'DeckController'
+                }
+            },
+            onEnter: function ($rootScope, $state, Deck) {
+                $rootScope.help = function () {
+                    $state.go('tabs.deck-help');
+                };
+                Deck.enterTab();
             }
-        },
-        onEnter: function ($rootScope, $state, Deck) {
-            $rootScope.help = function () { $state.go('tabs.deck-help'); };
-            Deck.enterTab();
-        }
-    })
-    .state('tabs.deck-help', {
-        url: '/deckHelp',
-        views: {
-            'deck-tab': {
-                templateUrl: 'views/deck/help.html',
-                controller: 'DeckHelpController'
+        })
+        .state('tabs.deck-help', {
+            url: '/deckHelp',
+            views: {
+                'deck-tab': {
+                    templateUrl: 'views/deck/help.html',
+                    controller: 'DeckHelpController'
+                }
+            },
+            onEnter: function ($rootScope, $state) {
+                $rootScope.help = function () {
+                    $state.go('tabs.deck-help');
+                };
             }
-        },
-        onEnter: function ($rootScope, $state) {
-            $rootScope.help = function () { $state.go('tabs.deck-help'); };
-        }
-    })
-    .state('tabs.card', {
-        url: '/card',
-        views: {
-            'card-tab': {
-                templateUrl: 'views/card/card.html',
-                controller: 'CardController'
+        })
+        .state('tabs.card', {
+            url: '/card',
+            views: {
+                'card-tab': {
+                    templateUrl: 'views/card/card.html',
+                    controller: 'CardController'
+                }
+            },
+            onEnter: function ($rootScope, $state) {
+                $rootScope.help = function () {
+                    $state.go('tabs.card-help');
+                };
             }
-        },
-        onEnter: function ($rootScope, $state) {
-            $rootScope.help = function () { $state.go('tabs.card-help'); };
-        }
-    })
-    .state('tabs.answer', {
-        url: '/answer',
-        views: {
-            'card-tab': {
-                templateUrl: 'views/answer/answer.html',
-                controller: 'AnswerController'
+        })
+        .state('tabs.card-help', {
+            url: '/cardHelp',
+            views: {
+                'card-tab': {
+                    templateUrl: 'views/card/help.html',
+                    controller: 'CardHelpController'
+                }
+            },
+            onEnter: function ($rootScope, $state) {
+                $rootScope.help = function () {
+                    $state.go('tabs.card-help');
+                };
             }
-        },
-        onEnter: function ($rootScope, $state) {
-            $rootScope.help = function () { $state.go('tabs.card-help'); };
-        }
-    })
-    .state('tabs.card-help', {
-        url: '/cardHelp',
-        views: {
-            'card-tab': {
-                templateUrl: 'views/card/help.html',
-                controller: 'CardHelpController'
+        })
+        .state('tabs.settings', {
+            url: '/settings',
+            views: {
+                'settings-tab': {
+                    templateUrl: 'views/settings/settings.html',
+                    controller: 'SettingsController'
+                }
+            },
+            onEnter: function ($rootScope, $state) {
+                $rootScope.help = function () {
+                    $state.go('tabs.settings-help');
+                };
+            },
+            onExit: function (saveSettings) {
+                saveSettings();
             }
-        },
-        onEnter: function ($rootScope, $state) {
-            $rootScope.help = function () { $state.go('tabs.card-help'); };
-        }
-    })
-    .state('tabs.settings', {
-        url: '/settings',
-        views: {
-            'settings-tab': {
-                templateUrl: 'views/settings/settings.html',
-                controller: 'SettingsController'
+        })
+        .state('tabs.about', {
+            url: '/about',
+            views: {
+                'settings-tab': {
+                    templateUrl: 'views/about/about.html',
+                    controller: 'AboutController'
+                }
+            },
+            onExit: function (settings, LocalStorage, _) {
+                var s = {};
+                _.extendOwn(s, settings);
+                LocalStorage.setObject('settings', s);
             }
-        },
-        onEnter: function ($rootScope, $state) {
-            $rootScope.help = function () { $state.go('tabs.settings-help'); };
-        },
-        onExit: function (saveSettings) {
-            saveSettings();
-        }
-    })
-    .state('tabs.about', {
-        url: '/about',
-        views: {
-            'settings-tab': {
-                templateUrl: 'views/about/about.html',
-                controller: 'AboutController'
+        })
+        .state('tabs.reset', {
+            url: '/reset',
+            views: {
+                'settings-tab': {
+                    templateUrl: 'views/reset/reset.html',
+                    controller: 'ResetController'
+                }
+            },
+            onExit: function (saveSettings) {
+                saveSettings();
             }
-        },
-        onExit: function (settings, LocalStorage, _) {
-            var s = {};
-            _.extendOwn(s, settings);
-            LocalStorage.setObject('settings', s);
-        }
-    })
-    .state('tabs.reset', {
-        url: '/reset',
-        views: {
-            'settings-tab': {
-                templateUrl: 'views/reset/reset.html',
-                controller: 'ResetController'
+        })
+        .state('tabs.settings-help', {
+            url: '/settingsHelp',
+            views: {
+                'settings-tab': {
+                    templateUrl: 'views/settings/help.html',
+                    controller: 'SettingsHelpController'
+                }
+            },
+            onEnter: function ($rootScope, $state) {
+                $rootScope.help = function () {
+                    $state.go('tabs.settings-help');
+                };
             }
-        },
-        onExit: function (saveSettings) {
-            saveSettings();
-        }
-    })
-    .state('tabs.settings-help', {
-        url: '/settingsHelp',
-        views: {
-            'settings-tab': {
-                templateUrl: 'views/settings/help.html',
-                controller: 'SettingsHelpController'
-            }
-        },
-        onEnter: function ($rootScope, $state) {
-            $rootScope.help = function () { $state.go('tabs.settings-help'); };
-        }
-    });
+        });
     $urlRouterProvider.otherwise('/tabs/library');
-})
-;
+});
+
+// To run code before angular, remove index.html ng-app attribute and use this function.
+// ionic.Platform.ready(function () {
+//     console.log('device ready!"');
+//     // code here runs after device is ready and before angular bootstraps
+//     angular.bootstrap(document.body, ['app']);
+// });

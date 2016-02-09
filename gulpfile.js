@@ -3,32 +3,27 @@
 // Configuration constants
 
 var cmdAliases = {
-    cd: 'cd data/cdecks/test; update.sh deck1',
+    cd: 'cd data/cdecks/test; update.sh deck_2',
     ct: 'cd scripts; cdeck.py -t -m "prefix"',
-    up: 'scripts/upload.sh',
+    up: './scripts/upload.sh',
     si: 'gulp is -i',
-    bi: 'gulp; ionic build ios',
-    ei: 'gulp; ionic emulate ios --livereload --consolelogs --serverlogs',
-    ri: 'gulp; ionic run ios --livereload --consolelogs --serverlogs --device'
+    bi: 'gulp build ios',
+    ei: 'ionic emulate ios -l -c -s',
+    ri: 'ionic run ios -l -c -s --device',
+    ta: './scripts/testapp.sh',
+    sc: './scripts/scapp.sh'
 };
 
 var paths = {
     sass: ['./scss/**/*.scss'],
-    src: ['./src/*.ts'], // for typescript compilation
-    indexScripts: [ // added for index task
-        './www/**/*.js',
-        '!./www/js/app.js',
-        '!./www/**/*spec.js', // no test files
-        '!./www/lib/**'
-    ]
+    appJs: ['./www/**/*.js', '!./www/lib/**'] // added
 };
-paths.appScripts = paths.indexScripts.concat(
-    ['./www/js/app.js', './www/**/*spec.js']);
+// added: index generation js files, expluding app.js and test files
+paths.indexJs = paths.appJs.concat(['!./www/js/app.js', '!./www/**/*spec.js']);
 
 var configJsonFile = 'www/data/config.json';
 
 var ionicBrowser = ' --browser /Applications/Google\\ Chrome\\ Canary.app';
-
 
 var gulp = require('gulp-help')(require('gulp'));
 var gutil = require('gulp-util');
@@ -37,6 +32,10 @@ var sass = require('gulp-sass');
 var minifyCss = require('gulp-minify-css');
 var rename = require('gulp-rename');
 var sh = require('shelljs');
+var _ = require('underscore');
+var bump = require('gulp-bump');
+var replace = require('gulp-replace');
+var fs = require('fs');
 // var concat = require('gulp-concat');
 
 var argv = require('minimist')(process.argv.slice(2)); // added
@@ -44,7 +43,7 @@ var argv = require('minimist')(process.argv.slice(2)); // added
 
 // Tasks from the ionic starter
 
-gulp.task('default', ['sass', 'index', 'config']); // added index and config
+gulp.task('default', ['sass', 'index', 'jshint']); // added index and jshint
 
 gulp.task('sass', function (done) {
     gulp.src('./scss/ionic.app.scss')
@@ -89,6 +88,7 @@ gulp.task('git-check', 'Complain if git not installed.',
 // Tasks specific to this project
 
 // For Ionic >= 1.2 http://www.typescriptlang.org
+// add to paths something like src: ['./src/*.ts'], // for typescript compilation
 // gulp.task('compile', 'Typescript compilation', function () {
 //     gulp.src(paths.src)
 //         .pipe(typescript({
@@ -104,33 +104,12 @@ gulp.task('index', 'Inject script and css elements into www/index.html',
         sh.cp('-f', './index.html', './www/index.html');
         return gulp.src('./www/index.html')
             .pipe(ginject(
-                gulp.src(paths.indexScripts, {
+                gulp.src(paths.indexJs, {
                     read: false
                 }), {
                     relative: true
                 }))
             .pipe(gulp.dest('./www'));
-    });
-
-gulp.task('config',
-    'Transfer some config data from config.xml to www/data/config.json.',
-    // Adapted from https://github.com/Leonidas-from-XIV/node-xml2js
-    function () {
-        var fs = require('fs'),
-            xml2js = require('xml2js'),
-            parser = new xml2js.Parser(),
-            xmlstr = fs.readFileSync(__dirname + '/config.xml').toString(),
-            jsonFileName = __dirname + '/' + configJsonFile,
-            jsonstr = fs.readFileSync(jsonFileName).toString();
-        parser.parseString(xmlstr, function (err, xconfig) {
-            var widget = xconfig.widget,
-                config = JSON.parse(jsonstr);
-            config.version = widget.$.version;
-            config.name = widget.name[0];
-            config.email = widget.author[0].$.email;
-            config.href = widget.author[0].$.href;
-            fs.writeFileSync(jsonFileName, JSON.stringify(config, null, 2));
-        });
     });
 
 gulp.task('flavor',
@@ -144,8 +123,9 @@ gulp.task('flavor',
             var configJson = JSON.parse(fs.readFileSync(configJsonFile).toString());
             configJson.flavor = argv.name;
             fs.writeFileSync(configJsonFile, JSON.stringify(configJson, null, 2));
-            sh.exec('ln -s -f data/flavors/' + argv.name + '/resources .');
-            sh.exec('ln -s -f ../../data/flavors/' + argv.name + ' www/data/flavor');
+            sh.exec('ln -sf data/flavors/' + argv.name + '/resources .');
+            sh.exec('rm -rf www/data/flavor');
+            sh.exec('ln -sf `pwd`/data/flavors/' + argv.name + ' www/data/flavor');
         }
     });
 
@@ -164,13 +144,20 @@ gulp.task('build', '[-a] for Android, default iOS', ['pre-build'], function () {
     sh.exec('ionic build ' + (argv.a ? 'android' : 'ios'));
 });
 
-gulp.task('pre-build', ['default'], function () {
+gulp.task('pre-build', ['default', 'jscs'], function () {
     // PUBLISH fill out pre-build
+});
+
+gulp.task('jscs', 'Run jscs linter on all (non-lib) script files', function () {
+    var jscs = require('gulp-jscs');
+    gulp.src(paths.appJs)
+        .pipe(jscs())
+        .pipe(jscs.reporter());
 });
 
 gulp.task('jshint', 'Run jshint on all (non-lib) script files', function () {
     var jshint = require('gulp-jshint');
-    gulp.src(paths.appScripts)
+    gulp.src(paths.appJs)
         .pipe(jshint())
         .pipe(jshint.reporter('default'));
 });
@@ -194,11 +181,33 @@ gulp.task('dgeni', 'Generate jsdoc documentation.', function () {
     }
 });
 
-gulp.task('cmd', '-a ALIAS : Execute shell command named ALIAS in aliases dictionary',
+gulp.task('cmd', '[-a ALIAS] : Execute shell command named ALIAS in aliases dictionary' +
+  ', default: list aliases',
     function () {
-        var cmd = cmdAliases[argv.a];
-        console.log('cmd', cmd);
-        sh.exec(cmd);
+        if (!argv.a) {
+            _.forEach(cmdAliases, function (value, key) {
+                console.log(key, ':', value);
+            });
+        } else {
+            var cmd = cmdAliases[argv.a];
+            console.log('exec command:', cmd);
+            sh.exec(cmd);
+        }
+    });
+
+gulp.task('set-version', '-v VERSION : Change app version references to VERSION.',
+    function () {
+        fs.readFile('./package.json', function (err, data) {
+            var version = JSON.parse(data).version;
+            console.log('Setting version ' + version + ' to ' + argv.v);
+            gulp.src(['./bower.json', './www/data/config.json', './package.json'])
+            // see https://www.npmjs.com/package/gulp-bump
+            .pipe(bump({version: argv.v}))
+            .pipe(gulp.dest('./'));
+            gulp.src(['./config.xml'])
+            .pipe(replace(/(<widget.*version=")[^"]*/, '$1' + argv.v))
+            .pipe(gulp.dest('./'));
+        });
     });
 
 // ------------------ Testing tasks follow -------------------------------------
@@ -236,7 +245,7 @@ gulp.task('karma', 'Run karma in watch mode.', function () {
 });
 
 gulp.task('itest', 'Integration (e-e) tests', function () {
-    // TODO itest not working
+    // FUTURE itest not working
     var cwd = process.cwd(),
         mkCmd = function (cmd) {
             return 'scripts/term.sh "cd ' + cwd + ';' + cmd + '"';

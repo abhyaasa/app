@@ -21,6 +21,7 @@
     "smarttabs": true,
     "white": false,
     "globals": {
+        "Ionic": false,
         "cordova": false,
         "StatusBar": false,
         "$": false,

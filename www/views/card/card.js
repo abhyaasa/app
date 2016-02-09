@@ -3,14 +3,14 @@
 angular.module('app')
 
 .controller('CardController', function ($scope, $state, $log, $ionicGesture, _,
-  Deck, Card) {
+    Deck, Card) {
 
     $scope.done = false;
     $scope.Card = Card;
     $scope.Deck = Deck;
     $scope.$on('$ionicView.enter', function () {
         if (!Deck.data) { // Deck.data undefined by source auto-reload
-            $state.go('tabs.library');
+            Card.question = undefined;
         } else if (!Deck.data.activeCardIndex) {
             Card.setup(0);
         } else if (!Card.question) {
@@ -64,8 +64,9 @@ angular.module('app')
     };
 
     $scope.showAnswer = function () {
-        if (Card.question.type === 'mind') {
+        if (Card.type === 'mind') {
             $scope.done = true;
+            Card.isInput = false;
         }
     };
 
@@ -78,18 +79,17 @@ angular.module('app')
         return response[0];
     };
     $scope.response = function (index) {
-        var q = Card.question;
         var items = Card.responseItems;
-        if (_.contains(q.tags, '.ma')) {
-            $log.debug('multiple answer', index, JSON.stringify(q.responses));
-            if (q.responses[index][0]) {
+        if (_.contains(Card.question.tags, '.ma')) {
+            $log.debug('multiple answer', index, JSON.stringify(Card.responses));
+            if (Card.responses[index][0]) {
                 items[index].style = 'right-response';
             } else {
                 items[index].style = 'wrong-response';
                 Card.numWrong += 1;
             }
         } else {
-            var rightIndex = _.findIndex(q.responses, isRight);
+            var rightIndex = _.findIndex(Card.responses, isRight);
             items[rightIndex].style = 'right-response';
             if (index !== rightIndex) {
                 items[index].style = 'wrong-response';
@@ -118,9 +118,8 @@ angular.module('app')
 
     $scope.maDone = function () {
         var items = Card.responseItems;
-        var responses = Card.question.responses;
         for (var i = 0; i < items.length; i++) {
-            if (items[i].style === 'no-response' && responses[i][0]) {
+            if (items[i].style === 'no-response' && Card.responses[i][0]) {
                 items[i].style = 'missed-response';
                 Card.numWrong += 1;
             }
@@ -141,10 +140,15 @@ angular.module('app')
 
 .filter('unsafe', function ($sce, _, settings) {
     return function (value) {
+        var text = value;
         if (_.isArray(value)) {
-            value = value[settings.devanagari ? 1 : 0];
+            text = value[settings.devanagari ? 1 : 0];
+            if (settings.devanagari === 'both') {
+                text += value[0].length > 20 ? '\n' : ' ';
+                text += value[0];
+            }
         }
-        return $sce.trustAsHtml(value);
+        return $sce.trustAsHtml(text);
     };
 })
 
@@ -171,17 +175,21 @@ angular.module('app')
             Card.submittedAnswer = undefined;
         }
         Card.text = Card.question.text;
-        var responses = Card.question.responses;
+        Card.type = Card.question.type;
+        Card.responses = Card.question.responses;
         Card.hintIndex = Card.question.hints ? 0 : undefined;
-        if (Card.question.type === 'true-false') {
+        Card.haveHint = Card.question.hints !== undefined;
+        Card.hint = null;
+        Card.answer = Card.question.answer;
+        if (Card.type === 'true-false') {
             // Rewrite true-false as multiple-choice
-            Card.question.responses = [
+            Card.responses = [
                 [false, 'True'],
                 [false, 'False']
             ];
-            Card.question.responses[Card.question.answer ? 0 : 1][0] = true;
-            Card.question.type = 'multiple-choice';
-        } else if (Card.question.type === 'mind' && !Card.question.answer) {
+            Card.responses[Card.question.answer ? 0 : 1][0] = true;
+            Card.type = 'multiple-choice';
+        } else if (Card.type === 'mind' && !Card.question.answer) {
             // Sequence question
             var answerIndex = Card.question.id + 1;
             if (answerIndex === Deck.questions.length) {
@@ -189,6 +197,10 @@ angular.module('app')
             } else {
                 Card.question.answer = Deck.questions[answerIndex].text;
             }
+        } else if (Card.question.type === 'transliteration') {
+            Card.answer = Card.text[0];
+            Card.text = Card.text[1];
+            Card.type = 'mind';
         } else if (Card.question.type === 'matching') {
             // Rewrite matching as multiple-choice, including random order, this
             // question's answer with a random selection of other answers in this
@@ -197,42 +209,39 @@ angular.module('app')
             if (!q.matchingEnd) {
                 $log.error('No matchingEnd attribute with type matching');
             }
-            responses = [];
+            Card.responses = [];
             for (var i = q.matchingBegin; i <= q.matchingEnd; i++) {
                 if (i !== q.id) {
-                    responses.push([false, Deck.questions[i].answer]);
+                    Card.responses.push([false, Deck.questions[i].answer]);
                 }
             }
             var numResponses = 5;
-            responses = _.sample(responses, numResponses - 1).concat([
+            Card.responses = _.sample(Card.responses, numResponses - 1).concat([
                 [true, q.answer]
             ]);
-            Card.question.responses = responses;
-            Card.question.type = 'multiple-choice';
+            Card.type = 'multiple-choice';
         }
-        if (Card.question.type === 'multiple-choice') {
+        if (Card.type === 'multiple-choice') {
             if (settings.randomResponses) {
-                responses = _.sample(responses, responses.length);
+                Card.responses = _.sample(Card.responses, Card.responses.length);
             }
-            Card.responseItems = _.map(responses, makeItem);
+            Card.responseItems = _.map(Card.responses, makeItem);
             Card.numWrong = 0;
         }
-        Card.haveHint = Card.question.hints !== undefined;
-        Card.hint = null;
-        Card.answer = Card.question.answer;
-        if (Deck.reverseQandA) {
+        if (Deck.data.reverseQandA) {
             Card.haveHint = false;
             var answer = Card.text;
-            if (Card.question.type === 'mind' && Card.question.answer) {
+            if (Card.type === 'mind' && Card.question.answer) {
                 Card.text = Card.answer;
                 Card.answer = answer;
-            } else if (Card.question.type === 'multiple-choice') {
-                var rightAnswers = _.filter(responses, function (pair) {
+            } else if (Card.type === 'multiple-choice') {
+                var rightAnswers = _.filter(Card.responses, function (pair) {
                     return pair[0];
                 });
                 if (rightAnswers) {
                     var text = _.sample(rightAnswers)[1];
                     if (!_.contains(['True', 'False'], text)) {
+                        Card.type = 'mind';
                         Card.text = text;
                         Card.answer = answer;
                     }
@@ -251,8 +260,8 @@ angular.module('app')
 
     this.nextCard = function () {
         if (Deck.data.activeCardIndex === Deck.data.active.length - 1) {
-            Deck.data.done = true;
-            Deck.save();
+            Deck.restart(false);
+            Card.question = undefined;
             $state.go('tabs.deck');
         } else {
             Card.setup(Deck.data.activeCardIndex + 1);
@@ -272,5 +281,10 @@ angular.module('app')
             Card.setup(Deck.data.activeCardIndex - 1);
             $state.go('tabs.card');
         }
+    };
+
+    this.reset = function () {
+        Card.question = undefined;
+        Deck.reset();
     };
 });

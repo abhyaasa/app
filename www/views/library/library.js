@@ -3,12 +3,13 @@
 angular.module('app')
 
 .controller('LibraryController', function ($rootScope, $scope, $state, $log, _, mode,
-  Library, Deck, indexPromise) {
+  Library, Deck, Card, indexPromise) {
     $scope.selectClosedDeck = function(deckName) {
         Deck.setupClosedDeck(deckName);
     };
 
     $scope.selectOpenDeck = function (displayName) {
+        Card.question = undefined;
         Deck.setupOpenDeck(displayName);
     };
 
@@ -17,15 +18,13 @@ angular.module('app')
 
     if (Library.numDecks() === 1 && mode !== 'debug') {
         $rootScope.config.hideLibrary = true;
-        $rootScope.hideTabs = false;
         if (Library.decklists.open.length > 1) {
             Deck.setupOpenDeck($scope.deckLists.open[0]);
         } else {
             Deck.setupClosedDeck($scope.Decklists.closed[0]);
         }
-    } else {
-        $rootScope.hideTabs = false;
     }
+
     // TODO implement search, Ionic in action 6.3, p 140
     // try AngularJS cookbook p 64 http://jsfiddle.net/msfrisbie/ghsa3nym/
     // angular.extend($scope, {

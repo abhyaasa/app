@@ -16,7 +16,6 @@ angular.module('app')
 .service('Deck', function ($log, $state, $rootScope, settings, getData, Library, _,
   LocalStorage) {
     var Deck = this;
-    this.reverseQandA = false;
     this.count = undefined; // maintained by this.setCount()
 
     var setupQuestions = function (fileName) {
@@ -51,10 +50,9 @@ angular.module('app')
                 name: deckName,
                 history: _.map(Deck.questions, function () { return []; }),
                 filter: copy(initialFilterSettings),
-                reverse: false, // TODO reverse Q&A
+                reverseQandA: false,
                 active: filter(Deck.questions), // indices of active quesitons
-                activeCardIndex: undefined, // current card active index list pointer
-                done: false
+                activeCardIndex: undefined // current card active index list pointer
             };
             Deck.data.outcomes = new Array(Deck.data.active.length);
             Deck.save();

@@ -2,7 +2,7 @@
 
 angular.module('app')
 
-.controller('ResetController', function ($log, $scope, $state, Deck, Library,
+.controller('ResetController', function ($log, $scope, $state, Card, Deck, Library,
   restoreSettings, saveSettings, LocalStorage) {
     $scope.hideConfirm = true;
     $scope.hideWarning = true;
@@ -22,9 +22,9 @@ angular.module('app')
         if ($scope.selection === 'settings') {
             restoreSettings(true);
         } else if ($scope.selection === 'deck') {
-            Deck.reset();
+            Card.reset();
         } else if ($scope.selection === 'all decks') {
-            Deck.reset();
+            Card.reset();
             Library.resetAllDecks();
         } else if ($scope.selection === 'all data') {
             LocalStorage.clear();
