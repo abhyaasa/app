@@ -15,19 +15,19 @@ describe('Deck', function () {
 
     it('invokes success handler with object represented in json file',
         // FIXME fails, if success, test failure also
-        inject(function (getData) {
+        inject(function ($scope, getData) {
             var handler = jasmine.createSpy('success');
             getData('flavor/test.json').then(handler);
-            scope.$digest();
+            $scope.$digest();
             expect(handler).toHaveBeenCalledWith(['data', 'for unit test']);
         }));
 
     it('invokes fail handler when local json file does not exist',
         // FIXME fails, if success, test failure also
-        inject(function ($log, getData) {
+        inject(function ($log, $scope, getData) {
             var handler = jasmine.createSpy('success');
             getData('bogus.json', handler);
-            scope.$digest();
+            $scope.$digest();
             expect(handler).toHaveBeenCalledWith('XX');
         }));
 });

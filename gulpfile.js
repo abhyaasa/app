@@ -7,23 +7,18 @@ var cmdAliases = {
     ct: 'cd scripts; cdeck.py -t -m "prefix"',
     up: 'scripts/upload.sh',
     si: 'gulp is -i',
-    bi: 'gulp build',
+    bi: 'gulp build ios',
     ei: 'ionic emulate ios -l -c -s',
-    ri: 'ionic run ios -l -c -s --device'
+    ri: 'ionic run ios -l -c -s --device',
+    ta: 'scripts/testapp.sh'
 };
 
 var paths = {
     sass: ['./scss/**/*.scss'],
-    src: ['./src/*.ts'], // for typescript compilation
-    indexScripts: [ // added for index task
-        './www/**/*.js',
-        '!./www/js/app.js',
-        '!./www/**/*spec.js', // no test files
-        '!./www/lib/**'
-    ]
+    appJs: ['./www/**/*.js', '!./www/lib/**'] // added
 };
-paths.appScripts = paths.indexScripts.concat(
-    ['./www/js/app.js', './www/**/*spec.js']);
+// added: index generation js files, expluding app.js and test files
+paths.indexJs = paths.appJs.concat(['!./www/js/app.js', '!./www/**/*spec.js']);
 
 var configJsonFile = 'www/data/config.json';
 
@@ -47,7 +42,7 @@ var argv = require('minimist')(process.argv.slice(2)); // added
 
 // Tasks from the ionic starter
 
-gulp.task('default', ['sass', 'index']); // added index
+gulp.task('default', ['sass', 'index', 'jshint']); // added index and jshint
 
 gulp.task('sass', function (done) {
     gulp.src('./scss/ionic.app.scss')
@@ -92,6 +87,7 @@ gulp.task('git-check', 'Complain if git not installed.',
 // Tasks specific to this project
 
 // For Ionic >= 1.2 http://www.typescriptlang.org
+// add to paths something like src: ['./src/*.ts'], // for typescript compilation
 // gulp.task('compile', 'Typescript compilation', function () {
 //     gulp.src(paths.src)
 //         .pipe(typescript({
@@ -107,7 +103,7 @@ gulp.task('index', 'Inject script and css elements into www/index.html',
         sh.cp('-f', './index.html', './www/index.html');
         return gulp.src('./www/index.html')
             .pipe(ginject(
-                gulp.src(paths.indexScripts, {
+                gulp.src(paths.indexJs, {
                     read: false
                 }), {
                     relative: true
@@ -151,9 +147,16 @@ gulp.task('pre-build', ['default'], function () {
     // PUBLISH fill out pre-build
 });
 
+gulp.task('jscs', 'Run jscs linter on all (non-lib) script files', function () {
+    var jscs = require('gulp-jscs');
+    gulp.src(paths.appJs)
+        .pipe(jscs())
+        .pipe(jscs.reporter());
+});
+
 gulp.task('jshint', 'Run jshint on all (non-lib) script files', function () {
     var jshint = require('gulp-jshint');
-    gulp.src(paths.appScripts)
+    gulp.src(paths.appJs)
         .pipe(jshint())
         .pipe(jshint.reporter('default'));
 });

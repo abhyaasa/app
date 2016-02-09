@@ -200,12 +200,12 @@ For each `FLAVOR` there is a `data/flavors/FLAVOR` directory with `library`, `me
 
 ## Scripts
 
-Python and shell scripts: `g` is in the app directory, others in the `scripts` directory.
+Python and shell scripts.
 
 ### Shell scripts
 
 - `g ALIAS` is a shortcut for invoking via `gulp cmd` the script associated with `ALIAS` in the `cmdAliases` dictionary defined early in `gulpfile.js`.
-- `setup.sh` facilitates initial setup and testing of the development environment.
+- `scripts/setup.sh` facilitates initial setup and testing of the development environment.
 - `scripts/psclean.sh` removes stray processes that may be created by ionic development. If the message "An uncaught exception occurred and has been reported to Ionic" is seen, try running this script and confirm with the `ps` output that there are no stray processes. Kill them manually if need be.
 - `scripts/resources.sh` is run after icon or splash screen images in resources directory are changed.
 - `scripts/term.sh` is used by `gulp itest`.
