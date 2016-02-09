@@ -9,8 +9,10 @@ import json
 import argparse
 
 EPILOG = """
-The index is a list of names of .json files in the directory, excluding the index file itself (if it is in the directory).
+The index is a list of names of .json files in the directory, excluding the index file
+itself (if it is in the directory).
 """
+
 
 def main(args):
     # use os.path.isfile or os.path.isdir to avoid directories
@@ -26,6 +28,7 @@ def main(args):
         if dirpath == outdir and outfile in files:
             files.remove(outfile)
     json.dump(files, writer, indent=2, sort_keys=True)
+
 
 def get_args():
     formatter = argparse.RawDescriptionHelpFormatter
