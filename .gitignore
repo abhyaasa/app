@@ -26,6 +26,3 @@ www/index.html
 
 # flavor-specific app data
 www/data/flavor
-
-# temporary files: message output, etc.
-temp/**
