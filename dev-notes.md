@@ -213,7 +213,11 @@ Python and shell scripts.
 
 ### Python scripts
 
-Python 2.6+ (maybe earlier) is needed to run `.py` scripts. Use `-h` argument for usage information. `cdeck.py --format_help` provides documentation on deck and compact deck file formats.
+Correct `.py` script initial `#!` script lines as needed if `/usr/bin/env python` does not run Python 2.6+ (maybe earlier). Python 3.x will not work.
+
+Use `-h` argument for script usage information.
+
+`cdeck.py --format_help` provides documentation on deck and compact deck file formats.
 
 ### jsdoc documentation
 
