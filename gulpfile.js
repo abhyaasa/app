@@ -195,12 +195,13 @@ gulp.task('cmd', '[-a ALIAS] : Execute shell command named ALIAS in aliases dict
         }
     });
 
-gulp.task('set-version', '-v VERSION : Change app version references to VERSION.',
+gulp.task('set-version', '-v VERSION : Change app version references to VERSION, ' +
+    'and create annotated git tag.',
     function () {
         fs.readFile('./package.json', function (err, data) {
             var version = JSON.parse(data).version;
             console.log('Setting version ' + version + ' to ' + argv.v);
-            gulp.src(['./bower.json', './www/data/config.json', './package.json'])
+            gulp.src(['./www/data/config.json', './package.json'])
             // see https://www.npmjs.com/package/gulp-bump
             .pipe(bump({version: argv.v}))
             .pipe(gulp.dest('./'));
@@ -208,6 +209,7 @@ gulp.task('set-version', '-v VERSION : Change app version references to VERSION.
             .pipe(replace(/(<widget.*version=")[^"]*/, '$1' + argv.v))
             .pipe(gulp.dest('./'));
         });
+        sh.exec('git tag -a v' + argv.v + ' -m "version ' + argv.v + '"');
     });
 
 // ------------------ Testing tasks follow -------------------------------------

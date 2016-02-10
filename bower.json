@@ -1,34 +1,14 @@
 {
-  "name": "abhyaasa",
-  "version": "0.0.2",
-  "private": "true",
-  "devDependencies": {
-    "ionic": "driftyco/ionic-bower#1.2.4"
-  },
-  "resolutions": {
-    "angular": "1.4.3"
-  },
-  "homepage": "https://github.com/abhyaasa/app",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/abhyaasa/app"
-  },
-  "authors": [
-    "Vasudeva (Chris Haynes) <abhyaasa108@gmail.com>"
-  ],
-  "description": "SGS Datta Deepam flash card application; under development.",
-  "keywords": [
-    "flashcards"
-  ],
-  "license": "MIT",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "www/lib",
-    "www/data"
-  ],
-  "dependencies": {
-    "underscore": "~1.8.3",
-    "angular-mocks": "1.3"
-  }
+    "name": "abhyaasa",
+    "private": "true",
+    "devDependencies": {
+        "ionic": "driftyco/ionic-bower#1.2.4"
+    },
+    "resolutions": {
+        "angular": "1.4.3"
+    },
+    "dependencies": {
+        "underscore": "~1.8.3",
+        "angular-mocks": "1.3"
+    }
 }

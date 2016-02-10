@@ -37,19 +37,6 @@
     "scsslint": "0.0.3",
     "shelljs": "^0.3.0"
   },
-  "author": "Christopher T. Haynes <vasudeva.chaynes@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "email": "vasudeva.chaynes@gmail.com",
-    "url": "https://github.com/abhyaasa/app/issues"
-  },
-  "keywords": [
-    "flashcards"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/abhyaasa/app"
-  },
   "cordovaPlugins": [
     "cordova-plugin-console",
     "cordova-plugin-device",
