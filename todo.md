@@ -9,7 +9,7 @@ A partial list of additional todo items follows, grouped in approximately decrea
   - xcode simulator and device run launches device app, only shows good nav and tab bar without icons, no bad log messages, last is ```
     2016-02-06 19:39:32.567 Abhyaasa[22191:1285789] Finished load of: file:///Users/home/Library/Developer/CoreSimulator/Devices/2857D4DE-23C4-464B-B9EF-E14D33127588/data/Containers/Bundle/Application/95671FA2-F1B1-45A1-A1AE-22EFA0537996/Abhyaasa.app/www/index.html#/tabs/library```
   - ionic run emulator and hangs with ionic spinner
-  - ionic view similar app haning to ionic run
+  - ionic view similar app hanging to ionic run
 
 
 - REVIEW items for periodic consideration

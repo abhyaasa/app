@@ -26,3 +26,7 @@ www/index.html
 
 # flavor-specific app data
 www/data/flavor
+
+# flavor-specific resources link
+resources/android/
+resources/ios/
