@@ -17,6 +17,7 @@ angular.module('app', ['ionic', 'services'])
             cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
         }
         if (window.StatusBar) {
+            // cordova-plugin-statusbar required
             StatusBar.styleDefault();
         }
     });

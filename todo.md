@@ -33,7 +33,8 @@ A partial list of additional todo items follows, grouped in approximately decrea
   - iTunes publication
 
 
-- FUTURE for consideration at a later time
+- FUTURE for consideration at a later time  
+  - ionic 2, angular 2, typescript coversion
   - splash and icon http://learn.ionicframework.com/formulas/adding-an-icon/ and  http://blog.ionic.io/automating-icons-and-splash-screens/  - Leitner learning algorithm https://en.wikipedia.org/wiki/Leitner_system
   - devanagari q, transliteration a
   - deck state copy, rename, reorder, etc
