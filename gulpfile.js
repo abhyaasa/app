@@ -18,6 +18,7 @@ var paths = {
     sass: ['./scss/**/*.scss'],
     appJs: ['./www/**/*.js', '!./www/lib/**'] // added
 };
+
 // added: index generation js files, expluding app.js and test files
 paths.indexJs = paths.appJs.concat(['!./www/js/app.js', '!./www/**/*spec.js']);
 
@@ -39,7 +40,6 @@ var fs = require('fs');
 // var concat = require('gulp-concat');
 
 var argv = require('minimist')(process.argv.slice(2)); // added
-
 
 // Tasks from the ionic starter
 
@@ -83,7 +83,6 @@ gulp.task('git-check', 'Complain if git not installed.',
         }
         done();
     });
-
 
 // Tasks specific to this project
 
@@ -203,7 +202,7 @@ gulp.task('set-version', '-v VERSION : Change app version references to VERSION,
             console.log('Setting version ' + version + ' to ' + argv.v);
             gulp.src(['./www/data/config.json', './package.json'])
             // see https://www.npmjs.com/package/gulp-bump
-            .pipe(bump({version: argv.v}))
+            .pipe(bump({ version: argv.v }))
             .pipe(gulp.dest('./'));
             gulp.src(['./config.xml'])
             .pipe(replace(/(<widget.*version=")[^"]*/, '$1' + argv.v))
@@ -248,8 +247,8 @@ gulp.task('karma', 'Run karma in watch mode.', function () {
 
 gulp.task('itest', 'Integration (e-e) tests', function () {
     // FUTURE itest not working
-    var cwd = process.cwd(),
-        mkCmd = function (cmd) {
+    var cwd = process.cwd();
+    var mkCmd = function (cmd) {
             return 'scripts/term.sh "cd ' + cwd + ';' + cmd + '"';
         };
     sh.exec(mkCmd('ionic serve -c -t ios ' + ionicBrowser));

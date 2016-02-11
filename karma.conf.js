@@ -60,7 +60,7 @@ module.exports = function (config) {
             flags: [
                 '--window-size=350,350',
                 '--window-position=0,0'
-            ]}},
+            ] } },
 
         // Continuous Integration mode
         // if true, Karma captures browsers, runs the tests and exits

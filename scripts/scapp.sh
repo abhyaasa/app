@@ -4,4 +4,4 @@ cd ..
 rm -rf scapp
 git clone --depth=1 https://github.com/abhyaasa/app scapp
 cd scapp
-./scripts/setup.sh | tee temp/setup.txt
+./scripts/local_setup.sh

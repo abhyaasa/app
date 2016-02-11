@@ -36,6 +36,9 @@
   "disallowTrailingComma": true,
   "requireDotNotation": true,
   "requireSpaceAfterLineComment": true,
+  "requirePaddingNewLinesBeforeLineComments": false,
+  "requirePaddingNewLinesAfterBlocks": false,
+  "requireTrailingComma": false,
   "requireSpacesInFunctionExpression": {
     "beforeOpeningCurlyBrace": true
   },
