@@ -152,24 +152,27 @@ For each `FLAVOR` there is a `data/flavors/FLAVOR` directory with `library`, `me
 
 ## Scripts
 
-Python and shell scripts.
+Python and shell scripts. All but `g` are in the `scripts` directory.
 
 ### Shell scripts
 
 - `g ALIAS` is a shortcut for invoking via `gulp cmd` the script associated with `ALIAS` in the `cmdAliases` dictionary defined early in `gulpfile.js`.
-- `scripts/setup.sh` facilitates initial setup and testing of the development environment.
-- `scripts/psclean.sh` removes stray processes that may be created by ionic development. If the message "An uncaught exception occurred and has been reported to Ionic" is seen, try running this script and confirm with the `ps` output that there are no stray processes. Kill them manually if need be.
-- `scripts/resources.sh` is run after icon or splash screen images in resources directory are changed.
-- `scripts/term.sh` is used by `gulp itest`.
-- `scripts/upload.sh` uploads the app for testing with the **ionic view** app.
+- `/full_setup.sh` and `local_setup.sh` facilitate initial setup and testing of the development environment.
+- `psclean.sh` removes stray processes that may be created by ionic development. If the message "An uncaught exception occurred and has been reported to Ionic" is seen, try running this script and confirm with the `ps` output that there are no stray processes. Kill them manually if need be.
+- `resources.sh` is run after icon or splash screen images in resources directory are changed.
+- `term.sh` is used by `gulp itest`.
+- `scapp.sh` and `testapp.sh` are used by gulp test aliases.
+- `upload.sh` uploads the app for testing with the **ionic view** app.
 
 ### Python scripts
+
+- `cdeck.py --format_help` provides documentation on deck and compact deck file formats.
+- `index.py` creates `index.json` files for data `library` directories.
+- `trans.py` converts between Devanagari and several transliteration scripts.
 
 Correct `.py` script initial `#!` script lines as needed if `/usr/bin/env python` does not run Python 2.6+ (maybe earlier). Python 3.x will not work.
 
 Use `-h` argument for script usage information.
-
-`cdeck.py --format_help` provides documentation on deck and compact deck file formats.
 
 ### jsdoc documentation
 
