@@ -3,6 +3,7 @@
   <name>Abhyaasa</name>
   <description>SGS Datta Deepam flash card application; under development.</description>
   <author email="abhyaasa108@gmail.com" href="https://github.com/abhyaasa/app">Vasudeva (Chris Haynes)</author>
+  <allow-navigation href="*"/>
   <content src="index.html"/>
   <access origin="*"/>
   <preference name="AndroidPersistentFileLocation" value="Internal"/>

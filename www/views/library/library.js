@@ -4,7 +4,7 @@ angular.module('app')
 
 .controller('LibraryController', function ($rootScope, $scope, $state, $log, _, mode,
   Library, Deck, Card, indexPromise) {
-    $scope.selectClosedDeck = function(deckName) {
+    $scope.selectClosedDeck = function (deckName) {
         Deck.setupClosedDeck(deckName);
     };
 
@@ -45,7 +45,7 @@ angular.module('app')
 .controller('LibraryHelpController', function () {})
 
 .service('Library', function ($log, $state, getData, LocalStorage, _) {
-    var Library = this;
+    var _this = this;
 
     var openDecks = LocalStorage.getObject('*openDecks*');
     if (openDecks.length === undefined) {
@@ -58,26 +58,26 @@ angular.module('app')
         var isOpen = function (fd) {
             return _.contains(openDecks, fd.display);
         };
-        Library.deckLists.open = openDecks.sort();
-        Library.deckLists.closed = _.reject(fileDecks, isOpen).sort();
-        $log.debug('deckLists', JSON.stringify(Library.deckLists));
+        _this.deckLists.open = openDecks.sort();
+        _this.deckLists.closed = _.reject(fileDecks, isOpen).sort();
+        $log.debug('deckLists', JSON.stringify(_this.deckLists));
     };
     this.numDecks = function () {
-        return Library.deckLists.open.length + Library.deckLists.closed.length;
+        return _this.deckLists.open.length + _this.deckLists.closed.length;
     };
 
     var fileDecks;
     this.provideIndex = function (indexPromise) {
         var indexNames = indexPromise.data;
         $log.debug('indexNames', indexNames);
-        fileDecks =_.map(indexNames, function (name) {
+        fileDecks = _.map(indexNames, function (name) {
             return {
                 file: name,
                 // discard suffix and replace _ characters with spaces
                 display: name.match(/.*(?=\.)/)[0].replace(/_/g, ' ')
             };
         });
-        Library.updateDeckLists();
+        _this.updateDeckLists();
     };
 
     this.saveDeck = function (displayName, data) {

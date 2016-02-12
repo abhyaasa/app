@@ -15,12 +15,12 @@ angular.module('app')
 
 .service('Deck', function ($log, $state, $rootScope, settings, getData, Library, _,
   LocalStorage) {
-    var Deck = this;
+    var _this = this;
     this.count = undefined; // maintained by this.setCount()
 
     var setupQuestions = function (fileName) {
         return getData('flavor/library/' + fileName).then(function (promise) {
-            Deck.questions = promise.data;
+            _this.questions = promise.data;
         });
     };
 
@@ -46,60 +46,60 @@ angular.module('app')
         };
         $log.debug('Deck setup', JSON.stringify(deckName));
         setupQuestions(deckName.file).then(function () {
-            Deck.data = {
+            _this.data = {
                 name: deckName,
-                history: _.map(Deck.questions, function () { return []; }),
+                history: _.map(_this.questions, function () { return []; }),
                 filter: copy(initialFilterSettings),
                 reverseQandA: false,
-                active: filter(Deck.questions), // indices of active quesitons
+                active: filter(_this.questions), // indices of active quesitons
                 activeCardIndex: undefined // current card active index list pointer
             };
-            Deck.data.outcomes = new Array(Deck.data.active.length);
-            Deck.save();
+            _this.data.outcomes = new Array(_this.data.active.length);
+            _this.save();
             $state.go('tabs.card');
         });
     };
 
     this.setupOpenDeck = function (displayName) {
-        Deck.data = LocalStorage.getObject(displayName);
-        setupQuestions(Deck.data.name.file).then(function () {
+        _this.data = LocalStorage.getObject(displayName);
+        setupQuestions(_this.data.name.file).then(function () {
             $state.go('tabs.card');
         });
     };
 
     this.reset = function () {
-        if (Deck.data) {
-            Library.resetDeck(Deck.data.name);
-            Deck.data = undefined;
+        if (_this.data) {
+            Library.resetDeck(_this.data.name);
+            _this.data = undefined;
         }
     };
 
     this.save = function () {
-        Library.saveDeck(Deck.data.name.display, Deck.data);
+        Library.saveDeck(_this.data.name.display, _this.data);
     };
 
     this.outcome = function (qid, outcome) {
-        Deck.data.outcomes[Deck.data.activeCardIndex] = outcome;
-        Deck.data.history[qid].push(outcome);
-        Deck.save();
+        _this.data.outcomes[_this.data.activeCardIndex] = outcome;
+        _this.data.history[qid].push(outcome);
+        _this.save();
     };
 
     this.restart = function (restoreRemoved) {
         if (restoreRemoved) {
-            Deck.data.outcomes = new Array(Deck.data.active.length);
+            _this.data.outcomes = new Array(_this.data.active.length);
         } else {
-            Deck.data.outcomes = _.map(Deck.data.outcomes, function (outcome) {
+            _this.data.outcomes = _.map(_this.data.outcomes, function (outcome) {
                 return outcome === 'removed' ? 'removed' : undefined;
             });
         }
-        Deck.data.activeCardIndex = undefined;
-        Deck.save();
+        _this.data.activeCardIndex = undefined;
+        _this.save();
         $state.go('tabs.card');
     };
 
     this.enterTab = function () {
         var multiset = function (array) {
-            var ms = {remaining: 0};
+            var ms = { remaining: 0 };
             array.map(function (value) {
                 if (_.has(ms, value)) {
                     ms[value] += 1;
@@ -109,12 +109,12 @@ angular.module('app')
             });
             return ms;
         };
-        var isUndefined = function(value) {
+        var isUndefined = function (value) {
             return value === undefined;
         };
-        if (Deck.data) {
-            Deck.count = multiset(Deck.data.outcomes);
-            Deck.count.remaining = _.filter(Deck.data.outcomes, isUndefined).length;
+        if (_this.data) {
+            _this.count = multiset(_this.data.outcomes);
+            _this.count.remaining = _.filter(_this.data.outcomes, isUndefined).length;
         }
     };
 })

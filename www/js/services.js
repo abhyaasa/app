@@ -33,6 +33,16 @@ angular.module('services', ['ionic'])
 
 .constant('_', window._) // underscore.js access
 
+.constant('httpStubData', {
+    'config.json': {
+        flavor: 'test',
+        email: 'abhyaasa108@gmail.com',
+        href: 'https://github.com/abhyaasa/app',
+        name: 'Abhyaasa',
+        version: '0.0.2'
+    }
+})
+
 /**
  * @name getData
  * @param {string} path to file, relative to www/data
@@ -41,12 +51,14 @@ angular.module('services', ['ionic'])
  */
 .provider('getData', function () {
     var injector = angular.injector(['ng']);
+    // var httpStubData = injector.get('httpStubData');
     var $http = injector.get('$http');
     var $log = injector.get('$log');
     this.$get = function () {
+        // FIXME return $q.when( someValue );
         return function (path, failure) {
-            return $http.get('/data/' + path).catch(
-                function (error) {
+            return $http.get('/data/' + path)
+                .catch(function (error) {
                     if (failure) {
                         return failure(error);
                     } else {

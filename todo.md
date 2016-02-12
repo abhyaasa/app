@@ -6,11 +6,19 @@ There are lots of things to do. Some are recorded as Atom todo-show (ctrl-shift-
 A partial list of additional todo items follows, grouped in approximately decreasing priority order reflected by todo-show group tags. Order within groups sometimes reflects decreasing priority.
 
 - FIXME bugs with unknown location
-  - xcode simulator and device run launches device app, only shows good nav and tab bar without icons, no bad log messages, last is ```
-    2016-02-06 19:39:32.567 Abhyaasa[22191:1285789] Finished load of: file:///Users/home/Library/Developer/CoreSimulator/Devices/2857D4DE-23C4-464B-B9EF-E14D33127588/data/Containers/Bundle/Application/95671FA2-F1B1-45A1-A1AE-22EFA0537996/Abhyaasa.app/www/index.html#/tabs/library```
-  - ionic run emulator and hangs with ionic spinner
-  - ionic view similar app hanging to ionic run
+  - xcode console: 2016-02-11 17:43:58.971 Abhyaasa[55934:1772096] ERROR Internal navigation rejected - <allow-navigation> not set for url='http://172.27.35.142:8100/'
+  - added`<allow-navigation href="*" />` to config.xml
+  - xcode simulator and device run launches device app, only shows ionic spinner, last console messages```
+  2016-02-11 20:23:56.181 Abhyaasa[59538:2107071] Resetting plugins due to page load.
+  2016-02-11 20:24:16.560 Abhyaasa[59538:2107071] Failed to load webpage with error: The request timed out.```
+  - xcode console
+  - ionic emulate and run --device work
+  - ionic view displays nav and tab bars, but no tab icons or tab content
 
+  - stub file reads:
+    app.js: getDataProvider.$get()('config.json')
+    app.js: getDataProvider.$get()('flavor/library/index.json')
+    deck.js: getData('flavor/library/' + fileName)
 
 - REVIEW items for periodic consideration
   - xcode warning also in tabtest (along with 4 status bar warnings): CDVSplashScreen.m: 'interfaceOrientation' is deprecated: first deprecated in iOS 8.0, updateBounds method line
