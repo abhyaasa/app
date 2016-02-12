@@ -6,19 +6,13 @@ There are lots of things to do. Some are recorded as Atom todo-show (ctrl-shift-
 A partial list of additional todo items follows, grouped in approximately decreasing priority order reflected by todo-show group tags. Order within groups sometimes reflects decreasing priority.
 
 - FIXME bugs with unknown location
-  - xcode console: 2016-02-11 17:43:58.971 Abhyaasa[55934:1772096] ERROR Internal navigation rejected - <allow-navigation> not set for url='http://172.27.35.142:8100/'
-  - added`<allow-navigation href="*" />` to config.xml
-  - xcode simulator and device run launches device app, only shows ionic spinner, last console messages```
-  2016-02-11 20:23:56.181 Abhyaasa[59538:2107071] Resetting plugins due to page load.
-  2016-02-11 20:24:16.560 Abhyaasa[59538:2107071] Failed to load webpage with error: The request timed out.```
-  - xcode console
-  - ionic emulate and run --device work
+  - xcode simulator works
+  - xcode simulator works, iphone run launches app with initial page but not responsive with 98% CPU. After closing xcode, uploaded up works. Last console messages```
+  2016-02-12 11:49:10.323 Abhyaasa[223:5879] THREAD WARNING: ['Device'] took '16.217041' ms. Plugin should use a background thread.
+  ```
+  - when http url started with /, xcode console: 2016-02-11 17:43:58.971 Abhyaasa[55934:1772096] ERROR Internal navigation rejected - <allow-navigation> not set for url='http://172.27.35.142:8100/'
+  - added`<allow-navigation href="*" />` to config.xml, then ionic emulate and run --device worked
   - ionic view displays nav and tab bars, but no tab icons or tab content
-
-  - stub file reads:
-    app.js: getDataProvider.$get()('config.json')
-    app.js: getDataProvider.$get()('flavor/library/index.json')
-    deck.js: getData('flavor/library/' + fileName)
 
 - REVIEW items for periodic consideration
   - xcode warning also in tabtest (along with 4 status bar warnings): CDVSplashScreen.m: 'interfaceOrientation' is deprecated: first deprecated in iOS 8.0, updateBounds method line

@@ -40,7 +40,29 @@ angular.module('services', ['ionic'])
         href: 'https://github.com/abhyaasa/app',
         name: 'Abhyaasa',
         version: '0.0.2'
-    }
+    },
+    'flavor/library/index.json': [
+        'deck.json',
+        'deck_2.json'
+    ],
+    'flavor/library/deck.json': [{
+        answer: 'Ci',
+        id: 3,
+        tags: [
+            '.ci'
+        ],
+        text: 'case insensitive',
+        type: 'mind'
+    }, {
+        answer: '<p>Buddy at shelter</p>',
+        id: 4,
+        tags: [
+            '.html'
+        ],
+        text: '<p>image <img alt="Buddy"src="data/flavor/media/deck_2/buddyShelter.jpg"' +
+            ' title="Buddy at shelter" /></p>',
+        type: 'mind'
+    }]
 })
 
 /**
@@ -54,10 +76,11 @@ angular.module('services', ['ionic'])
     // var httpStubData = injector.get('httpStubData');
     var $http = injector.get('$http');
     var $log = injector.get('$log');
+    var urlPrefix = ionic.Platform.isAndroid() ? '/android_asset/www/' : '';
     this.$get = function () {
-        // FIXME return $q.when( someValue );
+        // FIXME return $q.when( someValue ) using httpStubData
         return function (path, failure) {
-            return $http.get('/data/' + path)
+            return $http.get(urlPrefix + 'data/' + path)
                 .catch(function (error) {
                     if (failure) {
                         return failure(error);

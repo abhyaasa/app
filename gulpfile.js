@@ -7,7 +7,7 @@ var cmdAliases = {
     ct: 'cd scripts; cdeck.py -t -m "prefix"',
     up: './scripts/upload.sh',
     si: 'gulp is -i',
-    bi: 'gulp build ios',
+    bi: 'gulp build',
     ei: 'ionic emulate ios -l -c -s',
     ri: 'ionic run ios -l -c -s --device',
     ta: './scripts/testapp.sh',

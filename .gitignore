@@ -30,3 +30,6 @@ www/data/flavor
 # flavor-specific resources link
 resources/android/
 resources/ios/
+
+# created by ionic upload
+www.zip
