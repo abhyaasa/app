@@ -157,12 +157,13 @@ Python and shell scripts. All but `g` are in the `scripts` directory.
 ### Shell scripts
 
 - `g ALIAS` is a shortcut for invoking via `gulp cmd` the script associated with `ALIAS` in the `cmdAliases` dictionary defined early in `gulpfile.js`.
-- `/full_setup.sh` and `local_setup.sh` facilitate initial setup and testing of the development environment.
-- `psclean.sh` removes stray processes that may be created by ionic development. If the message "An uncaught exception occurred and has been reported to Ionic" is seen, try running this script and confirm with the `ps` output that there are no stray processes. Kill them manually if need be.
-- `resources.sh` is run after icon or splash screen images in resources directory are changed.
+- `full_setup.sh` installs global and local dependencies.
+- `local_setup.sh` installs local dependencies.
 - `term.sh` is used by `gulp itest`.
-- `scapp.sh` and `testapp.sh` are used by gulp test aliases.
+- `scapp.sh` used by gulp `sc` alias for testing clone of the app.
+- `testapp.sh` used by gulp `ta` alias for testing build from standard template.
 - `upload.sh` uploads the app for testing with the **ionic view** app.
+- `psclean.sh` removes stray processes that may be created by ionic development. If the message "An uncaught exception occurred and has been reported to Ionic" is seen, try running this script and confirm with the `ps` output that there are no stray processes. Kill them manually if need be.
 
 ### Python scripts
 
@@ -198,6 +199,13 @@ OPEN_DECK_DISPLAY_NAME: decks's data dictionary
 
 
 ## Updating
+
+### resources
+
+After a change has been made to an image file at top level in the `resources` directory of the current flavor, the following to update the `android` and `ios` subdirectories.
+```
+$ ionic resources
+```
 
 ### Update ruby gems used by gulp (and ionic?)
 ```

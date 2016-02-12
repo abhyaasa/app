@@ -33,6 +33,38 @@ angular.module('services', ['ionic'])
 
 .constant('_', window._) // underscore.js access
 
+.constant('httpStubData', {
+    'config.json': {
+        flavor: 'test',
+        email: 'abhyaasa108@gmail.com',
+        href: 'https://github.com/abhyaasa/app',
+        name: 'Abhyaasa',
+        version: '0.0.2'
+    },
+    'flavor/library/index.json': [
+        'deck.json',
+        'deck_2.json'
+    ],
+    'flavor/library/deck.json': [{
+        answer: 'Ci',
+        id: 3,
+        tags: [
+            '.ci'
+        ],
+        text: 'case insensitive',
+        type: 'mind'
+    }, {
+        answer: '<p>Buddy at shelter</p>',
+        id: 4,
+        tags: [
+            '.html'
+        ],
+        text: '<p>image <img alt="Buddy"src="data/flavor/media/deck_2/buddyShelter.jpg"' +
+            ' title="Buddy at shelter" /></p>',
+        type: 'mind'
+    }]
+})
+
 /**
  * @name getData
  * @param {string} path to file, relative to www/data
@@ -41,12 +73,15 @@ angular.module('services', ['ionic'])
  */
 .provider('getData', function () {
     var injector = angular.injector(['ng']);
+    // var httpStubData = injector.get('httpStubData');
     var $http = injector.get('$http');
     var $log = injector.get('$log');
+    var urlPrefix = ionic.Platform.isAndroid() ? '/android_asset/www/' : '';
     this.$get = function () {
+        // FIXME return $q.when( someValue ) using httpStubData
         return function (path, failure) {
-            return $http.get('/data/' + path).catch(
-                function (error) {
+            return $http.get(urlPrefix + 'data/' + path)
+                .catch(function (error) {
                     if (failure) {
                         return failure(error);
                     } else {

@@ -6,11 +6,13 @@ There are lots of things to do. Some are recorded as Atom todo-show (ctrl-shift-
 A partial list of additional todo items follows, grouped in approximately decreasing priority order reflected by todo-show group tags. Order within groups sometimes reflects decreasing priority.
 
 - FIXME bugs with unknown location
-  - xcode simulator and device run launches device app, only shows good nav and tab bar without icons, no bad log messages, last is ```
-    2016-02-06 19:39:32.567 Abhyaasa[22191:1285789] Finished load of: file:///Users/home/Library/Developer/CoreSimulator/Devices/2857D4DE-23C4-464B-B9EF-E14D33127588/data/Containers/Bundle/Application/95671FA2-F1B1-45A1-A1AE-22EFA0537996/Abhyaasa.app/www/index.html#/tabs/library```
-  - ionic run emulator and hangs with ionic spinner
-  - ionic view similar app haning to ionic run
-
+  - xcode simulator works
+  - xcode simulator works, iphone run launches app with initial page but not responsive with 98% CPU. After closing xcode, uploaded up works. Last console messages```
+  2016-02-12 11:49:10.323 Abhyaasa[223:5879] THREAD WARNING: ['Device'] took '16.217041' ms. Plugin should use a background thread.
+  ```
+  - when http url started with /, xcode console: 2016-02-11 17:43:58.971 Abhyaasa[55934:1772096] ERROR Internal navigation rejected - <allow-navigation> not set for url='http://172.27.35.142:8100/'
+  - added`<allow-navigation href="*" />` to config.xml, then ionic emulate and run --device worked
+  - ionic view displays nav and tab bars, but no tab icons or tab content
 
 - REVIEW items for periodic consideration
   - xcode warning also in tabtest (along with 4 status bar warnings): CDVSplashScreen.m: 'interfaceOrientation' is deprecated: first deprecated in iOS 8.0, updateBounds method line
