@@ -33,38 +33,6 @@ angular.module('services', ['ionic'])
 
 .constant('_', window._) // underscore.js access
 
-.constant('httpStubData', {
-    'config.json': {
-        flavor: 'test',
-        email: 'abhyaasa108@gmail.com',
-        href: 'https://github.com/abhyaasa/app',
-        name: 'Abhyaasa',
-        version: '0.0.2'
-    },
-    'flavor/library/index.json': [
-        'deck.json',
-        'deck_2.json'
-    ],
-    'flavor/library/deck.json': [{
-        answer: 'Ci',
-        id: 3,
-        tags: [
-            '.ci'
-        ],
-        text: 'case insensitive',
-        type: 'mind'
-    }, {
-        answer: '<p>Buddy at shelter</p>',
-        id: 4,
-        tags: [
-            '.html'
-        ],
-        text: '<p>image <img alt="Buddy"src="data/flavor/media/deck_2/buddyShelter.jpg"' +
-            ' title="Buddy at shelter" /></p>',
-        type: 'mind'
-    }]
-})
-
 /**
  * @name getData
  * @param {string} path to file, relative to www/data
@@ -78,7 +46,6 @@ angular.module('services', ['ionic'])
     var $log = injector.get('$log');
     var urlPrefix = ionic.Platform.isAndroid() ? '/android_asset/www/' : '';
     this.$get = function () {
-        // FIXME return $q.when( someValue ) using httpStubData
         return function (path, failure) {
             return $http.get(urlPrefix + 'data/' + path)
                 .catch(function (error) {
@@ -144,6 +111,28 @@ angular.module('services', ['ionic'])
 // http://www.gajotres.net/playing-native-audio-using-ionic-framework-and-cordova/
 // https://github.com/arielfaur/ionic-audio
 .factory('MediaSrv', function ($q, $ionicPlatform, $window, $log) {
+
+    function getErrorMessage(code) {
+        if (code === 1) {
+            return 'MediaError.MEDIA_ERR_ABORTED';
+        } else if (code === 2) {
+            return 'MediaError.MEDIA_ERR_NETWORK';
+        } else if (code === 3) {
+            return 'MediaError.MEDIA_ERR_DECODE';
+        } else if (code === 4) {
+            return 'MediaError.MEDIA_ERR_NONE_SUPPORTED';
+        } else {
+            return 'Unknown code <' + code + '>';
+        }
+    }
+
+    function _logError(src, err) {
+        $log.error('media error', {
+            code: err.code,
+            message: getErrorMessage(err.code)
+        });
+    }
+
     function loadMedia(src, onError, onStatus, onStop) {
         var defer = $q.defer();
         $ionicPlatform.ready(function () {
@@ -172,13 +161,6 @@ angular.module('services', ['ionic'])
         return defer.promise;
     }
 
-    function _logError(src, err) {
-        $log.error('media error', {
-            code: err.code,
-            message: getErrorMessage(err.code)
-        });
-    }
-
     function getStatusMessage(status) {
         if (status === 0) {
             return 'Media.MEDIA_NONE';
@@ -194,21 +176,6 @@ angular.module('services', ['ionic'])
             return 'Unknown status <' + status + '>';
         }
     }
-
-    function getErrorMessage(code) {
-        if (code === 1) {
-            return 'MediaError.MEDIA_ERR_ABORTED';
-        } else if (code === 2) {
-            return 'MediaError.MEDIA_ERR_NETWORK';
-        } else if (code === 3) {
-            return 'MediaError.MEDIA_ERR_DECODE';
-        } else if (code === 4) {
-            return 'MediaError.MEDIA_ERR_NONE_SUPPORTED';
-        } else {
-            return 'Unknown code <' + code + '>';
-        }
-    }
-
     var service = {
         loadMedia: loadMedia,
         getStatusMessage: getStatusMessage,

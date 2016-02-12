@@ -53,19 +53,6 @@ angular.module('app')
     }
     $log.debug('openDecks', JSON.stringify(openDecks));
 
-    this.deckLists = { open: undefined, closed: undefined };
-    this.updateDeckLists = function () {
-        var isOpen = function (fd) {
-            return _.contains(openDecks, fd.display);
-        };
-        _this.deckLists.open = openDecks.sort();
-        _this.deckLists.closed = _.reject(fileDecks, isOpen).sort();
-        $log.debug('deckLists', JSON.stringify(_this.deckLists));
-    };
-    this.numDecks = function () {
-        return _this.deckLists.open.length + _this.deckLists.closed.length;
-    };
-
     var fileDecks;
     this.provideIndex = function (indexPromise) {
         var indexNames = indexPromise.data;
@@ -78,6 +65,19 @@ angular.module('app')
             };
         });
         _this.updateDeckLists();
+    };
+
+    this.deckLists = { open: undefined, closed: undefined };
+    this.updateDeckLists = function () {
+        var isOpen = function (fd) {
+            return _.contains(openDecks, fd.display);
+        };
+        _this.deckLists.open = openDecks.sort();
+        _this.deckLists.closed = _.reject(fileDecks, isOpen).sort();
+        $log.debug('deckLists', JSON.stringify(_this.deckLists));
+    };
+    this.numDecks = function () {
+        return _this.deckLists.open.length + _this.deckLists.closed.length;
     };
 
     this.saveDeck = function (displayName, data) {
