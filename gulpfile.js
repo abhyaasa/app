@@ -1,7 +1,5 @@
 'use strict';
 
-// Configuration constants
-
 var cmdAliases = {
     cd: 'cd data/cdecks/test; update.sh deck_2',
     ct: 'cd scripts; cdeck.py -t -m "prefix"',
@@ -16,10 +14,9 @@ var cmdAliases = {
 
 var paths = {
     sass: ['./scss/**/*.scss'],
-    appJs: ['./www/**/*.js', '!./www/lib/**'] // added
+    appJs: ['./www/**/*.js', '!./www/lib/**']
 };
 
-// added: index generation js files, expluding app.js and test files
 paths.indexJs = paths.appJs.concat(['!./www/js/app.js', '!./www/**/*spec.js']);
 
 var configJsonFile = 'www/data/config.json';
@@ -37,15 +34,15 @@ var _ = require('underscore');
 var bump = require('gulp-bump');
 var replace = require('gulp-replace');
 var fs = require('fs');
-// var concat = require('gulp-concat');
+var markdown = require('gulp-markdown');
+// var concat = require('gulp-concat'); # included in devDependencies, but not used
 
-var argv = require('minimist')(process.argv.slice(2)); // added
+var argv = require('minimist')(process.argv.slice(2));
 
-// Tasks from the ionic starter
+gulp.task('default', 'Run by ionic app build and serve commands',
+    ['sass', 'index', 'md', 'jshint']);
 
-gulp.task('default', ['sass', 'index', 'jshint']); // added index and jshint
-
-gulp.task('sass', function (done) {
+gulp.task('sass', 'Ionic .scss to .css file transformation', function (done) {
     gulp.src('./scss/ionic.app.scss')
         .pipe(sass())
         .pipe(gulp.dest('./www/css/'))
@@ -62,29 +59,6 @@ gulp.task('sass', function (done) {
 gulp.task('watch', 'Only watches sass files.', function () {
     gulp.watch(paths.sass, ['sass']);
 });
-
-gulp.task('install', ['git-check'], function () {
-    return bower.commands.install()
-        .on('log', function (data) {
-            gutil.log('bower', gutil.colors.cyan(data.id), data.message);
-        });
-});
-
-gulp.task('git-check', 'Complain if git not installed.',
-    function (done) { // run by ionic
-        if (!sh.which('git')) {
-            console.log('  ' + gutil.colors.red('Git is not installed.') +
-                '\n  Git, the version control system, is required to download Ionic.' +
-                '\n  Download git here: ' +
-                gutil.colors.cyan('http://git-scm.com/downloads') + '.' +
-                '\n  Once git is installed, run \'' +
-                gutil.colors.cyan('gulp install') + '\' again.');
-            process.exit(1);
-        }
-        done();
-    });
-
-// Tasks specific to this project
 
 // For Ionic >= 1.2 http://www.typescriptlang.org
 // add to paths something like src: ['./src/*.ts'], // for typescript compilation
@@ -130,6 +104,13 @@ gulp.task('flavor',
         }
     });
 
+gulp.task('md', 'Process markdown files', function () {
+    sh.exec('rm -rf ./www/data/md_html');
+    gulp.src('./data/md/*.md')
+        .pipe(markdown())
+        .pipe(gulp.dest('./www/data/md_html'));
+});
+
 gulp.task('is',
     '[-a|-i|-l] : ionic serve for android, ios, or (default) both', ['default'],
     function () {
@@ -140,13 +121,9 @@ gulp.task('is',
         sh.exec(command);
     });
 
-gulp.task('build', '[-a] for Android, default iOS', ['pre-build'], function () {
+gulp.task('build', '[-a] for Android, default iOS', ['jscs'], function () {
     // BUILD finish this: see https://github.com/leob/ionic-quickstarter
     sh.exec('ionic build ' + (argv.a ? 'android' : 'ios'));
-});
-
-gulp.task('pre-build', ['default', 'jscs'], function () {
-    // PUBLISH fill out pre-build
 });
 
 gulp.task('jscs', 'Run jscs linter on all (non-lib) script files', function () {
@@ -163,11 +140,8 @@ gulp.task('jshint', 'Run jshint on all (non-lib) script files', function () {
         .pipe(jshint.reporter('default'));
 });
 
-gulp.task('install', ['git-check'], function () {
-    return bower.commands.install()
-        .on('log', function (data) {
-            gutil.log('bower', gutil.colors.cyan(data.id), data.message);
-        });
+gulp.task('publish-pre-build', 'Execute before publishing build', function () {
+    // PUBLISH gulp publishing tasks
 });
 
 gulp.task('dgeni', 'Generate jsdoc documentation.', function () {
@@ -183,7 +157,7 @@ gulp.task('dgeni', 'Generate jsdoc documentation.', function () {
 });
 
 gulp.task('cmd', '[-a ALIAS] : Execute shell command named ALIAS in aliases dictionary' +
-  ', default: list aliases',
+    ', default: list aliases',
     function () {
         if (!argv.a) {
             _.forEach(cmdAliases, function (value, key) {
@@ -203,12 +177,14 @@ gulp.task('set-version', '-v VERSION : Change app version references to VERSION,
             var version = JSON.parse(data).version;
             console.log('Setting version ' + version + ' to ' + argv.v);
             gulp.src(['./www/data/config.json', './package.json'])
-            // see https://www.npmjs.com/package/gulp-bump
-            .pipe(bump({ version: argv.v }))
-            .pipe(gulp.dest('./'));
+                // see https://www.npmjs.com/package/gulp-bump
+                .pipe(bump({
+                    version: argv.v
+                }))
+                .pipe(gulp.dest('./'));
             gulp.src(['./config.xml'])
-            .pipe(replace(/(<widget.*version=")[^"]*/, '$1' + argv.v))
-            .pipe(gulp.dest('./'));
+                .pipe(replace(/(<widget.*version=")[^"]*/, '$1' + argv.v))
+                .pipe(gulp.dest('./'));
         });
         sh.exec('git tag -a v' + argv.v + ' -m "version ' + argv.v + '"');
     });
@@ -251,8 +227,8 @@ gulp.task('itest', 'Integration (e-e) tests', function () {
     // FUTURE itest not working
     var cwd = process.cwd();
     var mkCmd = function (cmd) {
-            return 'scripts/term.sh "cd ' + cwd + ';' + cmd + '"';
-        };
+        return 'scripts/term.sh "cd ' + cwd + ';' + cmd + '"';
+    };
     sh.exec(mkCmd('ionic serve -c -t ios ' + ionicBrowser));
     sh.exec('sleep 10');
     sh.exec(mkCmd('webdriver-manager start'));
