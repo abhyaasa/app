@@ -23,11 +23,9 @@ Some of the app features:
 
 Early users are invited to email support requests and suggestions to <abhyaasa108@gmail.com>. Also feel free to contribute to this app's GitHub [Issues](https://github.com/abhyaasa/app/issues) list and [Wiki](https://github.com/abhyaasa/app/wiki).
 
-## Collaboration support
+## Collaboration
 
-Information for collaborators that is not specific to developers may be found in this project's [google drive](https://drive.google.com/folderview?id=0B0YCA8SjU_Bsfm1yT0VsV1IteUcxVzFGZFM4Nkg0TUNqRFM4R0JKdk9YWFRPbDJEZE5uSkU&usp=sharing).
-
-Developers, see the [`dev-notes.md`](https://github.com/abhyaasa/app/blob/master/dev-notes.md) file.
+Developers, please see the [`dev-notes.md`](https://github.com/abhyaasa/app/blob/master/dev-notes.md) file.
 
 ## License
 

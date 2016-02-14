@@ -105,10 +105,10 @@ gulp.task('flavor',
     });
 
 gulp.task('md', 'Process markdown files', function () {
-    sh.exec('rm -rf ./www/data/md_html');
+    sh.exec('rm -rf ./www/data/md');
     gulp.src('./data/md/*.md')
         .pipe(markdown())
-        .pipe(gulp.dest('./www/data/md_html'));
+        .pipe(gulp.dest('./www/data/md'));
 });
 
 gulp.task('is',

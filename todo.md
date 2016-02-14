@@ -7,11 +7,16 @@ A partial list of additional todo items follows, grouped in approximately decrea
 
 - FIXME bugs with unknown location follow
 
+
+- TODO items not associated with particular
+
+
 - REVIEW items for periodic consideration
   - sanskrit embedded in text
   - typescript http://blog.ionic.io/ionic-and-typescript-part-2/
   - Coffee, jade, NOT stylus
   - Chrome developer > angularjs > hints
+
 
 - PUBLISH tasks
   - make injected functions minifiable, e.g. function (a, b){} => ['a', 'b', function (a, b){}, use ng-strict-di: AngularJS Web Application Development Cookbook p 281
