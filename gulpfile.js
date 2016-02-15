@@ -145,7 +145,7 @@ gulp.task('publish-pre-build', 'Execute before publishing build', function () {
 });
 
 gulp.task('dgeni', 'Generate jsdoc documentation.', function () {
-    // FUTURE consider https://www.npmjs.com/package/d2doc-dgeni-packages
+    // from https://github.com/petebacondarwin/dgeni-example
     var Dgeni = require('dgeni');
     try {
         var dgeni = new Dgeni([require('./docs/dgeni-package')]);
