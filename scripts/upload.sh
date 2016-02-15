@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-echo "Cancell this if the build is not current"
-echo "or the app has not been deleted your ionic view website."
 /usr/bin/expect <<EOD
 spawn ionic upload
 expect "Email:"

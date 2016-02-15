@@ -63,6 +63,7 @@ angular.module('app', ['ionic', 'services'])
                 }
             },
             onEnter: function ($rootScope, $state) {
+                // TOOD hide the help button during the intro
                 $rootScope.help = function () {
                     $state.go('tabs.intro');
                 };

@@ -1,6 +1,7 @@
 'use strict';
 
 var cmdAliases = {
+    help: 'gulp cmd',
     cd: 'cd data/cdecks/test; update.sh deck_2',
     ct: 'cd scripts; cdeck.py -t -m "prefix"',
     up: './scripts/upload.sh',
@@ -25,7 +26,6 @@ var ionicBrowser = ' --browser /Applications/Google\\ Chrome\\ Canary.app';
 
 var gulp = require('gulp-help')(require('gulp'));
 var gutil = require('gulp-util');
-var bower = require('bower');
 var sass = require('gulp-sass');
 var minifyCss = require('gulp-minify-css');
 var rename = require('gulp-rename');
