@@ -6,5 +6,5 @@ send "chaynes56@gmail.com"
 expect "Password:"
 send "sgsdatta"
 expect "Logged in!"
-expect "Uploading app...."
+expect "Saved api_key"
 EOD

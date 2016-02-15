@@ -3,18 +3,17 @@
   <ion-content padding="true" class="has-header">
     <div>
       <ion-slide-box>
+        <ion-slide><div ng-include="'data/md/intro1.html'"></div></ion-slide>
         <ion-slide>
-          <p>
-            Some intro to using this app...
-          </p>
-          <p>
-            Swipe left to view next slide.
-          </p>
+            <div ng-include="'data/md/library.html'"></div>
+            <div ng-include="'data/md/deck.html'"></div>
         </ion-slide>
         <ion-slide>
-          <p>
-            These slides may be reviewed at any time with the <strong>View Introduction</strong>            button of the <strong>Settings</strong> tab.
-          </p>
+            <div ng-include="'data/md/card.html'"></div>
+            <div ng-include="'data/md/settings.html'"></div>
+        </ion-slide>
+        <ion-slide>
+          <div ng-include="'data/md/intro-end.html'"></div>
           <button class="button button-stable button-block" ng-click="gotIt()">
             Got it!
           </button>
