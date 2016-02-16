@@ -145,7 +145,9 @@ gulp.task('publish-pre-build', 'Execute before publishing build', function () {
 });
 
 gulp.task('dgeni', 'Generate jsdoc documentation.', function () {
-    // from https://github.com/petebacondarwin/dgeni-example
+    // from https://github.com/petebacondarwin/dgeni-example, for doc tags see
+    // https://github.com/angular/angular.js/wiki/Writing-AngularJS-Documentation and
+    // http://www.chirayuk.com/snippets/angularjs/ngdoc
     var Dgeni = require('dgeni');
     try {
         var dgeni = new Dgeni([require('./docs/dgeni-package')]);

@@ -12,6 +12,7 @@ var Package = require('dgeni').Package;
 module.exports = new Package('dgeni-example', [
     require('dgeni-packages/jsdoc'),
     require('dgeni-packages/nunjucks')
+    // REVIEW https://github.com/angular/dgeni-packages, ngdoc does not work
     // require('dgeni-packages/ngdoc')
 ])
 
