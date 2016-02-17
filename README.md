@@ -9,7 +9,7 @@ Abhyaasa
 
 Some of the app features:
 
-- A wide range of question types, including multiple choice, multiple answer, true/false, short answer, matching, and transliteration. Question text may be plain unicode or html, including images.
+- A wide range of question types, including multiple choice, multiple answer, true/false, short answer, matching, and transliteration. Question text may be plain unicode or html, including images, and may be accompanied by sound.
 
 - Question database entry in json or a compact custom format. The latter supports a number of options, including markdown text formatting, sequence questions (in which the answer is the next question), and tag ranges.
 
@@ -21,7 +21,7 @@ Some of the app features:
 
 ## Support
 
-Early users are invited to email support requests and suggestions to <abhyaasa108@gmail.com>. Also feel free to contribute to this app's GitHub [Issues](https://github.com/abhyaasa/app/issues) list and [Wiki](https://github.com/abhyaasa/app/wiki).
+Users are invited to email support requests and suggestions to <abhyaasa108@gmail.com>. Also feel free to contribute to this app's GitHub [Issues](https://github.com/abhyaasa/app/issues) list and [Wiki](https://github.com/abhyaasa/app/wiki).
 
 ## Collaboration
 

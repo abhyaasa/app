@@ -93,6 +93,7 @@ Tags interpreted by this program and removed from output:
     a single answer and no distractors. User preferences may indicate options for
     displaying matching questions, which may include visual pairing or multiple choice,
     where distractors are chosen randomly from answers of other questions in the group.
+.mp3 : play mp3 sound file
 
 Tags retained in output, for use by the app, and in the special_apptime_tags list:
 
@@ -100,6 +101,10 @@ Tags retained in output, for use by the app, and in the special_apptime_tags lis
 .ci : case insensitive input response
 .html : text is in html format
 .ma : multiple right answer (multiple choices) question
+
+Sound files are in the deck's media directory. The file name base (without path or
+.mp3 suffix) is prefixed to the quesiton text and ends, from which it is separated
+by a # character.
 
 Text characters <, >, &, ', and " are automatically escaped unless the .html tag
 is active for html interpretation.
@@ -118,6 +123,7 @@ Quiz questions json format is list of question dictionaries with keys:
 id: question order number (0-based)
 type: string = text, true-false, multiiple-choice, matching, transliteration, or mind
 text: text of question
+mp3: mp3 file base name, without path or .mp3
 responses (absent in text, t/f, sequence and mind question types):
           list of [is_answer, response_text] pairs, where is_answer is boolean
 answer (t/f, matching or mind type): boolean (t/f) or text (mind)
@@ -276,6 +282,12 @@ def main(args):
             if '.md' in qtags:
                 markdown_mode = True
                 qtags.add('.html')
+            if '.mp3' in qtags:
+                pair = question.split('#', 1)
+                if len(pair) != 2:
+                    error('no mp3 file name in question')
+                mp3base, question = pair
+                q['mp3'] = args.media + '/' + mp3base + '.mp3'
             q_from_tags = from_tags.intersection(qtags)
             if len(q_from_tags) > 1:
                 error('at most one from tag')
