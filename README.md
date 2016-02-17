@@ -9,7 +9,7 @@ Abhyaasa
 
 Some of the app features:
 
-- A wide range of question types, including multiple choice, multiple answer, true/false, short answer, matching, and transliteration. Question text may be plain unicode or html, including images.
+- A wide range of question types, including multiple choice, multiple answer, true/false, short answer, matching, and transliteration. Question text may be plain unicode or html, including images, and may be accompanied by sound.
 
 - Question database entry in json or a compact custom format. The latter supports a number of options, including markdown text formatting, sequence questions (in which the answer is the next question), and tag ranges.
 

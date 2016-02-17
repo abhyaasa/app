@@ -152,9 +152,9 @@ angular.module('app')
     };
 })
 
-.service('Card', function ($sce, $log, $state, Deck, settings, _) {
-    var Card = this;
-
+.service('Card', function ($sce, $log, $state, Deck, settings, MediaSrv, _) {
+    var _this = this;
+    // FIXME pranava deck2 no answer, reverse not working either
     this.submittedAnswer = undefined;
 
     this.setup = function (activeCardIndex) {
@@ -166,105 +166,109 @@ angular.module('app')
         };
         Deck.data.activeCardIndex = activeCardIndex;
         Deck.save();
-        Card.question = Deck.questions[Deck.data.active[activeCardIndex]];
-        Card.isMA = _.contains(Card.question.tags, '.ma');
-        Card.answerClass = 'answer';
-        Card.isInput = (_.contains(Card.question.tags, '.cs') ||
-            _.contains(Card.question.tags, '.ci'));
-        if (Card.isInput) {
-            Card.submittedAnswer = undefined;
+        _this.question = Deck.questions[Deck.data.active[activeCardIndex]];
+        _this.isMA = _.contains(_this.question.tags, '.ma');
+        _this.answerClass = 'answer';
+        _this.isInput = (_.contains(_this.question.tags, '.cs') ||
+            _.contains(_this.question.tags, '.ci'));
+        if (_this.isInput) {
+            _this.submittedAnswer = undefined;
         }
-        Card.text = Card.question.text;
-        Card.type = Card.question.type;
-        Card.responses = Card.question.responses;
-        Card.hintIndex = Card.question.hints ? 0 : undefined;
-        Card.haveHint = Card.question.hints !== undefined;
-        Card.hint = null;
-        Card.answer = Card.question.answer;
-        if (Card.type === 'true-false') {
+        _this.text = _this.question.text;
+        _this.type = _this.question.type;
+        _this.responses = _this.question.responses;
+        _this.hintIndex = _this.question.hints ? 0 : undefined;
+        _this.haveHint = _this.question.hints !== undefined;
+        _this.hint = null;
+        _this.answer = _this.question.answer;
+        var mp3File = _this.question.mp3;
+        if (mp3File !== undefined) {
+            MediaSrv.playSound(mp3File);
+        }
+        if (_this.type === 'true-false') {
             // Rewrite true-false as multiple-choice
-            Card.responses = [
+            _this.responses = [
                 [false, 'True'],
                 [false, 'False']
             ];
-            Card.responses[Card.question.answer ? 0 : 1][0] = true;
-            Card.type = 'multiple-choice';
-        } else if (Card.type === 'mind' && !Card.question.answer) {
+            _this.responses[_this.question.answer ? 0 : 1][0] = true;
+            _this.type = 'multiple-choice';
+        } else if (_this.type === 'mind' && !_this.question.answer) {
             // Sequence question
-            var answerIndex = Card.question.id + 1;
+            var answerIndex = _this.question.id + 1;
             if (answerIndex === Deck.questions.length) {
                 $state.go('tabs.deck'); // card is last in sequence at end of deck
             } else {
-                Card.question.answer = Deck.questions[answerIndex].text;
+                _this.question.answer = Deck.questions[answerIndex].text;
             }
-        } else if (Card.question.type === 'transliteration') {
-            Card.answer = Card.text[0];
-            Card.text = Card.text[1];
-            Card.type = 'mind';
-        } else if (Card.question.type === 'matching') {
+        } else if (_this.question.type === 'transliteration') {
+            _this.answer = _this.text[0];
+            _this.text = _this.text[1];
+            _this.type = 'mind';
+        } else if (_this.question.type === 'matching') {
             // Rewrite matching as multiple-choice, including random order, this
             // question's answer with a random selection of other answers in this
             // random sequence.
-            var q = Card.question;
+            var q = _this.question;
             if (!q.matchingEnd) {
                 $log.error('No matchingEnd attribute with type matching');
             }
-            Card.responses = [];
+            _this.responses = [];
             for (var i = q.matchingBegin; i <= q.matchingEnd; i++) {
                 if (i !== q.id) {
-                    Card.responses.push([false, Deck.questions[i].answer]);
+                    _this.responses.push([false, Deck.questions[i].answer]);
                 }
             }
             var numResponses = 5;
-            Card.responses = _.sample(Card.responses, numResponses - 1).concat([
+            _this.responses = _.sample(_this.responses, numResponses - 1).concat([
                 [true, q.answer]
             ]);
-            Card.type = 'multiple-choice';
+            _this.type = 'multiple-choice';
         }
-        if (Card.type === 'multiple-choice') {
+        if (_this.type === 'multiple-choice') {
             if (settings.randomResponses) {
-                Card.responses = _.sample(Card.responses, Card.responses.length);
+                _this.responses = _.sample(_this.responses, _this.responses.length);
             }
-            Card.responseItems = _.map(Card.responses, makeItem);
-            Card.numWrong = 0;
+            _this.responseItems = _.map(_this.responses, makeItem);
+            _this.numWrong = 0;
         }
         if (Deck.data.reverseQandA) {
-            Card.haveHint = false;
-            var answer = Card.text;
-            if (Card.type === 'mind' && Card.question.answer) {
-                Card.text = Card.answer;
-                Card.answer = answer;
-            } else if (Card.type === 'multiple-choice') {
-                var rightAnswers = _.filter(Card.responses, function (pair) {
+            _this.haveHint = false;
+            var answer = _this.text;
+            if (_this.type === 'mind' && _this.question.answer) {
+                _this.text = _this.answer;
+                _this.answer = answer;
+            } else if (_this.type === 'multiple-choice') {
+                var rightAnswers = _.filter(_this.responses, function (pair) {
                     return pair[0];
                 });
                 if (rightAnswers) {
                     var text = _.sample(rightAnswers)[1];
                     if (!_.contains(['True', 'False'], text)) {
-                        Card.type = 'mind';
-                        Card.text = text;
-                        Card.answer = answer;
+                        _this.type = 'mind';
+                        _this.text = text;
+                        _this.answer = answer;
                     }
                 }
             }
         }
-        $log.debug('Card.setup', JSON.stringify(Card));
+        $log.debug('_this.setup', JSON.stringify(_this));
     };
 
     this.outcome = function (outcome) {
         if (outcome === 'wrong') {
-            Card.answerClass = 'wrong-response';
+            _this.answerClass = 'wrong-response';
         }
-        Deck.outcome(Card.question.id, outcome);
+        Deck.outcome(_this.question.id, outcome);
     };
 
     this.nextCard = function () {
         if (Deck.data.activeCardIndex === Deck.data.active.length - 1) {
             Deck.restart(false);
-            Card.question = undefined;
+            _this.question = undefined;
             $state.go('tabs.deck');
         } else {
-            Card.setup(Deck.data.activeCardIndex + 1);
+            _this.setup(Deck.data.activeCardIndex + 1);
             if (Deck.data.outcomes[Deck.data.activeCardIndex] === 'removed') {
                 this.nextCard();
             }
@@ -275,16 +279,16 @@ angular.module('app')
 
     this.previousCard = function () {
         if (Deck.data.activeCardIndex === 0) {
-            Card.setup(Deck.data.active.length - 1);
+            _this.setup(Deck.data.active.length - 1);
             $state.go('tabs.deck');
         } else {
-            Card.setup(Deck.data.activeCardIndex - 1);
+            _this.setup(Deck.data.activeCardIndex - 1);
             $state.go('tabs.card');
         }
     };
 
     this.reset = function () {
-        Card.question = undefined;
+        _this.question = undefined;
         Deck.reset();
     };
 });

@@ -13,6 +13,8 @@ Order within groups sometimes reflects decreasing priority. Items are only liste
 - PRIORITY
 
 - TODO
+  - git rebase merge branch to master (upstream)
+  - move media decks (no clash with sound)
 
 - IDEA
 
@@ -23,6 +25,7 @@ Order within groups sometimes reflects decreasing priority. Items are only liste
   - typescript http://blog.ionic.io/ionic-and-typescript-part-2/
   - Coffee, jade, NOT stylus
   - Chrome developer > angularjs > hints
+  - check for unused variables: .jshintrc "unused": true
 
 - PUBLISH
   - make injected functions minifiable, e.g. function (a, b){} => ['a', 'b', function (a, b){}, use ng-strict-di: AngularJS Web Application Development Cookbook p 281

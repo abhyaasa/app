@@ -94,24 +94,16 @@ angular.module('services', ['ionic'])
     };
 }])
 
-// FUTURE test media service: Adapted from
+// MediaSrv and following window.Media adopted from
 // http://forum.ionicframework.com/t/how-to-play-local-audio-files/7479/5
-// for media plugin :
-// http://plugins.cordova.io/#/package/org.apache.cordova.media
-// Usage:
-//   MediaSrv.loadMedia('sounds/mysound.mp3').then(function (media) {
-//    media.play();
-//   });
-// Requires cordova-plugin-media
-// Also see mawarnes version in forum thread above
-// Alternatives: https://www.npmjs.com/package/cordova-plugin-nativeaudio or
-// http://goldfirestudios.com/blog/104/howler.js-Modern-Web-Audio-Javascript-Library
-// nativeAudio problem with volume control
-// https://blog.nraboy.com/2014/11/playing-audio-android-ios-ionicframework-app/
-// http://www.gajotres.net/playing-native-audio-using-ionic-framework-and-cordova/
-// https://github.com/arielfaur/ionic-audio
+// $ cordova plugin add org.apache.cordova.media
+// Also see mawarnes version in forum thread above, and the thread indicates that
+// Android needs:
+//      android.permission.WRITE_EXTERNAL_STORAGE
+//      android.permission.RECORD_AUDIO
+//      android.permission.MODIFY_AUDIO_SETTINGS
+//      android.permission.READ_PHONE_STATE
 .factory('MediaSrv', function ($q, $ionicPlatform, $window, $log) {
-
     function getErrorMessage(code) {
         if (code === 1) {
             return 'MediaError.MEDIA_ERR_ABORTED';
@@ -176,11 +168,74 @@ angular.module('services', ['ionic'])
             return 'Unknown status <' + status + '>';
         }
     }
-    var service = {
+
+    function playSound(mp3File) {
+        loadMedia(mp3File).then(function (media) {
+            // Don't want iOS default, which ignores mute button, see
+            // https://www.npmjs.com/package/cordova-plugin-media
+            media.play({ playAudioWhenScreenIsLocked: false });
+        });
+    }
+
+    return {
         loadMedia: loadMedia,
         getStatusMessage: getStatusMessage,
-        getErrorMessage: getErrorMessage
+        getErrorMessage: getErrorMessage,
+        playSound: playSound
     };
-
-    return service;
 });
+
+window.Media = function (src, mediaSuccess, mediaError, mediaStatus) {
+    // REVIEW several media functions below are stubs
+    // src: A URI containing the audio content. (DOMString)
+    // mediaSuccess: (Optional) The callback that executes after a Media object has
+    // completed the current play, record, or stop action. (Function)
+    // mediaError: (Optional) The callback that executes if an error occurs. (Function)
+    // mediaStatus: (Optional) The callback that executes to indicate status changes.
+    // (Function)
+    if (typeof Audio !== 'function' && typeof Audio !== 'object') {
+        console.warn('HTML5 Audio is not supported in this browser');
+    }
+    var sound = new Audio();
+    sound.src = src;
+    sound.addEventListener('ended', mediaSuccess, false);
+    sound.load();
+    return {
+        // Returns the current position within an audio file (in seconds).
+        getCurrentPosition: function (mediaSuccess, mediaError) {
+            mediaSuccess(sound.currentTime);
+        },
+        // Returns the duration of an audio file (in seconds) or -1.
+        getDuration: function () {
+            return isNaN(sound.duration) ? -1 : sound.duration;
+        },
+        // Start or resume playing an audio file.
+        play: function () {
+            sound.play();
+        },
+        // Pause playback of an audio file.
+        pause: function () {
+            sound.pause();
+        },
+        // Releases the underlying operating system's audio resources.
+        // REVIEW Should be called on a ressource when it's no longer needed!
+        release: function () {},
+        // Moves the position within the audio file.
+        seekTo: function (milliseconds) {},
+        // Set the volume for audio playback (between 0.0 and 1.0).
+        setVolume: function (volume) {
+            sound.volume = volume;
+        },
+        // Start recording an audio file.
+        startRecord: function () {},
+        // Stop recording an audio file.
+        stopRecord: function () {},
+        // Stop playing an audio file.
+        stop: function () {
+                sound.pause();
+                if (mediaSuccess) {
+                    mediaSuccess();
+                }
+            }
+    };
+};
