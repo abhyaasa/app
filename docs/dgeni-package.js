@@ -11,14 +11,15 @@ var Package = require('dgeni').Package;
 // npm module.
 module.exports = new Package('dgeni-example', [
     require('dgeni-packages/jsdoc'),
-    require('dgeni-packages/nunjucks'),
-    require('dgeni-packages/ngdoc')
+    require('dgeni-packages/nunjucks')
+    // REVIEW https://github.com/angular/dgeni-packages, ngdoc does not work
+    // require('dgeni-packages/ngdoc')
 ])
 
 // Configure our dgeni-example package. We can ask the Dgeni dependency injector
 // to provide us with access to services and processors that we wish to
 // configure.
-.config(function(log, readFilesProcessor, templateFinder, writeFilesProcessor) {
+.config(function (log, readFilesProcessor, templateFinder, writeFilesProcessor) {
     // Set logging level
     log.level = 'info';
 
@@ -29,19 +30,17 @@ module.exports = new Package('dgeni-example', [
     // Specify collections of source files that should contain the documentation
     // to extract
     readFilesProcessor.sourceFiles = [{
-        // Process all js files in `src` and its subfolders ...
+        // Process all js files in `ww` and its subfolders ...
         include: 'www/**/*.js',
-        // ... except for this one!
+        // ... except for these!
         exclude: 'www/lib/**/*.js',
-        // When calculating the relative path to these files use this as the
-        // base path.
-        // So `src/foo/bar.js` will have relative path of `foo/bar.js`
+        // When calculating the relative path to these files use this as the base path.
+        // So `www/foo/bar.js` will have relative path of `foo/bar.js`
         basePath: 'www'
     }];
 
     // Add a folder to search for our own templates to use when rendering docs
-    templateFinder.templateFolders.unshift(path.resolve(__dirname,
-        'templates'));
+    templateFinder.templateFolders.unshift(path.resolve(__dirname, 'templates'));
 
     // Specify how to match docs to templates.
     // In this case we just use the same static template for all docs

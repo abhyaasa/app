@@ -1,11 +1,13 @@
 'use strict';
 
+/* begin configuration variables */
+
 var cmdAliases = {
     help: 'gulp cmd',
     cd: 'cd data/cdecks/test; update.sh deck_2',
     ct: 'cd scripts; cdeck.py -t -m "prefix"',
     up: './scripts/upload.sh',
-    si: 'gulp is -i',
+    si: 'gulp si -i',
     bi: 'gulp build',
     ei: 'ionic emulate ios -l -c -s',
     ri: 'ionic run ios -l -c -s --device',
@@ -17,12 +19,13 @@ var paths = {
     sass: ['./scss/**/*.scss'],
     appJs: ['./www/**/*.js', '!./www/lib/**']
 };
-
 paths.indexJs = paths.appJs.concat(['!./www/js/app.js', '!./www/**/*spec.js']);
 
 var configJsonFile = 'www/data/config.json';
 
-var ionicBrowser = ' --browser /Applications/Google\\ Chrome\\ Canary.app';
+var devBrowser = ' --browser /Applications/Google\\ Chrome\\ Canary.app';
+
+/* end configuration variables */
 
 var gulp = require('gulp-help')(require('gulp'));
 var gutil = require('gulp-util');
@@ -111,11 +114,13 @@ gulp.task('md', 'Process markdown files', function () {
         .pipe(gulp.dest('./www/data/md'));
 });
 
-gulp.task('is',
-    '[-a|-i|-l] : ionic serve for android, ios, or (default) both', ['default'],
+gulp.task('si',
+    '[-a|-i|-l] : serve ionic for android, ios, or both, with devBrowser, or default: ' +
+    'serve ios with default browser',
+    ['default'],
     function () {
-        var platform = argv.a ? '-t android' + ionicBrowser :
-            argv.i ? '-t ios' + ionicBrowser :
+        var platform = argv.a ? '-t android' + devBrowser :
+            argv.i ? '-t ios' + devBrowser :
             argv.l ? '-l' : '';
         var command = 'ionic serve -c ' + platform;
         sh.exec(command);
@@ -145,7 +150,9 @@ gulp.task('publish-pre-build', 'Execute before publishing build', function () {
 });
 
 gulp.task('dgeni', 'Generate jsdoc documentation.', function () {
-    // FUTURE consider https://www.npmjs.com/package/d2doc-dgeni-packages
+    // from https://github.com/petebacondarwin/dgeni-example, for doc tags see
+    // https://github.com/angular/angular.js/wiki/Writing-AngularJS-Documentation and
+    // http://www.chirayuk.com/snippets/angularjs/ngdoc
     var Dgeni = require('dgeni');
     try {
         var dgeni = new Dgeni([require('./docs/dgeni-package')]);
@@ -229,7 +236,7 @@ gulp.task('itest', 'Integration (e-e) tests', function () {
     var mkCmd = function (cmd) {
         return 'scripts/term.sh "cd ' + cwd + ';' + cmd + '"';
     };
-    sh.exec(mkCmd('ionic serve -c -t ios ' + ionicBrowser));
+    sh.exec(mkCmd('ionic serve -c -t ios ' + devBrowser));
     sh.exec('sleep 10');
     sh.exec(mkCmd('webdriver-manager start'));
     sh.exec('sleep 3');

@@ -19,7 +19,10 @@ www/index.html
 www.zip
 
 # created by 'gulp marked'
-www/data/md
+www/data/md/
+
+# created by 'gulp dgeni'
+docs/build/
 
 # development notes
 notes/
