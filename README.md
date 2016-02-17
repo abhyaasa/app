@@ -21,7 +21,7 @@ Some of the app features:
 
 ## Support
 
-Early users are invited to email support requests and suggestions to <abhyaasa108@gmail.com>. Also feel free to contribute to this app's GitHub [Issues](https://github.com/abhyaasa/app/issues) list and [Wiki](https://github.com/abhyaasa/app/wiki).
+Users are invited to email support requests and suggestions to <abhyaasa108@gmail.com>. Also feel free to contribute to this app's GitHub [Issues](https://github.com/abhyaasa/app/issues) list and [Wiki](https://github.com/abhyaasa/app/wiki).
 
 ## Collaboration
 
