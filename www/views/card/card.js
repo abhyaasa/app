@@ -4,8 +4,7 @@ angular.module('app')
 
 .controller('CardController', function ($scope, $state, $log, $ionicGesture, _,
     Deck, Card) {
-
-    $scope.done = false;
+    $log.debug('Card Controller Deck Card', Deck, Card);
     $scope.Card = Card;
     $scope.Deck = Deck;
     $scope.$on('$ionicView.enter', function () {
@@ -21,10 +20,10 @@ angular.module('app')
     var gestureSetup = function () {
         var element = angular.element(document.querySelector('#content'));
         var finish = function () {
-            if (!$scope.done) {
+            if (!Card.done) {
                 Card.outcome('skipped');
             }
-            $scope.done = false;
+            Card.done = false;
         };
 
         var next = function () {
@@ -40,7 +39,7 @@ angular.module('app')
         $ionicGesture.on('swiperight', previous, element);
 
         var remove = function () {
-            $scope.done = false;
+            Card.done = false;
             Card.outcome('removed');
             Card.nextCard();
         };
@@ -59,20 +58,20 @@ angular.module('app')
 
     $scope.setOutcome = function (outcome) {
         Card.outcome(outcome);
-        $scope.done = false;
+        Card.done = false;
         Card.nextCard();
     };
 
     $scope.showAnswer = function () {
         if (Card.type === 'mind') {
-            $scope.done = true;
+            Card.done = true;
             Card.isInput = false;
         }
     };
 
     $scope.isText = function () {
         Card.outcome('text');
-        $scope.done = true;
+        Card.done = true;
     };
 
     var isRight = function (response) {
@@ -97,7 +96,7 @@ angular.module('app')
             } else {
                 Card.outcome('right');
             }
-            $scope.done = true;
+            Card.done = true;
         }
         $log.debug('response items', JSON.stringify(items));
     };
@@ -113,7 +112,7 @@ angular.module('app')
         } else {
             Card.outcome('wrong');
         }
-        $scope.done = true;
+        Card.done = true;
     };
 
     $scope.maDone = function () {
@@ -131,7 +130,7 @@ angular.module('app')
         } else {
             Card.outcome('right');
         }
-        $scope.done = true;
+        Card.done = true;
         $log.debug('Done items', JSON.stringify(items));
     };
 })
@@ -166,6 +165,7 @@ angular.module('app')
         };
         Deck.data.activeCardIndex = activeCardIndex;
         Deck.save();
+        _this.done = false;
         _this.question = Deck.questions[Deck.data.active[activeCardIndex]];
         _this.isMA = _.contains(_this.question.tags, '.ma');
         _this.answerClass = 'answer';

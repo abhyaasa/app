@@ -5,14 +5,6 @@ angular.module('app')
 .controller('SettingsController', function ($scope, settings, MediaSrv) {
     $scope.settings = settings;
 
-    $scope.playSound = function () { // FIXME test sound button
-        MediaSrv.loadMedia('data/flavor/media/sound/Omkara.mp3').then(function (media) {
-            // Don't want iOS default, which ignores mute button,
-            // see https://www.npmjs.com/package/cordova-plugin-media
-            media.play({ playAudioWhenScreenIsLocked: false });
-        });
-    };
-
     // // from http://docs.ionic.io/v1.0/docs/deploy-install
     // // FUTURE implement and test deploy
     // var deploy = new Ionic.Deploy();

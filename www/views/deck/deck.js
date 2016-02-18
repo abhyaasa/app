@@ -14,7 +14,7 @@ angular.module('app')
 .controller('DeckHelpController', function () {})
 
 .service('Deck', function ($log, $state, $rootScope, settings, getData, Library, _,
-  LocalStorage) {
+    LocalStorage) {
     var _this = this;
     this.count = undefined; // maintained by this.setCount()
 
@@ -33,7 +33,9 @@ angular.module('app')
             include: []
         };
         var copy = function (obj) {
-            return _.mapObject(obj, function (val) { return _.clone(val); });
+            return _.mapObject(obj, function (val) {
+                return _.clone(val);
+            });
         };
         var filter = function (questions) {
             // returns list of indices of questions that pass filter
@@ -48,7 +50,9 @@ angular.module('app')
         setupQuestions(deckName.file).then(function () {
             _this.data = {
                 name: deckName,
-                history: _.map(_this.questions, function () { return []; }),
+                history: _.map(_this.questions, function () {
+                    return [];
+                }),
                 filter: copy(initialFilterSettings),
                 reverseQandA: false,
                 active: filter(_this.questions), // indices of active quesitons
@@ -99,7 +103,9 @@ angular.module('app')
 
     this.enterTab = function () {
         var multiset = function (array) {
-            var ms = { remaining: 0 };
+            var ms = {
+                remaining: 0
+            };
             array.map(function (value) {
                 if (_.has(ms, value)) {
                     ms[value] += 1;
@@ -117,5 +123,4 @@ angular.module('app')
             _this.count.remaining = _.filter(_this.data.outcomes, isUndefined).length;
         }
     };
-})
-;
+});

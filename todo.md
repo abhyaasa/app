@@ -7,6 +7,7 @@ Order within groups sometimes reflects decreasing priority. Items are only liste
 - XXX
 
 - FIXME
+  - reset deck, then select in library: card answer displayed
 
 - CHANGED
 
