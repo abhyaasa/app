@@ -9,8 +9,9 @@ var cmdAliases = {
     up: './scripts/upload.sh',
     si: 'gulp si -i',
     bi: 'gulp build',
-    ei: 'ionic emulate ios -l -c -s',
-    ri: 'ionic run ios -l -c -s --device',
+    ei: 'ionic emulate ios -lcs',
+    ri: 'ionic run ios -lcs --device',
+    xi: 'open platforms/ios/*.xcodeproj',
     ta: './scripts/testapp.sh',
     sc: './scripts/scapp.sh'
 };

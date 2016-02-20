@@ -4,7 +4,7 @@ angular.module('app')
 
 .controller('CardController', function ($scope, $state, $log, $ionicGesture, _,
     Deck, Card) {
-    $log.debug('Card Controller Deck Card', Deck, Card);
+
     $scope.Card = Card;
     $scope.Deck = Deck;
     $scope.$on('$ionicView.enter', function () {

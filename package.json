@@ -46,7 +46,7 @@
     "ionic-plugin-keyboard",
     "cordova-plugin-statusbar",
     "cordova-plugin-whitelist",
-    "org.apache.cordova.media"
+    "cordova-plugin-media"
   ],
   "cordovaPlatforms": [
     "ios",

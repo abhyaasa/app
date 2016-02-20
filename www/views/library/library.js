@@ -3,7 +3,7 @@
 angular.module('app')
 
 .controller('LibraryController', function ($rootScope, $scope, $state, $log, _, mode,
-  Library, Deck, Card, indexPromise) {
+    Library, Deck, Card, indexPromise) {
     $scope.selectClosedDeck = function (deckName) {
         Deck.setupClosedDeck(deckName);
     };
@@ -67,7 +67,10 @@ angular.module('app')
         _this.updateDeckLists();
     };
 
-    this.deckLists = { open: undefined, closed: undefined };
+    this.deckLists = {
+        open: undefined,
+        closed: undefined
+    };
     this.updateDeckLists = function () {
         var isOpen = function (fd) {
             return _.contains(openDecks, fd.display);
@@ -101,5 +104,4 @@ angular.module('app')
         openDecks = [];
         LocalStorage.setObject('*openDecks*', openDecks);
     };
-})
-;
+});

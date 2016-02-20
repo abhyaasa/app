@@ -1,5 +1,38 @@
 'use strict';
 
+var httpStubData = { // REVIEW global httpStubData
+    'config.json': {
+        flavor: 'test',
+        email: 'abhyaasa108@gmail.com',
+        href: 'https://github.com/abhyaasa/app',
+        name: 'Abhyaasa',
+        version: '0.0.2'
+    },
+    'flavor/library/index.json': [
+        'deck.json',
+        'deck_2.json'
+    ],
+    'flavor/library/deck.json': [{
+        answer: 'Ci',
+        id: 0,
+        tags: [
+            '.ci'
+        ],
+        text: 'case insensitive',
+        type: 'mind'
+    }, {
+        answer: '<p>Buddy at shelter</p>',
+        id: 1,
+        tags: [
+            '.html'
+        ],
+        text: '<p>image <img alt="Buddy"src="data/flavor/media/deck_2/buddyShelter.jpg"' +
+            ' title="Buddy at shelter" /></p>',
+        type: 'mind'
+    }]
+};
+httpStubData = false;
+
 angular.module('services', ['ionic'])
 
 /**
@@ -41,12 +74,20 @@ angular.module('services', ['ionic'])
  */
 .provider('getData', function () {
     var injector = angular.injector(['ng']);
-    // var httpStubData = injector.get('httpStubData');
     var $http = injector.get('$http');
     var $log = injector.get('$log');
     var urlPrefix = ionic.Platform.isAndroid() ? '/android_asset/www/' : '';
+    var $q = injector.get('$q');
     this.$get = function () {
         return function (path, failure) {
+            $log.debug('getData path', path);
+            if (httpStubData) { // XXX stub getData
+                var data = httpStubData[path];
+                var deferred = $q.defer();
+                deferred.resolve({ data: data });
+                $log.debug(data, 'and promise.data', deferred.promise.data);
+                return deferred.promise;
+            }
             return $http.get(urlPrefix + 'data/' + path)
                 .catch(function (error) {
                     if (failure) {
@@ -173,7 +214,9 @@ angular.module('services', ['ionic'])
         loadMedia(mp3File).then(function (media) {
             // Don't want iOS default, which ignores mute button, see
             // https://www.npmjs.com/package/cordova-plugin-media
-            media.play({ playAudioWhenScreenIsLocked: false });
+            media.play({
+                playAudioWhenScreenIsLocked: false
+            });
         });
     }
 
@@ -232,10 +275,10 @@ window.Media = function (src, mediaSuccess, mediaError, mediaStatus) {
         stopRecord: function () {},
         // Stop playing an audio file.
         stop: function () {
-                sound.pause();
-                if (mediaSuccess) {
-                    mediaSuccess();
-                }
+            sound.pause();
+            if (mediaSuccess) {
+                mediaSuccess();
             }
+        }
     };
 };
