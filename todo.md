@@ -10,7 +10,6 @@ Order within groups sometimes reflects decreasing priority. Items are only liste
 - FIXME 2
   - upload fails: see notes/ionic/ionic.text
   - emulator fails to load media file: Feb 18 16:09:31 dram Abhyaasa[45438]: Unknown resource 'data/flavor/media/deck_2/omkara.mp3'
-  - convert $log.debug to console.log
   - add config.json setting to reset settings on load
 
 - CHANGED
@@ -35,7 +34,7 @@ Order within groups sometimes reflects decreasing priority. Items are only liste
 
 - PUBLISH 3
   - make injected functions minifiable, e.g. function (a, b){} => ['a', 'b', function (a, b){}, use ng-strict-di: AngularJS Web Application Development Cookbook p 281
-  - remove $log.debug calls
+  - remove clog.debug calls
   - iTunes publication
 
 - ANDROID 3

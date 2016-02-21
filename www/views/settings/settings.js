@@ -34,16 +34,16 @@ angular.module('app')
 
 .value('settings', {})
 
-.service('saveSettings', function ($log, settings, LocalStorage, _) {
+.service('saveSettings', function (clog, settings, LocalStorage, _) {
     return function () {
         var s = {};
         _.extendOwn(s, settings);
         LocalStorage.setObject('*settings*', s);
-        $log.debug('SAVED SETTINGS');
+        clog.debug('SAVED SETTINGS');
     };
 })
 
-.service('restoreSettings', function ($log, settings, LocalStorage, _) {
+.service('restoreSettings', function (clog, settings, LocalStorage, _) {
     var defaultSettings = {
         intro: true,
         randomQuestions: false,
@@ -59,6 +59,6 @@ angular.module('app')
                 _.extendOwn(settings, s);
             }
         }
-        $log.debug('restored settings', JSON.stringify(settings));
+        clog.debug('restored settings', JSON.stringify(settings));
     };
 });

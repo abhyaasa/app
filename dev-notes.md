@@ -30,7 +30,7 @@ Install [Chrome Canary](https://www.google.com/chrome/browser/canary.html) for s
 
 Test the app in the iOS emulator with `$ g ei`.
 
-An Apple developer membership is required for testing on a usb-connected device, as with `g ri`. 
+An Apple developer membership is required for testing on a usb-connected device, as with `g ri`.
 
 Install [Atom](https://atom.io), or other development editor, as needed.
 
@@ -134,7 +134,7 @@ The `mode` constant in `services.js` may be set to `'debug'`, `'build'`, or `'no
 
 In debug mode:
 
-- the `$log.debug` is enabled
+- `clog.debug` is enabled
 - the library tab is always enabled to permit the browser debug console to be enabled (cmd-opt-I in chrome)
 
 In build mode:
@@ -187,7 +187,7 @@ REVIEW flesh out this documentation
 
 ## `$rootScope` variables
 
-- `config`: configuration represented by `www/data/config.json`, with the following possible additional attributes:
+- `config`: configuration represented by `www/data/config.json`, with the following possible additional attribute(s):
   - `hideLibrary`: true if just one library element
 - `hideTabs`: false until tabs bar configured after library index loaded
 - `debug`: true when `mode` is `'debug'`
@@ -195,6 +195,8 @@ REVIEW flesh out this documentation
 
 
 ## `localStorage` key map
+
+If the constant `clearStorage` is true, localStorage is cleared at startup.
 
 `*settings*`: `settings` service dictionary
 `*openDecks*`: array of open deck display names

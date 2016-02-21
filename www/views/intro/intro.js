@@ -2,7 +2,7 @@
 
 angular.module('app')
 
-.controller('IntroController', function ($log, $state, $scope, settings, saveSettings) {
+.controller('IntroController', function (clog, $state, $scope, settings, saveSettings) {
     $scope.gotIt = function () {
         if (settings.intro) {
             settings.intro = false;

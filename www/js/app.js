@@ -2,8 +2,8 @@
 
 angular.module('app', ['ionic', 'services'])
 
-.run(function ($log, $ionicPlatform, $rootScope, $state, restoreSettings, settings,
-    mode) {
+.run(function (clog, $ionicPlatform, $rootScope, $state, restoreSettings, settings,
+    mode, clearStorage, LocalStorage) {
 
     // https://github.com/angular-ui/ui-router/wiki/Frequently-Asked-Questions\
     // #issue-im-getting-a-blank-screen-and-there-are-no-errors
@@ -22,24 +22,27 @@ angular.module('app', ['ionic', 'services'])
         }
     });
 
-    $rootScope.debug = mode === 'debug';
     $rootScope.settings = settings;
 
+    if (clearStorage) {
+        LocalStorage.clear();
+    }
     restoreSettings();
     if (settings.intro) {
         $state.go('tabs.intro');
     }
 })
 
-.controller('TabsController', function ($rootScope, configPromise, $log) {
+.controller('TabsController', function ($rootScope, configPromise, clog) {
     // promise is resolved: https://github.com/angular-ui/ui-router/wiki
     $rootScope.config = configPromise.data;
-    $log.debug('config', JSON.stringify($rootScope.config));
+    clog.debug('config', JSON.stringify($rootScope.config));
 })
 
-.config(function ($stateProvider, $urlRouterProvider, $logProvider, getDataProvider,
+.config(function ($stateProvider, $urlRouterProvider, getDataProvider,
     mode, $compileProvider) {
-    $logProvider.debugEnabled(mode === 'debug');
+    // not used: clog.debug used instead of $log
+    // $logProvider.debugEnabled(mode === 'debug');
     $compileProvider.debugInfoEnabled(mode !== 'build');
 
     $stateProvider
@@ -49,6 +52,7 @@ angular.module('app', ['ionic', 'services'])
             templateUrl: 'views/tabs.html',
             resolve: {
                 configPromise: function () {
+                    // REVIEW why is config.json fetched multipel times?
                     return getDataProvider.$get()('config.json');
                 }
             },

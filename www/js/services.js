@@ -31,7 +31,7 @@ var httpStubData = { // REVIEW global httpStubData
         type: 'mind'
     }]
 };
-httpStubData = false;
+// httpStubData = false;
 
 angular.module('services', ['ionic'])
 
@@ -64,7 +64,26 @@ angular.module('services', ['ionic'])
 
 .constant('mode', 'debug') // 'debug', 'build', or 'normal'
 
+.constant('clearStorage', true) // clear local storage at startup?
+
 .constant('_', window._) // underscore.js access
+
+/* Console LOG, because $log does not work in xcode */
+.service('clog', function (mode) {
+    this.log = function (...args) {
+        console.log(...args);
+    };
+
+    this.debug = function (arg1, ...args) {
+        if (mode === 'debug') {
+            console.log('Debug: ' + arg1, ...args);
+        }
+    };
+
+    this.error = function (...args) {
+        console.error(...args);
+    };
+})
 
 /**
  * @name getData
@@ -75,17 +94,15 @@ angular.module('services', ['ionic'])
 .provider('getData', function () {
     var injector = angular.injector(['ng']);
     var $http = injector.get('$http');
-    var $log = injector.get('$log');
     var urlPrefix = ionic.Platform.isAndroid() ? '/android_asset/www/' : '';
     var $q = injector.get('$q');
     this.$get = function () {
         return function (path, failure) {
-            $log.debug('getData path', path);
-            if (httpStubData) { // XXX stub getData
+            if (httpStubData) { // REVIEW stub getData
                 var data = httpStubData[path];
                 var deferred = $q.defer();
                 deferred.resolve({ data: data });
-                $log.debug(data, 'and promise.data', deferred.promise.data);
+                console.log('getStubData', path, deferred.promise.data);
                 return deferred.promise;
             }
             return $http.get(urlPrefix + 'data/' + path)
@@ -93,7 +110,7 @@ angular.module('services', ['ionic'])
                     if (failure) {
                         return failure(error);
                     } else {
-                        $log.error('getData', JSON.stringify(error));
+                        console.error('getData', JSON.stringify(error));
                     }
                 });
         };
@@ -104,7 +121,7 @@ angular.module('services', ['ionic'])
 /**
  * @name LocalStorage
  */
-.service('LocalStorage', ['$window', function ($window) {
+.service('LocalStorage', function ($window) {
     /**
      * set value
      * @param {string} key
@@ -133,7 +150,7 @@ angular.module('services', ['ionic'])
     this.clear = function () {
         $window.localStorage.clear();
     };
-}])
+})
 
 // MediaSrv and following window.Media adopted from
 // http://forum.ionicframework.com/t/how-to-play-local-audio-files/7479/5
@@ -144,7 +161,7 @@ angular.module('services', ['ionic'])
 //      android.permission.RECORD_AUDIO
 //      android.permission.MODIFY_AUDIO_SETTINGS
 //      android.permission.READ_PHONE_STATE
-.factory('MediaSrv', function ($q, $ionicPlatform, $window, $log) {
+.factory('MediaSrv', function ($q, $ionicPlatform, $window, clog) {
     function getErrorMessage(code) {
         if (code === 1) {
             return 'MediaError.MEDIA_ERR_ABORTED';
@@ -160,7 +177,7 @@ angular.module('services', ['ionic'])
     }
 
     function _logError(src, err) {
-        $log.error('media error', {
+        clog.error('media error', {
             code: err.code,
             message: getErrorMessage(err.code)
         });
