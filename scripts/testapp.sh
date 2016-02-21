@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
-# Build ionic app from scratch in ../testapp with elements of this app and
-# start emulator to test it, as a partial check for dependency incompatibilities.
+# Build ionic app from scratch in ../testapp with elements of this app.
 cd ..
 rm -rf testapp
 ionic start testapp tabs
 cd testapp
-cp ../app/{package.json} .
-rm -rf www
-cp -r ../app/www .
+cp ../app/package.json .
+# cp ../app/{bower.json,gulpfile.js,g} .
+npm install
 ionic state reset
+# cp ../app/config.xml
+# rm -rf www hooks
+# cp -r ../app/{www,hooks} .
 ionic build
 ionic build
 # The following doesn't work when run from this script:

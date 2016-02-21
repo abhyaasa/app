@@ -35,6 +35,12 @@ var httpStubData = { // REVIEW global httpStubData
 
 angular.module('services', ['ionic'])
 
+.constant('mode', 'debug') // 'debug', 'build', or 'normal'
+
+.constant('clearStorage', true) // clear local storage at startup?
+
+.constant('_', window._) // underscore.js access
+
 /**
  * Use x name as tag, attribute, class name, or after directive in comment.
  * The associated element is removed.
@@ -61,12 +67,6 @@ angular.module('services', ['ionic'])
         }
     };
 })
-
-.constant('mode', 'debug') // 'debug', 'build', or 'normal'
-
-.constant('clearStorage', true) // clear local storage at startup?
-
-.constant('_', window._) // underscore.js access
 
 /* Console LOG, because $log does not work in xcode */
 .service('clog', function (mode) {
@@ -98,11 +98,11 @@ angular.module('services', ['ionic'])
     var $q = injector.get('$q');
     this.$get = function () {
         return function (path, failure) {
-            if (httpStubData) { // REVIEW stub getData
+            if (httpStubData) { // REVIEW stub getData, includse $q inject above
                 var data = httpStubData[path];
                 var deferred = $q.defer();
                 deferred.resolve({ data: data });
-                console.log('getStubData', path, deferred.promise.data);
+                console.log('STUB: getStubData', path, deferred.promise.data);
                 return deferred.promise;
             }
             return $http.get(urlPrefix + 'data/' + path)
@@ -117,9 +117,9 @@ angular.module('services', ['ionic'])
     };
 })
 
-// based on http://learn.ionicframework.com/formulas/localstorage/
 /**
  * @name LocalStorage
+ * based on http://learn.ionicframework.com/formulas/localstorage/
  */
 .service('LocalStorage', function ($window) {
     /**
@@ -246,7 +246,7 @@ angular.module('services', ['ionic'])
 });
 
 window.Media = function (src, mediaSuccess, mediaError, mediaStatus) {
-    // REVIEW several media functions below are stubs
+    // Several media functions below are stubs.
     // src: A URI containing the audio content. (DOMString)
     // mediaSuccess: (Optional) The callback that executes after a Media object has
     // completed the current play, record, or stop action. (Function)

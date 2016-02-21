@@ -43,6 +43,10 @@ var markdown = require('gulp-markdown');
 
 var argv = require('minimist')(process.argv.slice(2));
 
+function logError(message) {
+    console.log(gutil.colors.magenta(message));
+}
+
 gulp.task('default', 'Run by ionic app build and serve commands',
     ['sass', 'index', 'md', 'jshint']);
 
@@ -95,7 +99,7 @@ gulp.task('flavor',
     function () {
         var fs = require('fs');
         if (!argv.name) {
-            console.log(gutil.colors.magenta('Usage: gulp flavor --name NAME'));
+            logError('Usage: gulp flavor --name NAME');
         } else {
             var configJson = JSON.parse(fs.readFileSync(configJsonFile).toString());
             configJson.flavor = argv.name;
@@ -130,6 +134,7 @@ gulp.task('si',
 gulp.task('build', '[-a] for Android, default iOS', ['jscs'], function () {
     // BUILD finish this: see https://github.com/leob/ionic-quickstarter
     sh.exec('ionic build ' + (argv.a ? 'android' : 'ios'));
+    logError('If build did not end with "** BUILD SUCCEEDED **", run it again!');
 });
 
 gulp.task('jscs', 'Run jscs linter on all (non-lib) script files', function () {
