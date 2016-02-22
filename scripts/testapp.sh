@@ -4,13 +4,12 @@ cd ..
 rm -rf testapp
 ionic start testapp tabs
 cd testapp
-cp ../app/package.json .
+# cp ../app/package.json .
 # cp ../app/{bower.json,gulpfile.js,g} .
 npm install
 ionic state reset
 # cp ../app/config.xml
-# rm -rf www hooks
-# cp -r ../app/{www,hooks} .
+# rm -rf www hooks; cp -r ../app/{www,hooks} .
 ionic build
 ionic build
 # The following doesn't work when run from this script:

@@ -2,7 +2,7 @@
 
 angular.module('app')
 
-.controller('LibraryController', function ($rootScope, $scope, $state, clog, _, mode,
+.controller('LibraryController', function ($rootScope, $scope, $state, _, mode,
     Library, Deck, Card, indexPromise) {
     $scope.selectClosedDeck = function (deckName) {
         Deck.setupClosedDeck(deckName);

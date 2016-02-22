@@ -2,9 +2,11 @@
 # http://git-scm.com/docs/gitignore
 
 # created by 'ionic state restore'
-node_modules/
 platforms/
 plugins/
+
+# created by 'npm install'
+node_modules/
 
 # created by 'bower install'
 www/lib/
@@ -24,16 +26,13 @@ www/data/md/
 # created by 'gulp dgeni'
 docs/build/
 
-# development notes
-notes/
+# created by 'gulp flavor'
+www/data/flavor
+resources/android/
+resources/ios/
 
 # compiled python
 *.pyc
 
 # proprietary content of Datta Deepam flavor
 **/datta-deepam/
-
-# flavor-specific
-www/data/flavor
-resources/android/
-resources/ios/

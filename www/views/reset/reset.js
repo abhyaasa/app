@@ -2,7 +2,7 @@
 
 angular.module('app')
 
-.controller('ResetController', function (clog, $scope, $state, Card, Deck, Library,
+.controller('ResetController', function ($scope, $state, Card, Deck, Library,
   restoreSettings, saveSettings, LocalStorage) {
     $scope.hideConfirm = true;
     $scope.hideWarning = true;
