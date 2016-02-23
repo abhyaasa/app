@@ -161,7 +161,7 @@ angular.module('services', ['ionic'])
 //      android.permission.RECORD_AUDIO
 //      android.permission.MODIFY_AUDIO_SETTINGS
 //      android.permission.READ_PHONE_STATE
-.factory('MediaSrv', function ($q, $ionicPlatform, $window, $log) {
+.factory('MediaSrv', function ($q, $ionicPlatform, $window, clog) {
     function getErrorMessage(code) {
         if (code === 1) {
             return 'MediaError.MEDIA_ERR_ABORTED';
@@ -177,7 +177,7 @@ angular.module('services', ['ionic'])
     }
 
     function _logError(src, err) {
-        $log.error('media error', {
+        clog.error('media error', {
             code: err.code,
             message: getErrorMessage(err.code)
         });
@@ -246,7 +246,7 @@ angular.module('services', ['ionic'])
 });
 
 window.Media = function (src, mediaSuccess, mediaError, mediaStatus) {
-    // REVIEW several media functions below are stubs
+    // Several media functions below are stubs.
     // src: A URI containing the audio content. (DOMString)
     // mediaSuccess: (Optional) The callback that executes after a Media object has
     // completed the current play, record, or stop action. (Function)
