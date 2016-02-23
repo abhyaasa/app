@@ -37,7 +37,7 @@ angular.module('services', ['ionic'])
 
 .constant('mode', 'debug') // 'debug', 'build', or 'normal'
 
-.constant('clearStorage', true) // clear local storage at startup?
+.constant('clearStorage', false) // clear local storage at startup?
 
 .constant('_', window._) // underscore.js access
 
@@ -94,17 +94,15 @@ angular.module('services', ['ionic'])
 .provider('getData', function () {
     var injector = angular.injector(['ng']);
     var $http = injector.get('$http');
-    var $log = injector.get('$log');
     var urlPrefix = ionic.Platform.isAndroid() ? '/android_asset/www/' : '';
     var $q = injector.get('$q');
     this.$get = function () {
         return function (path, failure) {
-            $log.debug('getData path', path);
-            if (httpStubData) { // XXX stub getData
+            if (httpStubData) { // REVIEW stub getData, includse $q inject above
                 var data = httpStubData[path];
                 var deferred = $q.defer();
                 deferred.resolve({ data: data });
-                $log.debug(data, 'and promise.data', deferred.promise.data);
+                console.log('STUB: getStubData', path, deferred.promise.data);
                 return deferred.promise;
             }
             return $http.get(urlPrefix + 'data/' + path)
@@ -112,18 +110,18 @@ angular.module('services', ['ionic'])
                     if (failure) {
                         return failure(error);
                     } else {
-                        $log.error('getData', JSON.stringify(error));
+                        console.error('getData', JSON.stringify(error));
                     }
                 });
         };
     };
 })
 
-// based on http://learn.ionicframework.com/formulas/localstorage/
 /**
  * @name LocalStorage
+ * based on http://learn.ionicframework.com/formulas/localstorage/
  */
-.service('LocalStorage', ['$window', function ($window) {
+.service('LocalStorage', function ($window) {
     /**
      * set value
      * @param {string} key
@@ -152,7 +150,7 @@ angular.module('services', ['ionic'])
     this.clear = function () {
         $window.localStorage.clear();
     };
-}])
+})
 
 // MediaSrv and following window.Media adopted from
 // http://forum.ionicframework.com/t/how-to-play-local-audio-files/7479/5
