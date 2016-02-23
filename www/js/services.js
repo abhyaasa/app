@@ -70,6 +70,7 @@ angular.module('services', ['ionic'])
 
 /* Console LOG, because $log does not work in xcode */
 .service('clog', function (mode) {
+<<<<<<< HEAD
     this.log = function (...args) {
         console.log(...args);
     };
@@ -82,6 +83,20 @@ angular.module('services', ['ionic'])
 
     this.error = function (...args) {
         console.error(...args);
+=======
+    this.log = function () {
+        console.log.apply(null, arguments);
+    };
+
+    this.debug = function (arg1) {
+        if (mode === 'debug') {
+            console.log.apply(null, ['Debug: ' + arg1].concat(arguments.slice(1)));
+        }
+    };
+
+    this.error = function () {
+        console.error.apply(null, arguments);
+>>>>>>> topic
     };
 })
 

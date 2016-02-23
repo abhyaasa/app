@@ -57,7 +57,6 @@ Development tools
 - `css` and `scss`: HTML style manager, and syntactically-superior development-time variant
 - `markdown`: preprocessor for simplified html markup
 - `npm`: development package manager
-- `nvm`: node and nvm version manager (very helpful in some environments)
 - `xcode`: iOS app deployment and setup for device testing (only on OSX)
 - `genymotion`: Android app emulation
 
@@ -65,10 +64,12 @@ Recommended development environment
 
 - `OSX`: required for iOS development
 - `brew`: Ruby-based OSX package manager
+- `nvm`: node and nvm version manager (very helpful in some environments, install brew first)
 - `atom`: preferred for most text editing
 - `GitHub Desktop`: makes routine git operations convenient (`SourceTree` might be preferable)
 - `iTerm`: better OSX upterminal emulator
 - `inkscape`: svg to png conversion and other vector graphic editing
+- `P4Merge`: setup as git external diff and merge tool
 
 
 ## Tasks
