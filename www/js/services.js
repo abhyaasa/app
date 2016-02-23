@@ -31,9 +31,15 @@ var httpStubData = { // REVIEW global httpStubData
         type: 'mind'
     }]
 };
-httpStubData = false;
+// httpStubData = false;
 
 angular.module('services', ['ionic'])
+
+.constant('mode', 'debug') // 'debug', 'build', or 'normal'
+
+.constant('clearStorage', true) // clear local storage at startup?
+
+.constant('_', window._) // underscore.js access
 
 /**
  * Use x name as tag, attribute, class name, or after directive in comment.
@@ -62,9 +68,22 @@ angular.module('services', ['ionic'])
     };
 })
 
-.constant('mode', 'debug') // 'debug', 'build', or 'normal'
+/* Console LOG, because $log does not work in xcode */
+.service('clog', function (mode) {
+    this.log = function () {
+        console.log.apply(null, arguments);
+    };
 
-.constant('_', window._) // underscore.js access
+    this.debug = function (arg1) {
+        if (mode === 'debug') {
+            console.log.apply(null, ['Debug: ' + arg1].concat(arguments.slice(1)));
+        }
+    };
+
+    this.error = function () {
+        console.error.apply(null, arguments);
+    };
+})
 
 /**
  * @name getData
