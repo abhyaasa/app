@@ -227,9 +227,10 @@ angular.module('app', ['ionic', 'services'])
     $urlRouterProvider.otherwise('/tabs/library');
 });
 
-// To run code before angular, remove index.html ng-app attribute and use this function.
-// ionic.Platform.ready(function () {
-//     console.log('device ready!"');
-//     // code here runs after device is ready and before angular bootstraps
-//     angular.bootstrap(document.body, ['app']);
-// });
+// After cordova is ready, Dynamically bootstrap angular.
+// This is necessary for console logging to work in xcode.
+ionic.Platform.ready(function () {
+    console.log('device ready!"');
+    // code here runs after device is ready and before angular bootstraps
+    angular.bootstrap(document, ['app']);
+});
