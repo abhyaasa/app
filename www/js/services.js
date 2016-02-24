@@ -69,19 +69,19 @@ angular.module('services', ['ionic'])
 })
 
 /* Console LOG, because $log does not work in xcode */
-.service('clog', function (mode) {
+.service('clog', function (_, mode) { // FIXME clog -> Log
     this.log = function () {
-        console.log.apply(null, arguments);
+        console.log.apply(null, ['LOG:'].concat(_.toArray(arguments)));
     };
 
-    this.debug = function (arg1) {
+    this.debug = function () {
         if (mode === 'debug') {
-            console.log.apply(null, ['Debug: ' + arg1].concat(arguments.slice(1)));
+            console.log.apply(null, ['Debug LOG:'].concat(_.toArray(arguments)));
         }
     };
 
     this.error = function () {
-        console.error.apply(null, arguments);
+        console.log.apply(null, ['ERROR LOG:'].concat(_.toArray(arguments)));
     };
 })
 

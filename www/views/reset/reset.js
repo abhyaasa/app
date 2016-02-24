@@ -2,18 +2,18 @@
 
 angular.module('app')
 
-.controller('ResetController', function ($log, $scope, $state, Card, Deck, Library,
+.controller('ResetController', function ($scope, $state, Card, Deck, Library,
   restoreSettings, saveSettings, LocalStorage) {
     $scope.hideConfirm = true;
     $scope.hideWarning = true;
     $scope.selection = undefined;
     $scope.options = [
-        { text: 'Reset current deck', value: 'deck', warning: 'deck', show: Deck.data},
+        { text: 'Reset current deck', value: 'deck', warning: 'deck', show: Deck.data },
         { text: 'Reset all decks', value: 'all decks', warning: 'deck', show: true },
         { text: 'Reset settings to defaults', value: 'settings', show: true },
         { text: 'Reset all user data', value: 'all data', warning: 'deck', show: true }
     ];
-    $scope.selected = function(item) {
+    $scope.selected = function (item) {
         $scope.selection = item.value;
         $scope.hideWarning = item.warning !== 'deck';
         $scope.hideConfirm = false;

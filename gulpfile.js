@@ -11,7 +11,7 @@ var cmdAliases = {
     bi: 'gulp build',
     ei: 'ionic emulate ios -lcs',
     ri: 'ionic run ios -lcs --device',
-    xi: 'open platforms/ios/*.xcodeproj',
+    bx: 'gulp bx',
     ta: './scripts/testapp.sh',
     sc: './scripts/scapp.sh'
 };
@@ -127,9 +127,13 @@ gulp.task('si',
         sh.exec(command);
     });
 
-gulp.task('build', '[-a] for Android, default iOS', ['jscs'], function () {
+gulp.task('build', '[-a] for Android, default iOS', ['jscs', 'default'], function () {
     // BUILD finish this: see https://github.com/leob/ionic-quickstarter
     sh.exec('ionic build ' + (argv.a ? 'android' : 'ios'));
+});
+
+gulp.task('bx', 'Build and open xcode project', ['build'], function () {
+    sh.exec('open platforms/ios/*.xcodeproj');
 });
 
 gulp.task('jscs', 'Run jscs linter on all (non-lib) script files', function () {
