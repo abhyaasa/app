@@ -2,7 +2,7 @@
 
 angular.module('app')
 
-.controller('CardController', function ($scope, $state, clog, $ionicGesture, _,
+.controller('CardController', function ($scope, $state, Log, $ionicGesture, _,
     Deck, Card) {
 
     $scope.Card = Card;
@@ -80,7 +80,7 @@ angular.module('app')
     $scope.response = function (index) {
         var items = Card.responseItems;
         if (_.contains(Card.question.tags, '.ma')) {
-            clog.debug('multiple answer', index, JSON.stringify(Card.responses));
+            Log.debug('multiple answer', index, JSON.stringify(Card.responses));
             if (Card.responses[index][0]) {
                 items[index].style = 'right-response';
             } else {
@@ -98,7 +98,7 @@ angular.module('app')
             }
             Card.done = true;
         }
-        clog.debug('response items', JSON.stringify(items));
+        Log.debug('response items', JSON.stringify(items));
     };
 
     $scope.submitAnswer = function (submittedAnswer) {
@@ -131,7 +131,7 @@ angular.module('app')
             Card.outcome('right');
         }
         Card.done = true;
-        clog.debug('Done items', JSON.stringify(items));
+        Log.debug('Done items', JSON.stringify(items));
     };
 })
 
@@ -151,7 +151,7 @@ angular.module('app')
     };
 })
 
-.service('Card', function ($sce, clog, $state, Deck, settings, MediaSrv, _) {
+.service('Card', function ($sce, Log, $state, Deck, settings, MediaSrv, _) {
     var _this = this;
     // FIXME pranava deck2 no answer, reverse not working either
     this.submittedAnswer = undefined;
@@ -211,7 +211,7 @@ angular.module('app')
             // random sequence.
             var q = _this.question;
             if (!q.matchingEnd) {
-                clog.error('No matchingEnd attribute with type matching');
+                Log.error('No matchingEnd attribute with type matching');
             }
             _this.responses = [];
             for (var i = q.matchingBegin; i <= q.matchingEnd; i++) {
@@ -252,7 +252,7 @@ angular.module('app')
                 }
             }
         }
-        clog.debug('_this.setup', JSON.stringify(_this));
+        Log.debug('_this.setup', JSON.stringify(_this));
     };
 
     this.outcome = function (outcome) {

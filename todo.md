@@ -34,7 +34,7 @@ Order within groups sometimes reflects decreasing priority. Items are only liste
 
 - PUBLISH 3
   - make injected functions minifiable, e.g. function (a, b){} => ['a', 'b', function (a, b){}, use ng-strict-di: AngularJS Web Application Development Cookbook p 281
-  - remove clog.debug calls
+  - remove Log.debug calls
   - iTunes publication
 
 - ANDROID 3

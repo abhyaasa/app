@@ -44,14 +44,14 @@ angular.module('app')
 
 .controller('LibraryHelpController', function () {})
 
-.service('Library', function (clog, $state, getData, LocalStorage, _) {
+.service('Library', function (Log, $state, getData, LocalStorage, _) {
     var _this = this;
     var openDecks;
     var fileDecks;
 
     this.provideIndex = function (indexPromise) {
         var indexNames = indexPromise.data;
-        clog.debug('indexNames', indexNames);
+        Log.debug('indexNames', indexNames);
         fileDecks = _.map(indexNames, function (name) {
             return {
                 file: name,
@@ -73,14 +73,14 @@ angular.module('app')
             if (openDecks.length === undefined) {
                 openDecks = [];
             }
-            clog.debug('openDecks', JSON.stringify(openDecks));
+            Log.debug('openDecks', JSON.stringify(openDecks));
         }
         var isOpen = function (fd) {
             return _.contains(openDecks, fd.display);
         };
         _this.deckLists.open = openDecks.sort();
         _this.deckLists.closed = _.reject(fileDecks, isOpen).sort();
-        clog.debug('deckLists', JSON.stringify(_this.deckLists));
+        Log.debug('deckLists', JSON.stringify(_this.deckLists));
     };
 
     this.numDecks = function () {

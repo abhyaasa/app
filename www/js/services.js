@@ -68,8 +68,8 @@ angular.module('services', ['ionic'])
     };
 })
 
-/* Console LOG, because $log does not work in xcode */
-.service('clog', function (_, mode) { // FIXME clog -> Log
+/* Console Log, because $log does not work in xcode */
+.service('Log', function (_, mode) {
     this.log = function () {
         console.log.apply(null, ['LOG:'].concat(_.toArray(arguments)));
     };
@@ -102,7 +102,7 @@ angular.module('services', ['ionic'])
                 var data = httpStubData[path];
                 var deferred = $q.defer();
                 deferred.resolve({ data: data });
-                console.log('STUB: getStubData', path, deferred.promise.data);
+                console.log('STUB LOG: getStubData', path, deferred.promise.data);
                 return deferred.promise;
             }
             return $http.get(urlPrefix + 'data/' + path)
@@ -161,7 +161,7 @@ angular.module('services', ['ionic'])
 //      android.permission.RECORD_AUDIO
 //      android.permission.MODIFY_AUDIO_SETTINGS
 //      android.permission.READ_PHONE_STATE
-.factory('MediaSrv', function ($q, $ionicPlatform, $window, clog) {
+.factory('MediaSrv', function ($q, $ionicPlatform, $window, Log) {
     function getErrorMessage(code) {
         if (code === 1) {
             return 'MediaError.MEDIA_ERR_ABORTED';
@@ -177,7 +177,7 @@ angular.module('services', ['ionic'])
     }
 
     function _logError(src, err) {
-        clog.error('media error', {
+        Log.error('media error', {
             code: err.code,
             message: getErrorMessage(err.code)
         });

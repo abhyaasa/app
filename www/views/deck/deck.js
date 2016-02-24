@@ -13,7 +13,7 @@ angular.module('app')
 
 .controller('DeckHelpController', function () {})
 
-.service('Deck', function (clog, $state, $rootScope, settings, getData, Library, _,
+.service('Deck', function (Log, $state, $rootScope, settings, getData, Library, _,
     LocalStorage) {
     var _this = this;
     this.count = undefined; // maintained by this.setCount()
@@ -46,7 +46,7 @@ angular.module('app')
             }
             return indices;
         };
-        clog.debug('Deck setup', JSON.stringify(deckName));
+        Log.debug('Deck setup', JSON.stringify(deckName));
         setupQuestions(deckName.file).then(function () {
             _this.data = {
                 name: deckName,

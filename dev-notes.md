@@ -135,7 +135,7 @@ The `mode` constant in `services.js` may be set to `'debug'`, `'build'`, or `'no
 
 In debug mode:
 
-- `clog.debug` is enabled
+- `Log.debug` is enabled
 - the library tab is always enabled to permit the browser debug console to be enabled (cmd-opt-I in chrome)
 
 In build mode:

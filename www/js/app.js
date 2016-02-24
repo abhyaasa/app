@@ -2,7 +2,7 @@
 
 angular.module('app', ['ionic', 'services'])
 
-.run(function (clog, $ionicPlatform, $rootScope, $state, restoreSettings, settings,
+.run(function (Log, $ionicPlatform, $rootScope, $state, restoreSettings, settings,
     mode, clearStorage, LocalStorage) {
 
     // https://github.com/angular-ui/ui-router/wiki/Frequently-Asked-Questions\
@@ -33,15 +33,15 @@ angular.module('app', ['ionic', 'services'])
     }
 })
 
-.controller('TabsController', function ($rootScope, configPromise, clog) {
+.controller('TabsController', function ($rootScope, configPromise, Log) {
     // promise is resolved: https://github.com/angular-ui/ui-router/wiki
     $rootScope.config = configPromise.data;
-    clog.debug('config', JSON.stringify($rootScope.config));
+    Log.debug('config', JSON.stringify($rootScope.config));
 })
 
 .config(function ($stateProvider, $urlRouterProvider, getDataProvider,
     mode, $compileProvider) {
-    // not used: clog.debug used instead of $log
+    // not used: Log.debug used instead of $log
     // $logProvider.debugEnabled(mode === 'debug');
     $compileProvider.debugInfoEnabled(mode !== 'build');
 
