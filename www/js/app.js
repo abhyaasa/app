@@ -227,10 +227,10 @@ angular.module('app', ['ionic', 'services'])
     $urlRouterProvider.otherwise('/tabs/library');
 });
 
-// After cordova is ready, Dynamically bootstrap angular.
-// This is necessary for console logging to work in xcode.
+// After cordova is ready, dynamically bootstrap angular.
+// This is necessary before console logging works in xcode.
 ionic.Platform.ready(function () {
-    console.log('device ready!"');
-    // code here runs after device is ready and before angular bootstraps
+    console.log('LOG: begin bootstrap');
     angular.bootstrap(document, ['app']);
+    console.log('LOG: end bootstrap');
 });

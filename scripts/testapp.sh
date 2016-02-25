@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Build ionic app from scratch in ../testapp with elements of this app.
+set -e
 cd ..
 rm -rf testapp
 ionic start testapp tabs

@@ -5,6 +5,7 @@
   <author email="abhyaasa108@gmail.com" href="https://github.com/abhyaasa/app">Vasudeva (Chris Haynes)</author>
   <content src="index.html"/>
   <access origin="*"/>
+  <allow-navigation href="http://172.27.35.142:8100"/>
   <preference name="AndroidPersistentFileLocation" value="Internal"/>
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>

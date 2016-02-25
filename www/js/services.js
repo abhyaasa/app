@@ -74,7 +74,7 @@ angular.module('services', ['ionic'])
         console.log.apply(null, ['LOG:'].concat(_.toArray(arguments)));
     };
 
-    this.debug = function () {
+    this.debug = function (arg) {
         if (mode === 'debug') {
             console.log.apply(null, ['Debug LOG:'].concat(_.toArray(arguments)));
         }

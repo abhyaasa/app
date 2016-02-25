@@ -6,7 +6,6 @@ var cmdAliases = {
     help: 'gulp cmd',
     cd: 'cd data/cdecks/test; update.sh deck_2',
     ct: 'cd scripts; cdeck.py -t -m "prefix"',
-    up: './scripts/upload.sh',
     si: 'gulp si -i',
     bi: 'gulp build',
     ei: 'ionic emulate ios -lcs',
@@ -21,6 +20,7 @@ var paths = {
     appJs: ['./www/**/*.js', '!./www/lib/**']
 };
 paths.indexJs = paths.appJs.concat(['!./www/js/app.js', '!./www/**/*spec.js']);
+paths.projectJs = paths.appJs.concat(['./*.js', './doc/*.js']);
 
 var configJsonFile = 'www/data/config.json';
 
@@ -143,14 +143,14 @@ gulp.task('bx', 'Build and open xcode project', ['build'], function () {
 
 gulp.task('jscs', 'Run jscs linter on all (non-lib) script files', function () {
     var jscs = require('gulp-jscs');
-    gulp.src(paths.appJs)
+    gulp.src(paths.projectJs)
         .pipe(jscs())
         .pipe(jscs.reporter());
 });
 
 gulp.task('jshint', 'Run jshint on all (non-lib) script files', function () {
     var jshint = require('gulp-jshint');
-    gulp.src(paths.appJs)
+    gulp.src(paths.projectJs)
         .pipe(jshint())
         .pipe(jshint.reporter('default'));
 });

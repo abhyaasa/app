@@ -166,7 +166,6 @@ Python and shell scripts. All but `g` are in the `scripts` directory.
 - `term.sh` is used by `gulp itest`.
 - `scapp.sh` used by gulp `sc` alias for testing clone of the app.
 - `testapp.sh` used by gulp `ta` alias for testing build from standard template.
-- `upload.sh` uploads the app for testing with the **ionic view** app.
 - `psclean.sh` removes stray processes that may be created by ionic development. If the message "An uncaught exception occurred and has been reported to Ionic" is seen, try running this script and confirm with the `ps` output that there are no stray processes. Kill them manually if need be.
 
 ### Python scripts

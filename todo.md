@@ -4,8 +4,10 @@ Things To Do
 There are lots of things to do. Some are recorded as Atom todo-show (ctrl-shift-T) tagged entries (mostly in comments). The `todo-show` tag list in `~/.atom/config.cson` is mirrored by the top-level items below, in roughly decreasing order of priority.
 Order within groups sometimes reflects decreasing priority. Items are only listed here if they do not have a more meaningful location in other files. Excluded from the `todo-show` scan (by the `ignoreThesePaths` configuration list) are this file, library, auto-generated files, and archive files, and for the time being `**spec.js` files.
 
-- XXX 1
-  - www/data/media/Omkara.mp3
+- XXX 2
+  - g ei not working
+  - upload not working
+  - play www/data/media/Omkara.mp3
 
 - FIXME 2
   - upload fails: see notes/ionic/ionic.text
@@ -16,10 +18,12 @@ Order within groups sometimes reflects decreasing priority. Items are only liste
 
 - PRIORITY
 
-- TODO 2
-  - git rebase merge branch to master (upstream)
+- TODO 5
+  - git merge branch to master (upstream)
   - move media decks (no clash with sound)
   - g ri: runs emulator
+  - gulp jshint and jscs color output and exit
+  - xcode debugger breakpoints
 
 - IDEA
 

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Setup local iOS app development context. Called by full_setup.sh.
+set -e
 npm install # create node_modules/ per package.json
 bower install # create www/lib/ per bower.json
 ionic state restore # create platforms/ and plugins/ per package.json

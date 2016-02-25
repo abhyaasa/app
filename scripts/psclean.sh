@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 echo osascript -e 'quit app "Terminal"'; osascript -e 'quit app "Terminal"'
 echo killall gulp; killall gulp
 echo killall sh; killall sh
