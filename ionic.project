@@ -1,6 +1,6 @@
 {
-  "name": "abhyaasa",
-  "app_id": "7e0bb8d2",
+  "name": "test",
+  "app_id": "2f2f89c2",
   "gulpStartupTasks": [
     "watch"
   ],
