@@ -79,19 +79,28 @@ gulp.task('watch', 'Only watches sass files.', function () {
 // });
 
 gulp.task('index', 'Inject script and css elements into www/index.html',
-    // after http://digitaldrummerj.me/gulp-inject/
     function () {
-        var ginject = require('gulp-inject');
-        sh.cp('-f', './index.html', './www/index.html');
-        return gulp.src('./www/index.html')
-            .pipe(ginject(
+        return gulp.src('./www/index-source.html')
+            .pipe(require('gulp-inject')(
                 gulp.src(paths.indexJs, {
                     read: false
                 }), {
                     relative: true
                 }))
-            .pipe(gulp.dest('./www'));
+            .pipe(gulp.dest('./www/index.html'));
     });
+
+// gulp.task('config', '[-a] : Copy config-source.xml to config.xml, with -a option ' +
+//     'adding allow-navigation element',
+//     function () {
+//         if (argv.a) {
+//             gulp.src(['./config.xml'])
+//                 .pipe(replace(/(<widget.*version=")[^"]*/, '$1' + argv.v))
+//                 .pipe(gulp.dest('./'));
+//             console.log('<allow-navigation href="http://172.27.35.142:8100"/>');
+//         } else {
+//         }
+//     }); // TODO remove config
 
 gulp.task('flavor',
     '--name FLAVOR : inject FLAVOR into ' + configJsonFile +
@@ -199,7 +208,7 @@ gulp.task('set-version', '-v VERSION : Change app version references to VERSION,
                     version: argv.v
                 }))
                 .pipe(gulp.dest('./'));
-            gulp.src(['./config.xml'])
+            gulp.src(['./config-source.xml'])
                 .pipe(replace(/(<widget.*version=")[^"]*/, '$1' + argv.v))
                 .pipe(gulp.dest('./'));
         });

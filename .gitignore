@@ -14,7 +14,7 @@ www/lib/
 # created by 'gulp scss'
 www/css/
 
-# created by 'gulp index'
+# created from ./index-source.html by 'gulp index'
 www/index.html
 
 # created by 'ionic upload'
