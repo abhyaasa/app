@@ -90,18 +90,6 @@ gulp.task('index', 'Inject script and css elements into www/index.html',
             .pipe(gulp.dest('./www/index.html'));
     });
 
-// gulp.task('config', '[-a] : Copy config-source.xml to config.xml, with -a option ' +
-//     'adding allow-navigation element',
-//     function () {
-//         if (argv.a) {
-//             gulp.src(['./config.xml'])
-//                 .pipe(replace(/(<widget.*version=")[^"]*/, '$1' + argv.v))
-//                 .pipe(gulp.dest('./'));
-//             console.log('<allow-navigation href="http://172.27.35.142:8100"/>');
-//         } else {
-//         }
-//     }); // TODO remove config
-
 gulp.task('flavor',
     '--name FLAVOR : inject FLAVOR into ' + configJsonFile +
     ' and link ./resources to data/flavors/FLAVOR/resources',
@@ -140,13 +128,20 @@ gulp.task('si',
         sh.exec(command);
     });
 
+gulp.task('iconfig', 'Remove allow-navigation element from ios platform config.xml',
+    function () {
+        gulp.src(['./platforms/ios/*/config.xml'])
+            .pipe(replace(/<allow-navigation.*\/>/, ''))
+            .pipe(gulp.dest('./platforms/ios'));
+    }); // TODO remove config
+
 gulp.task('build', '[-a] for Android, default iOS', ['jscs', 'default'], function () {
     // BUILD finish this: see https://github.com/leob/ionic-quickstarter
     sh.exec('ionic build ' + (argv.a ? 'android' : 'ios'));
     logError('If build did not end with "** BUILD SUCCEEDED **", run it again!');
 });
 
-gulp.task('bx', 'Build and open xcode project', ['build'], function () {
+gulp.task('bx', 'Build and open xcode project', ['build', 'iconfig'], function () {
     sh.exec('open platforms/ios/*.xcodeproj');
 });
 
