@@ -5,14 +5,11 @@ There are lots of things to do. Some are recorded as Atom todo-show (ctrl-shift-
 Order within groups sometimes reflects decreasing priority. Items are only listed here if they do not have a more meaningful location in other files. Excluded from the `todo-show` scan (by the `ignoreThesePaths` configuration list) are this file, library, auto-generated files, and archive files, and for the time being `**spec.js` files.
 
 - XXX 2
-  - g ei not working
   - upload not working
   - play www/data/media/Omkara.mp3
 
-- FIXME 2
-  - upload fails: see notes/ionic/ionic.text
+- FIXME 1
   - emulator fails to load media file: Feb 18 16:09:31 dram Abhyaasa[45438]: Unknown resource 'data/flavor/media/deck_2/omkara.mp3'
-  - add config.json setting to reset settings on load
 
 - CHANGED
 

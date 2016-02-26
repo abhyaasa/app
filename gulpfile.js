@@ -9,7 +9,7 @@ var cmdAliases = {
     si: 'gulp si -i',
     bi: 'gulp build',
     ei: 'ionic emulate ios -lcs',
-    ri: 'ionic run ios -lcs --device',
+    ri: 'ionic run ios -lcs',
     bx: 'gulp bx',
     ta: './scripts/testapp.sh',
     sc: './scripts/scapp.sh'
@@ -128,7 +128,9 @@ gulp.task('si',
         sh.exec(command);
     });
 
-gulp.task('iconfig', 'Remove allow-navigation element from ios platform config.xml',
+gulp.task('ibuild', 'Build, and then remove allow-navigation element from ios ' +
+    'platform config.xml',
+    ['build'],
     function () {
         gulp.src(['./platforms/ios/*/config.xml'])
             .pipe(replace(/<allow-navigation.*\/>/, ''))
@@ -141,18 +143,18 @@ gulp.task('build', '[-a] for Android, default iOS', ['jscs', 'default'], functio
     logError('If build did not end with "** BUILD SUCCEEDED **", run it again!');
 });
 
-gulp.task('bx', 'Build and open xcode project', ['build', 'iconfig'], function () {
+gulp.task('bx', 'Build and open xcode project', ['ibuild'], function () {
     sh.exec('open platforms/ios/*.xcodeproj');
 });
 
-gulp.task('jscs', 'Run jscs linter on all (non-lib) script files', function () {
+gulp.task('jscs', 'Run jscs linter on all (non-lib) .js files', function () {
     var jscs = require('gulp-jscs');
     gulp.src(paths.projectJs)
         .pipe(jscs())
         .pipe(jscs.reporter());
 });
 
-gulp.task('jshint', 'Run jshint on all (non-lib) script files', function () {
+gulp.task('jshint', 'Run jshint on all (non-lib) .js files', function () {
     var jshint = require('gulp-jshint');
     gulp.src(paths.projectJs)
         .pipe(jshint())
