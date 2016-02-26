@@ -48,6 +48,7 @@ Order within groups sometimes reflects decreasing priority. Items are only liste
   - splash and icon http://learn.ionicframework.com/formulas/adding-an-icon/ and  http://blog.ionic.io/automating-icons-and-splash-screens/  - Leitner learning algorithm https://en.wikipedia.org/wiki/Leitner_system
   - devanagari q, transliteration a
   - deck state copy, rename, reorder, etc
+  - add python and xml linting
   - document code, e.g. https://www.npmjs.com/package/gulp-ngdocs
   - flesh out jsdoc documentation and improve dgeni formatting
   - consider adding other features, as in notes/features.txt

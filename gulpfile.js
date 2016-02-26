@@ -17,7 +17,9 @@ var cmdAliases = {
 
 var paths = {
     sass: ['./scss/**/*.scss'],
-    appJs: ['./www/**/*.js', '!./www/lib/**']
+    appJs: ['./www/**/*.js', '!./www/lib/**'],
+    projectJson: ['./ionic.project', './**/*.json',
+        '!./node_modules/**/*.json', '!./plugins/**/*.json', '!./platforms/**/*.json']
 };
 paths.indexJs = paths.appJs.concat(['!./www/js/app.js', '!./www/**/*spec.js']);
 paths.projectJs = paths.appJs.concat(['./*.js', './doc/*.js']);
@@ -35,10 +37,8 @@ var minifyCss = require('gulp-minify-css');
 var rename = require('gulp-rename');
 var sh = require('shelljs');
 var _ = require('underscore');
-var bump = require('gulp-bump');
 var replace = require('gulp-replace');
 var fs = require('fs');
-var markdown = require('gulp-markdown');
 // var concat = require('gulp-concat'); # included in devDependencies, but not used
 
 var argv = require('minimist')(process.argv.slice(2));
@@ -48,7 +48,7 @@ function logError(message) {
 }
 
 gulp.task('default', 'Run by ionic app build and serve commands',
-    ['sass', 'index', 'md', 'jshint']);
+    ['sass', 'index', 'md', 'lint']);
 
 gulp.task('sass', 'Ionic .scss to .css file transformation', function (done) {
     gulp.src('./scss/ionic.app.scss')
@@ -94,7 +94,6 @@ gulp.task('flavor',
     '--name FLAVOR : inject FLAVOR into ' + configJsonFile +
     ' and link ./resources to data/flavors/FLAVOR/resources',
     function () {
-        var fs = require('fs');
         if (!argv.name) {
             logError('Usage: gulp flavor --name NAME');
         } else {
@@ -112,7 +111,7 @@ gulp.task('flavor',
 gulp.task('md', 'Process markdown files', function () {
     sh.exec('rm -rf ./www/data/md');
     gulp.src('./data/md/*.md')
-        .pipe(markdown())
+        .pipe(require('gulp-markdown')())
         .pipe(gulp.dest('./www/data/md'));
 });
 
@@ -137,7 +136,7 @@ gulp.task('ibuild', 'Build, and then remove allow-navigation element from ios ' 
             .pipe(gulp.dest('./platforms/ios'));
     }); // TODO remove config
 
-gulp.task('build', '[-a] for Android, default iOS', ['jscs', 'default'], function () {
+gulp.task('build', '[-a] for Android, default iOS', ['default'], function () {
     // BUILD finish this: see https://github.com/leob/ionic-quickstarter
     sh.exec('ionic build ' + (argv.a ? 'android' : 'ios'));
     logError('If build did not end with "** BUILD SUCCEEDED **", run it again!');
@@ -146,6 +145,8 @@ gulp.task('build', '[-a] for Android, default iOS', ['jscs', 'default'], functio
 gulp.task('bx', 'Build and open xcode project', ['ibuild'], function () {
     sh.exec('open platforms/ios/*.xcodeproj');
 });
+
+gulp.task('lint', 'Run js and json linters.', ['jshint', 'jscs', 'jsonlint']);
 
 gulp.task('jscs', 'Run jscs linter on all (non-lib) .js files', function () {
     var jscs = require('gulp-jscs');
@@ -159,6 +160,19 @@ gulp.task('jshint', 'Run jshint on all (non-lib) .js files', function () {
     gulp.src(paths.projectJs)
         .pipe(jshint())
         .pipe(jshint.reporter('default'));
+});
+
+gulp.task('jsonlint', 'Report json errors', function () {
+    var jsonlint = require('gulp-json-lint');
+    var reporter = function (lint, file) {
+        // HACK avoid jsonlint bug: https://github.com/codenothing/jsonlint/issues/2
+        if (lint.error !== 'Invalid Reverse Solidus \'\\\' declaration.') {
+            console.log(file.path + ': ' + lint.error);
+        }
+    };
+    gulp.src(paths.projectJson)
+        .pipe(jsonlint())
+        .pipe(jsonlint.report(reporter));
 });
 
 gulp.task('publish-pre-build', 'Execute before publishing build', function () {
@@ -201,7 +215,7 @@ gulp.task('set-version', '-v VERSION : Change app version references to VERSION,
             console.log('Setting version ' + version + ' to ' + argv.v);
             gulp.src(['./www/data/config.json', './package.json'])
                 // see https://www.npmjs.com/package/gulp-bump
-                .pipe(bump({
+                .pipe(require('gulp-bump')({
                     version: argv.v
                 }))
                 .pipe(gulp.dest('./'));

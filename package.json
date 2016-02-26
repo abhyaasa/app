@@ -21,6 +21,7 @@
     "gulp-inject": "^1.5.0",
     "gulp-jscs": "^3.0.2",
     "gulp-jshint": "^1.11.2",
+    "gulp-json-lint": "^0.1.0",
     "gulp-karma": "^0.0.5",
     "gulp-markdown": "^1.2.0",
     "gulp-ngdocs": "^0.2.13",

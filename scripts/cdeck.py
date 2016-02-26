@@ -361,7 +361,7 @@ def main(args):
         line_num += len(elt.split('\n')) + 1
     if '.matching' in tags:
         end_matching()
-    json.dump(quiz, writer, indent=1, sort_keys=True)
+    json.dump(quiz, writer, indent=1, sort_keys=True, separators=(',', ': '))
 
 
 def get_args():
