@@ -18,6 +18,7 @@ var cmdAliases = {
 var paths = {
     sass: ['./scss/**/*.scss'],
     appJs: ['./www/**/*.js', '!./www/lib/**'],
+    projectScss: ['./scss/**/*.scss'],
     projectJson: ['./ionic.project', './**/*.json',
         '!./node_modules/**/*.json', '!./plugins/**/*.json', '!./platforms/**/*.json']
 };
@@ -146,7 +147,14 @@ gulp.task('bx', 'Build and open xcode project', ['ibuild'], function () {
     sh.exec('open platforms/ios/*.xcodeproj');
 });
 
-gulp.task('lint', 'Run js and json linters.', ['jshint', 'jscs', 'jsonlint']);
+gulp.task('lint', 'Run js, json, and scss linters.',
+    ['jshint', 'jscs', 'jsonlint', 'scss-lint']
+);
+
+gulp.task('scss-lint', 'scss file linter', function () {
+    return gulp.src(paths.projectScss)
+    .pipe(require('gulp-scss-lint')());
+});
 
 gulp.task('jscs', 'Run jscs linter on all (non-lib) .js files', function () {
     var jscs = require('gulp-jscs');
