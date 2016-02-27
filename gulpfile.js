@@ -20,7 +20,8 @@ var paths = {
     appJs: ['./www/**/*.js', '!./www/lib/**'],
     projectScss: ['./scss/**/*.scss'],
     projectJson: ['./ionic.project', './**/*.json',
-        '!./node_modules/**/*.json', '!./plugins/**/*.json', '!./platforms/**/*.json']
+        '!./node_modules/**/*.json', '!./plugins/**/*.json', '!./platforms/**/*.json'
+    ]
 };
 paths.indexJs = paths.appJs.concat(['!./www/js/app.js', '!./www/**/*spec.js']);
 paths.projectJs = paths.appJs.concat(['./*.js', './doc/*.js']);
@@ -33,15 +34,11 @@ var devBrowser = ' --browser /Applications/Google\\ Chrome\\ Canary.app';
 
 var gulp = require('gulp-help')(require('gulp'));
 var gutil = require('gulp-util');
-var sass = require('gulp-sass');
-var minifyCss = require('gulp-minify-css');
-var rename = require('gulp-rename');
 var sh = require('shelljs');
 var _ = require('underscore');
 var replace = require('gulp-replace');
 var fs = require('fs');
 // var concat = require('gulp-concat'); # included in devDependencies, but not used
-
 var argv = require('minimist')(process.argv.slice(2));
 
 function logError(message) {
@@ -52,6 +49,9 @@ gulp.task('default', 'Run by ionic app build and serve commands',
     ['sass', 'index', 'md', 'lint']);
 
 gulp.task('sass', 'Ionic .scss to .css file transformation', function (done) {
+    var sass = require('gulp-sass');
+    var minifyCss = require('gulp-minify-css');
+    var rename = require('gulp-rename');
     gulp.src('./scss/ionic.app.scss')
         .pipe(sass())
         .pipe(gulp.dest('./www/css/'))
@@ -81,8 +81,9 @@ gulp.task('watch', 'Only watches sass files.', function () {
 
 gulp.task('index', 'Inject script and css elements into www/index.html',
     function () {
+        var gulpInject = require('gulp-inject');
         return gulp.src('./www/index-source.html')
-            .pipe(require('gulp-inject')(
+            .pipe(gulpInject(
                 gulp.src(paths.indexJs, {
                     read: false
                 }), {
@@ -110,16 +111,16 @@ gulp.task('flavor',
     });
 
 gulp.task('md', 'Process markdown files', function () {
+    var markdown = require('gulp-markdown');
     sh.exec('rm -rf ./www/data/md');
     gulp.src('./data/md/*.md')
-        .pipe(require('gulp-markdown')())
+        .pipe(markdown())
         .pipe(gulp.dest('./www/data/md'));
 });
 
 gulp.task('si',
     '[-a|-i|-l] : serve ionic for android, ios, or both, with devBrowser, or default: ' +
-    'serve ios with default browser',
-    ['default'],
+    'serve ios with default browser', ['default'],
     function () {
         var platform = argv.a ? '-t android' + devBrowser :
             argv.i ? '-t ios' + devBrowser :
@@ -128,8 +129,13 @@ gulp.task('si',
         sh.exec(command);
     });
 
-gulp.task('ibuild', 'Build, and then remove allow-navigation element from ios ' +
-    'platform config.xml',
+gulp.task('build', '[-a] for Android, default iOS', ['default'], function () {
+    // BUILD finish this: see https://github.com/leob/ionic-quickstarter
+    sh.exec('ionic build ' + (argv.a ? 'android' : 'ios'));
+    logError('If build did not end with "** BUILD SUCCEEDED **", run it again!');
+});
+
+gulp.task('ibuild', 'After build, remove allow-navigation element from ios config.xml',
     ['build'],
     function () {
         gulp.src(['./platforms/ios/*/config.xml'])
@@ -137,13 +143,7 @@ gulp.task('ibuild', 'Build, and then remove allow-navigation element from ios ' 
             .pipe(gulp.dest('./platforms/ios'));
     }); // TODO remove config
 
-gulp.task('build', '[-a] for Android, default iOS', ['default'], function () {
-    // BUILD finish this: see https://github.com/leob/ionic-quickstarter
-    sh.exec('ionic build ' + (argv.a ? 'android' : 'ios'));
-    logError('If build did not end with "** BUILD SUCCEEDED **", run it again!');
-});
-
-gulp.task('bx', 'Build and open xcode project', ['ibuild'], function () {
+gulp.task('bx', 'Build for ios and open xcode project', ['ibuild'], function () {
     sh.exec('open platforms/ios/*.xcodeproj');
 });
 
@@ -152,8 +152,9 @@ gulp.task('lint', 'Run js, json, and scss linters.',
 );
 
 gulp.task('scss-lint', 'scss file linter', function () {
+    var scssLint = require('gulp-scss-lint');
     return gulp.src(paths.projectScss)
-    .pipe(require('gulp-scss-lint')());
+        .pipe(scssLint());
 });
 
 gulp.task('jscs', 'Run jscs linter on all (non-lib) .js files', function () {
@@ -192,8 +193,9 @@ gulp.task('dgeni', 'Generate jsdoc documentation.', function () {
     // https://github.com/angular/angular.js/wiki/Writing-AngularJS-Documentation and
     // http://www.chirayuk.com/snippets/angularjs/ngdoc
     var Dgeni = require('dgeni');
+    var dengiPackage = require('./docs/dgeni-package');
     try {
-        var dgeni = new Dgeni([require('./docs/dgeni-package')]);
+        var dgeni = new Dgeni([dengiPackage]);
         return dgeni.generate();
     } catch (x) {
         console.log(x.stack);
@@ -218,12 +220,13 @@ gulp.task('cmd', '[-a ALIAS] : Execute shell command named ALIAS in aliases dict
 gulp.task('set-version', '-v VERSION : Change app version references to VERSION, ' +
     'and create annotated git tag.',
     function () {
+        var bump = require('gulp-bump');
         fs.readFile('./package.json', function (err, data) {
             var version = JSON.parse(data).version;
             console.log('Setting version ' + version + ' to ' + argv.v);
             gulp.src(['./www/data/config.json', './package.json'])
                 // see https://www.npmjs.com/package/gulp-bump
-                .pipe(require('gulp-bump')({
+                .pipe(bump({
                     version: argv.v
                 }))
                 .pipe(gulp.dest('./'));
