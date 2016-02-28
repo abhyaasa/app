@@ -105,8 +105,6 @@ gulp.task('flavor',
             sh.exec('rm -rf www/data/flavor');
             sh.exec('ln -sf `pwd`/data/flavors/' + argv.name + ' www/data/flavor');
             sh.exec('ln -sf data/flavors/' + argv.name + '/resources .');
-            // build resources/{ios/,android/} and update config.xml
-            sh.exec('ionic resources');
         }
     });
 

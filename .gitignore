@@ -28,6 +28,8 @@ docs/build/
 
 # created by 'gulp flavor'
 www/data/flavor
+
+# created by 'ionic resources'
 resources/android/
 resources/ios/
 
