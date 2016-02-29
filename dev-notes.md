@@ -12,6 +12,8 @@ This project uses [semantic versioning](http://semver.org).
 
 The following assumes an OSX (MaxOS) development platform, which is required for iOS development.
 
+Install [Atom](https://atom.io), or other development editor, as needed.
+
 Install [Node 4](https://nodejs.org/dist/v4.3.1/node-v4.3.1.pkg) (includes `npm`).
 
 Install [xcode](https://developer.apple.com/xcode/download/): needed for emulator and USB-connected device testing. See http://www.macinstruct.com/node/494.
@@ -28,20 +30,18 @@ Next, install global dependencies:
 $ npm install -g cordova ionic ios-sim gulp bower
 ```
 
-The following command line completes a minimal app development installation. The voluminous output generated may overflow the terminal buffer, so output is saved in `temp/setup.txt` for inspection if something goes wrong.  It concludes by running the app in the default browser.
+The following command line completes a minimal app development installation. The voluminous output generated may overflow the terminal buffer, so output is saved in `temp/setup.txt` for inspection if something goes wrong.  
 ```
 $ ./scripts/setup.sh | tee temp/setup.txt
 ```
 
-Install [Chrome Canary](https://www.google.com/chrome/browser/canary.html) for server app testing in the preferred development browser, as with `$ gulp si -i`.
+Install [Chrome Canary](https://www.google.com/chrome/browser/canary.html) for server app testing in the preferred development browser. Try it out with the CLI shortcut command `g si`.
 
-Test the app in the iOS emulator with `$ g ei`.
+Test the app in the iOS emulator with `g ei`.
 
 An Apple developer membership is required for testing on a usb-connected device, as with `g ri`.
 
-Install [Atom](https://atom.io), or other development editor, as needed.
-
-This completes a minimal development setup.
+You now have exercised a minimal development setup.
 
 
 ## Tools
@@ -69,8 +69,7 @@ The following are used for automatic testing and installed with `npm`:
 - `karma`: test runner
 - `protractor`: integration task manager
 
-The node version manager, `nvm`, is useful in some environments. Its installer, the Ruby package manager `brew`, needs to be installed first:
-
+The node version manager, `nvm`, allows `npm` to be used without `sudo`. Install it using `npm`: https://www.npmjs.com/package/nvm.  Or the Ruby package manager `brew`, may be used:
 ```
 $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 $ brew nvm
@@ -176,10 +175,10 @@ Python and shell scripts. All but `g` are in the `scripts` directory.
 
 - `g ALIAS` is a shortcut for invoking via `gulp cmd` the script associated with `ALIAS` in the `cmdAliases` dictionary defined early in `gulpfile.js`.
 - `full_setup.sh` installs global and local dependencies.
-- `local_setup.sh` installs local dependencies.
+- `setup.sh` installs local dependencies.
 - `term.sh` is used by `gulp itest`.
-- `scapp.sh` used by gulp `sc` alias for testing clone of the app.
-- `testapp.sh` used by gulp `ta` alias for testing build from standard template.
+- `scapp.sh` creates shallow clone of the app.
+- `tabsapp.sh` creates related app from ionic tabs starter template and may partially updates to this app configuration.
 - `psclean.sh` removes stray processes that may be created by ionic development. If the message "An uncaught exception occurred and has been reported to Ionic" is seen, try running this script and confirm with the `ps` output that there are no stray processes. Kill them manually if need be.
 
 ### Python scripts
@@ -219,15 +218,16 @@ OPEN_DECK_DISPLAY_NAME: decks's data dictionary
 
 ## Updating
 
-### resources
+### Resources
 
 After a change has been made to an image file at top level in the `resources` directory of the current flavor, the following to update the `android` and `ios` subdirectories.
 ```
 $ ionic resources
 ```
 
-### Update ruby gems used by gulp (and ionic?)
+### Ruby gems
 
+These are used by OS X for `node` and `npm` management, among many other things.
 ```
 $ brew update
 ```
@@ -241,26 +241,34 @@ $ git reset --hard origin/master
 $ brew update
 ```
 
-### Update local and global development libraries.
+### npm and node
+
+```
+$ sudo npm install npm -g
+```
+or use `nvm` if that is in use.
+
+### Development and app libraries
+
+Update global dependencies.
+```
+$ npm update -g cordova ionic ios-sim gulp bower
+```
 
 Make sure that `package.json` is consistent with the installed local dependencies.
 ```
 $ ionic state save
 ```
 
-Update global dependencies.
+A major ionic update should be followed by updating all local dependencies:
 ```
-$ npm update -g cordova ionic ios-sim
-```
-
-A major ionic update should be followed by updating (in this case by rebuilding) all local dependencies in `node_modules/`, `plugins/`, `platforms/`, and `www.lib`.
-```
-$ ionic state reset
+bower update  # updates www/lib
+scripts/setup.sh  # updates node_modules/, plugins/, and platforms/ also sets test flavor
 ```
 Unmet dependency warnings can probably be ignored. If problems, try
 `sudo npm uninstall -g ionic && sudo npm install ionic`, and repeat above.
 
-### Tool updates
+### Tool
 
 Node [update instructions]( http://theholmesoffice.com/node-js-fundamentals-how-to-upgrade-the-node-js-version/).
 

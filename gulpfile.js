@@ -10,9 +10,7 @@ var cmdAliases = {
     bi: 'gulp build',
     ei: 'ionic emulate ios -lcs',
     ri: 'ionic run ios -lcs',
-    bx: 'gulp bx',
-    ta: './scripts/testapp.sh',
-    sc: './scripts/scapp.sh'
+    bx: 'gulp bx'
 };
 
 var paths = {

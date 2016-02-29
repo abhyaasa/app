@@ -9,10 +9,10 @@ platforms/
 plugins/
 
 # created by 'bower install'
-# www/lib/ # but leave in git for view_setup.sh
+www/lib/
 
 # created by 'gulp scss'
-# www/css/ # but leave in git for view_setup.sh
+# www/css/  # but leave in git for so setup.sh doesn't need gulp
 
 # created from ./index-source.html by 'gulp index'
 www/index.html
