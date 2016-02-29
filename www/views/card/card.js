@@ -2,10 +2,9 @@
 
 angular.module('app')
 
-.controller('CardController', function ($scope, $state, $log, $ionicGesture, _,
+.controller('CardController', function ($scope, $state, Log, $ionicGesture, _,
     Deck, Card) {
 
-    $scope.done = false;
     $scope.Card = Card;
     $scope.Deck = Deck;
     $scope.$on('$ionicView.enter', function () {
@@ -21,10 +20,10 @@ angular.module('app')
     var gestureSetup = function () {
         var element = angular.element(document.querySelector('#content'));
         var finish = function () {
-            if (!$scope.done) {
+            if (!Card.done) {
                 Card.outcome('skipped');
             }
-            $scope.done = false;
+            Card.done = false;
         };
 
         var next = function () {
@@ -40,7 +39,7 @@ angular.module('app')
         $ionicGesture.on('swiperight', previous, element);
 
         var remove = function () {
-            $scope.done = false;
+            Card.done = false;
             Card.outcome('removed');
             Card.nextCard();
         };
@@ -59,20 +58,20 @@ angular.module('app')
 
     $scope.setOutcome = function (outcome) {
         Card.outcome(outcome);
-        $scope.done = false;
+        Card.done = false;
         Card.nextCard();
     };
 
     $scope.showAnswer = function () {
         if (Card.type === 'mind') {
-            $scope.done = true;
+            Card.done = true;
             Card.isInput = false;
         }
     };
 
     $scope.isText = function () {
         Card.outcome('text');
-        $scope.done = true;
+        Card.done = true;
     };
 
     var isRight = function (response) {
@@ -81,7 +80,7 @@ angular.module('app')
     $scope.response = function (index) {
         var items = Card.responseItems;
         if (_.contains(Card.question.tags, '.ma')) {
-            $log.debug('multiple answer', index, JSON.stringify(Card.responses));
+            Log.debug('multiple answer', index, JSON.stringify(Card.responses));
             if (Card.responses[index][0]) {
                 items[index].style = 'right-response';
             } else {
@@ -97,9 +96,9 @@ angular.module('app')
             } else {
                 Card.outcome('right');
             }
-            $scope.done = true;
+            Card.done = true;
         }
-        $log.debug('response items', JSON.stringify(items));
+        Log.debug('response items', JSON.stringify(items));
     };
 
     $scope.submitAnswer = function (submittedAnswer) {
@@ -113,7 +112,7 @@ angular.module('app')
         } else {
             Card.outcome('wrong');
         }
-        $scope.done = true;
+        Card.done = true;
     };
 
     $scope.maDone = function () {
@@ -131,8 +130,8 @@ angular.module('app')
         } else {
             Card.outcome('right');
         }
-        $scope.done = true;
-        $log.debug('Done items', JSON.stringify(items));
+        Card.done = true;
+        Log.debug('Done items', JSON.stringify(items));
     };
 })
 
@@ -152,7 +151,7 @@ angular.module('app')
     };
 })
 
-.service('Card', function ($sce, $log, $state, Deck, settings, MediaSrv, _) {
+.service('Card', function ($sce, Log, $state, Deck, settings, MediaSrv, _) {
     var _this = this;
     // FIXME pranava deck2 no answer, reverse not working either
     this.submittedAnswer = undefined;
@@ -166,6 +165,7 @@ angular.module('app')
         };
         Deck.data.activeCardIndex = activeCardIndex;
         Deck.save();
+        _this.done = false;
         _this.question = Deck.questions[Deck.data.active[activeCardIndex]];
         _this.isMA = _.contains(_this.question.tags, '.ma');
         _this.answerClass = 'answer';
@@ -211,7 +211,7 @@ angular.module('app')
             // random sequence.
             var q = _this.question;
             if (!q.matchingEnd) {
-                $log.error('No matchingEnd attribute with type matching');
+                Log.error('No matchingEnd attribute with type matching');
             }
             _this.responses = [];
             for (var i = q.matchingBegin; i <= q.matchingEnd; i++) {
@@ -252,7 +252,7 @@ angular.module('app')
                 }
             }
         }
-        $log.debug('_this.setup', JSON.stringify(_this));
+        Log.debug('_this.setup', JSON.stringify(_this));
     };
 
     this.outcome = function (outcome) {

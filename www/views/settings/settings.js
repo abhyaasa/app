@@ -5,14 +5,6 @@ angular.module('app')
 .controller('SettingsController', function ($scope, settings, MediaSrv) {
     $scope.settings = settings;
 
-    $scope.playSound = function () { // FIXME test sound button
-        MediaSrv.loadMedia('data/flavor/media/sound/Omkara.mp3').then(function (media) {
-            // Don't want iOS default, which ignores mute button,
-            // see https://www.npmjs.com/package/cordova-plugin-media
-            media.play({ playAudioWhenScreenIsLocked: false });
-        });
-    };
-
     // // from http://docs.ionic.io/v1.0/docs/deploy-install
     // // FUTURE implement and test deploy
     // var deploy = new Ionic.Deploy();
@@ -42,16 +34,16 @@ angular.module('app')
 
 .value('settings', {})
 
-.service('saveSettings', function ($log, settings, LocalStorage, _) {
+.service('saveSettings', function (Log, settings, LocalStorage, _) {
     return function () {
         var s = {};
         _.extendOwn(s, settings);
         LocalStorage.setObject('*settings*', s);
-        $log.debug('SAVED SETTINGS');
+        Log.debug('SAVED SETTINGS');
     };
 })
 
-.service('restoreSettings', function ($log, settings, LocalStorage, _) {
+.service('restoreSettings', function (Log, settings, LocalStorage, _) {
     var defaultSettings = {
         intro: true,
         randomQuestions: false,
@@ -67,6 +59,6 @@ angular.module('app')
                 _.extendOwn(settings, s);
             }
         }
-        $log.debug('restored settings', JSON.stringify(settings));
+        Log.debug('restored settings', JSON.stringify(settings));
     };
 });

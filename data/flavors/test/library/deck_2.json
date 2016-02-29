@@ -1,68 +1,68 @@
 [
  {
   "answer": [
-   "om", 
+   "om",
    "\u0950"
-  ], 
-  "id": 0, 
-  "mp3": "data/flavor/media/deck_2/omkara.mp3", 
-  "tags": [], 
-  "text": "pranava", 
+  ],
+  "id": 0,
+  "mp3": "data/flavor/media/deck_2/omkara.mp3",
+  "tags": [],
+  "text": "pranava",
   "type": "mind"
- }, 
+ },
  {
-  "answer": false, 
-  "id": 1, 
-  "tags": [], 
+  "answer": false,
+  "id": 1,
+  "tags": [],
   "text": [
-   "\u015braddh\u0101v\u0101~lla", 
+   "\u015braddh\u0101v\u0101~lla",
    "\u0936\u094d\u0930\u0926\u094d\u0927\u093e\u0935\u093e\u0901\u0932\u094d\u0932"
-  ], 
+  ],
   "type": "true-false"
- }, 
+ },
  {
-  "id": 2, 
-  "tags": [], 
+  "id": 2,
+  "tags": [],
   "text": [
-   "a", 
+   "a",
    "\u0905"
-  ], 
+  ],
   "type": "transliteration"
- }, 
+ },
  {
-  "answer": "Cs", 
-  "id": 3, 
+  "answer": "Cs",
+  "id": 3,
   "tags": [
    ".cs"
-  ], 
-  "text": "case sensitive", 
+  ],
+  "text": "case sensitive",
   "type": "mind"
- }, 
+ },
  {
-  "answer": "Ci", 
-  "id": 4, 
+  "answer": "Ci",
+  "id": 4,
   "tags": [
    ".ci"
-  ], 
-  "text": "case insensitive", 
+  ],
+  "text": "case insensitive",
   "type": "mind"
- }, 
+ },
  {
-  "answer": "<p>Buddy at shelter</p>", 
-  "id": 5, 
+  "answer": "<p>Buddy at shelter</p>",
+  "id": 5,
   "tags": [
    ".html"
-  ], 
-  "text": "<p>image <img alt=\"Buddy\" src=\"data/flavor/media/deck_2/buddyShelter.jpg\" title=\"Buddy at shelter\" /></p>", 
+  ],
+  "text": "<p>image <img alt=\"Buddy\" src=\"data/flavor/media/deck_2/buddyShelter.jpg\" title=\"Buddy at shelter\" /></p>",
   "type": "mind"
- }, 
+ },
  {
-  "answer": "<p>Big Buddy</p>", 
-  "id": 6, 
+  "answer": "<p>Big Buddy</p>",
+  "id": 6,
   "tags": [
    ".html"
-  ], 
-  "text": "<p>image <img alt=\"Buddy\" src=\"data/flavor/media/deck_2/buddyShelter550w.jpg\" title=\"Buddy 550px wide\" /></p>", 
+  ],
+  "text": "<p>image <img alt=\"Buddy\" src=\"data/flavor/media/deck_2/buddyShelter550w.jpg\" title=\"Buddy 550px wide\" /></p>",
   "type": "mind"
  }
 ]

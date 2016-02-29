@@ -1,8 +1,10 @@
 # Specifies intentionally untracked files to ignore when using Git
 # http://git-scm.com/docs/gitignore
 
-# created by 'ionic state restore'
+# created by 'npm install'
 node_modules/
+
+# created by 'ionic state restore'
 platforms/
 plugins/
 
@@ -10,9 +12,9 @@ plugins/
 www/lib/
 
 # created by 'gulp scss'
-www/css/
+# www/css/  # but leave in git for so setup.sh doesn't need gulp
 
-# created by 'gulp index'
+# created from ./index-source.html by 'gulp index'
 www/index.html
 
 # created by 'ionic upload'
@@ -24,16 +26,15 @@ www/data/md/
 # created by 'gulp dgeni'
 docs/build/
 
-# development notes
-notes/
+# created by 'gulp flavor'
+www/data/flavor
+
+# created by 'ionic resources'
+resources/android/
+resources/ios/
 
 # compiled python
 *.pyc
 
 # proprietary content of Datta Deepam flavor
 **/datta-deepam/
-
-# flavor-specific
-www/data/flavor
-resources/android/
-resources/ios/

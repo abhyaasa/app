@@ -2,8 +2,8 @@
 
 angular.module('app')
 
-.controller('LibraryController', function ($rootScope, $scope, $state, $log, _, mode,
-  Library, Deck, Card, indexPromise) {
+.controller('LibraryController', function ($rootScope, $scope, $state, _, mode,
+    Library, Deck, Card, indexPromise) {
     $scope.selectClosedDeck = function (deckName) {
         Deck.setupClosedDeck(deckName);
     };
@@ -44,19 +44,14 @@ angular.module('app')
 
 .controller('LibraryHelpController', function () {})
 
-.service('Library', function ($log, $state, getData, LocalStorage, _) {
+.service('Library', function (Log, $state, getData, LocalStorage, _) {
     var _this = this;
-
-    var openDecks = LocalStorage.getObject('*openDecks*');
-    if (openDecks.length === undefined) {
-        openDecks = [];
-    }
-    $log.debug('openDecks', JSON.stringify(openDecks));
-
+    var openDecks;
     var fileDecks;
+
     this.provideIndex = function (indexPromise) {
         var indexNames = indexPromise.data;
-        $log.debug('indexNames', indexNames);
+        Log.debug('indexNames', indexNames);
         fileDecks = _.map(indexNames, function (name) {
             return {
                 file: name,
@@ -67,15 +62,27 @@ angular.module('app')
         _this.updateDeckLists();
     };
 
-    this.deckLists = { open: undefined, closed: undefined };
+    this.deckLists = {
+        open: undefined,
+        closed: undefined
+    };
+
     this.updateDeckLists = function () {
+        if (openDecks === undefined) {
+            openDecks = LocalStorage.getObject('*openDecks*');
+            if (openDecks.length === undefined) {
+                openDecks = [];
+            }
+            Log.debug('openDecks', JSON.stringify(openDecks));
+        }
         var isOpen = function (fd) {
             return _.contains(openDecks, fd.display);
         };
         _this.deckLists.open = openDecks.sort();
         _this.deckLists.closed = _.reject(fileDecks, isOpen).sort();
-        $log.debug('deckLists', JSON.stringify(_this.deckLists));
+        Log.debug('deckLists', JSON.stringify(_this.deckLists));
     };
+
     this.numDecks = function () {
         return _this.deckLists.open.length + _this.deckLists.closed.length;
     };
@@ -101,5 +108,4 @@ angular.module('app')
         openDecks = [];
         LocalStorage.setObject('*openDecks*', openDecks);
     };
-})
-;
+});

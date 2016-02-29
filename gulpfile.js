@@ -6,20 +6,23 @@ var cmdAliases = {
     help: 'gulp cmd',
     cd: 'cd data/cdecks/test; update.sh deck_2',
     ct: 'cd scripts; cdeck.py -t -m "prefix"',
-    up: './scripts/upload.sh',
     si: 'gulp si -i',
     bi: 'gulp build',
-    ei: 'ionic emulate ios -l -c -s',
-    ri: 'ionic run ios -l -c -s --device',
-    ta: './scripts/testapp.sh',
-    sc: './scripts/scapp.sh'
+    ei: 'ionic emulate ios -lcs',
+    ri: 'ionic run ios -lcs',
+    bx: 'gulp bx'
 };
 
 var paths = {
     sass: ['./scss/**/*.scss'],
-    appJs: ['./www/**/*.js', '!./www/lib/**']
+    appJs: ['./www/**/*.js', '!./www/lib/**'],
+    projectScss: ['./scss/**/*.scss'],
+    projectJson: ['./ionic.project', './**/*.json',
+        '!./node_modules/**/*.json', '!./plugins/**/*.json', '!./platforms/**/*.json'
+    ]
 };
 paths.indexJs = paths.appJs.concat(['!./www/js/app.js', '!./www/**/*spec.js']);
+paths.projectJs = paths.appJs.concat(['./*.js', './doc/*.js']);
 
 var configJsonFile = 'www/data/config.json';
 
@@ -29,23 +32,24 @@ var devBrowser = ' --browser /Applications/Google\\ Chrome\\ Canary.app';
 
 var gulp = require('gulp-help')(require('gulp'));
 var gutil = require('gulp-util');
-var sass = require('gulp-sass');
-var minifyCss = require('gulp-minify-css');
-var rename = require('gulp-rename');
 var sh = require('shelljs');
 var _ = require('underscore');
-var bump = require('gulp-bump');
 var replace = require('gulp-replace');
 var fs = require('fs');
-var markdown = require('gulp-markdown');
 // var concat = require('gulp-concat'); # included in devDependencies, but not used
-
 var argv = require('minimist')(process.argv.slice(2));
 
+function logError(message) {
+    console.log(gutil.colors.magenta(message));
+}
+
 gulp.task('default', 'Run by ionic app build and serve commands',
-    ['sass', 'index', 'md', 'jshint']);
+    ['sass', 'index', 'md', 'lint']);
 
 gulp.task('sass', 'Ionic .scss to .css file transformation', function (done) {
+    var sass = require('gulp-sass');
+    var minifyCss = require('gulp-minify-css');
+    var rename = require('gulp-rename');
     gulp.src('./scss/ionic.app.scss')
         .pipe(sass())
         .pipe(gulp.dest('./www/css/'))
@@ -74,27 +78,24 @@ gulp.task('watch', 'Only watches sass files.', function () {
 // });
 
 gulp.task('index', 'Inject script and css elements into www/index.html',
-    // after http://digitaldrummerj.me/gulp-inject/
     function () {
-        var ginject = require('gulp-inject');
-        sh.cp('-f', './index.html', './www/index.html');
-        return gulp.src('./www/index.html')
-            .pipe(ginject(
+        var gulpInject = require('gulp-inject');
+        return gulp.src('./www/index-source.html')
+            .pipe(gulpInject(
                 gulp.src(paths.indexJs, {
                     read: false
                 }), {
                     relative: true
                 }))
-            .pipe(gulp.dest('./www'));
+            .pipe(gulp.dest('./www/index.html'));
     });
 
 gulp.task('flavor',
     '--name FLAVOR : inject FLAVOR into ' + configJsonFile +
     ' and link ./resources to data/flavors/FLAVOR/resources',
     function () {
-        var fs = require('fs');
         if (!argv.name) {
-            console.log(gutil.colors.magenta('Usage: gulp flavor --name NAME'));
+            logError('Usage: gulp flavor --name NAME');
         } else {
             var configJson = JSON.parse(fs.readFileSync(configJsonFile).toString());
             configJson.flavor = argv.name;
@@ -102,12 +103,11 @@ gulp.task('flavor',
             sh.exec('rm -rf www/data/flavor');
             sh.exec('ln -sf `pwd`/data/flavors/' + argv.name + ' www/data/flavor');
             sh.exec('ln -sf data/flavors/' + argv.name + '/resources .');
-            // build resources/{ios/,android/} and update config.xml
-            sh.exec('ionic resources');
         }
     });
 
 gulp.task('md', 'Process markdown files', function () {
+    var markdown = require('gulp-markdown');
     sh.exec('rm -rf ./www/data/md');
     gulp.src('./data/md/*.md')
         .pipe(markdown())
@@ -116,8 +116,7 @@ gulp.task('md', 'Process markdown files', function () {
 
 gulp.task('si',
     '[-a|-i|-l] : serve ionic for android, ios, or both, with devBrowser, or default: ' +
-    'serve ios with default browser',
-    ['default'],
+    'serve ios with default browser', ['default'],
     function () {
         var platform = argv.a ? '-t android' + devBrowser :
             argv.i ? '-t ios' + devBrowser :
@@ -126,23 +125,59 @@ gulp.task('si',
         sh.exec(command);
     });
 
-gulp.task('build', '[-a] for Android, default iOS', ['jscs'], function () {
+gulp.task('build', '[-a] for Android, default iOS', ['default'], function () {
     // BUILD finish this: see https://github.com/leob/ionic-quickstarter
     sh.exec('ionic build ' + (argv.a ? 'android' : 'ios'));
+    logError('If build did not end with "** BUILD SUCCEEDED **", run it again!');
 });
 
-gulp.task('jscs', 'Run jscs linter on all (non-lib) script files', function () {
+gulp.task('ibuild', 'After build, remove allow-navigation element from ios config.xml',
+    ['build'],
+    function () {
+        gulp.src(['./platforms/ios/*/config.xml'])
+            .pipe(replace(/<allow-navigation.*\/>/, ''))
+            .pipe(gulp.dest('./platforms/ios'));
+    }); // TODO remove config
+
+gulp.task('bx', 'Build for ios and open xcode project', ['ibuild'], function () {
+    sh.exec('open platforms/ios/*.xcodeproj');
+});
+
+gulp.task('lint', 'Run js, json, and scss linters.',
+    ['jshint', 'jscs', 'jsonlint', 'scss-lint']
+);
+
+gulp.task('scss-lint', 'scss file linter', function () {
+    var scssLint = require('gulp-scss-lint');
+    return gulp.src(paths.projectScss)
+        .pipe(scssLint());
+});
+
+gulp.task('jscs', 'Run jscs linter on all (non-lib) .js files', function () {
     var jscs = require('gulp-jscs');
-    gulp.src(paths.appJs)
+    gulp.src(paths.projectJs)
         .pipe(jscs())
         .pipe(jscs.reporter());
 });
 
-gulp.task('jshint', 'Run jshint on all (non-lib) script files', function () {
+gulp.task('jshint', 'Run jshint on all (non-lib) .js files', function () {
     var jshint = require('gulp-jshint');
-    gulp.src(paths.appJs)
+    gulp.src(paths.projectJs)
         .pipe(jshint())
         .pipe(jshint.reporter('default'));
+});
+
+gulp.task('jsonlint', 'Report json errors', function () {
+    var jsonlint = require('gulp-json-lint');
+    var reporter = function (lint, file) {
+        // HACK avoid jsonlint bug: https://github.com/codenothing/jsonlint/issues/2
+        if (lint.error !== 'Invalid Reverse Solidus \'\\\' declaration.') {
+            console.log(file.path + ': ' + lint.error);
+        }
+    };
+    gulp.src(paths.projectJson)
+        .pipe(jsonlint())
+        .pipe(jsonlint.report(reporter));
 });
 
 gulp.task('publish-pre-build', 'Execute before publishing build', function () {
@@ -154,8 +189,9 @@ gulp.task('dgeni', 'Generate jsdoc documentation.', function () {
     // https://github.com/angular/angular.js/wiki/Writing-AngularJS-Documentation and
     // http://www.chirayuk.com/snippets/angularjs/ngdoc
     var Dgeni = require('dgeni');
+    var dengiPackage = require('./docs/dgeni-package');
     try {
-        var dgeni = new Dgeni([require('./docs/dgeni-package')]);
+        var dgeni = new Dgeni([dengiPackage]);
         return dgeni.generate();
     } catch (x) {
         console.log(x.stack);
@@ -180,6 +216,7 @@ gulp.task('cmd', '[-a ALIAS] : Execute shell command named ALIAS in aliases dict
 gulp.task('set-version', '-v VERSION : Change app version references to VERSION, ' +
     'and create annotated git tag.',
     function () {
+        var bump = require('gulp-bump');
         fs.readFile('./package.json', function (err, data) {
             var version = JSON.parse(data).version;
             console.log('Setting version ' + version + ' to ' + argv.v);
@@ -189,7 +226,7 @@ gulp.task('set-version', '-v VERSION : Change app version references to VERSION,
                     version: argv.v
                 }))
                 .pipe(gulp.dest('./'));
-            gulp.src(['./config.xml'])
+            gulp.src(['./config-source.xml'])
                 .pipe(replace(/(<widget.*version=")[^"]*/, '$1' + argv.v))
                 .pipe(gulp.dest('./'));
         });

@@ -1,6 +1,8 @@
-## abhyaasa
+## {{ config.name }}
 
 **Version:** {{ config.version }}
+
+**Flavor:** {{ config.flavor }}
 
 **For comments or assistance** contact <a href="mailto:{{ config.email }}">{{ config.email }}</a>
 

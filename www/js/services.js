@@ -1,6 +1,45 @@
 'use strict';
 
+var httpStubData = { // REVIEW global httpStubData
+    'config.json': {
+        flavor: 'test',
+        email: 'abhyaasa108@gmail.com',
+        href: 'https://github.com/abhyaasa/app',
+        name: 'Abhyaasa',
+        version: '0.0.2'
+    },
+    'flavor/library/index.json': [
+        'deck.json',
+        'deck_2.json'
+    ],
+    'flavor/library/deck.json': [{
+        answer: 'Ci',
+        id: 0,
+        tags: [
+            '.ci'
+        ],
+        text: 'case insensitive',
+        type: 'mind'
+    }, {
+        answer: '<p>Buddy at shelter</p>',
+        id: 1,
+        tags: [
+            '.html'
+        ],
+        text: '<p>image <img alt="Buddy"src="data/flavor/media/deck_2/buddyShelter.jpg"' +
+            ' title="Buddy at shelter" /></p>',
+        type: 'mind'
+    }]
+};
+// XXX httpStubData = false;
+
 angular.module('services', ['ionic'])
+
+.constant('mode', 'debug') // 'debug', 'build', or 'normal'
+
+.constant('clearStorage', false) // clear local storage at startup?
+
+.constant('_', window._) // underscore.js access
 
 /**
  * Use x name as tag, attribute, class name, or after directive in comment.
@@ -29,9 +68,22 @@ angular.module('services', ['ionic'])
     };
 })
 
-.constant('mode', 'debug') // 'debug', 'build', or 'normal'
+/* Console Log, because $log does not work in xcode */
+.service('Log', function (_, mode) {
+    this.log = function () {
+        console.log.apply(null, ['LOG:'].concat(_.toArray(arguments)));
+    };
 
-.constant('_', window._) // underscore.js access
+    this.debug = function (arg) {
+        if (mode === 'debug') {
+            console.log.apply(null, ['Debug LOG:'].concat(_.toArray(arguments)));
+        }
+    };
+
+    this.error = function () {
+        console.log.apply(null, ['ERROR LOG:'].concat(_.toArray(arguments)));
+    };
+})
 
 /**
  * @name getData
@@ -41,29 +93,35 @@ angular.module('services', ['ionic'])
  */
 .provider('getData', function () {
     var injector = angular.injector(['ng']);
-    // var httpStubData = injector.get('httpStubData');
     var $http = injector.get('$http');
-    var $log = injector.get('$log');
     var urlPrefix = ionic.Platform.isAndroid() ? '/android_asset/www/' : '';
+    var $q = injector.get('$q');
     this.$get = function () {
         return function (path, failure) {
+            if (httpStubData) { // REVIEW stub getData, includse $q inject above
+                var data = httpStubData[path];
+                var deferred = $q.defer();
+                deferred.resolve({ data: data });
+                console.log('STUB LOG: getStubData', path, deferred.promise.data);
+                return deferred.promise;
+            }
             return $http.get(urlPrefix + 'data/' + path)
                 .catch(function (error) {
                     if (failure) {
                         return failure(error);
                     } else {
-                        $log.error('getData', JSON.stringify(error));
+                        console.error('getData', JSON.stringify(error));
                     }
                 });
         };
     };
 })
 
-// based on http://learn.ionicframework.com/formulas/localstorage/
 /**
  * @name LocalStorage
+ * based on http://learn.ionicframework.com/formulas/localstorage/
  */
-.service('LocalStorage', ['$window', function ($window) {
+.service('LocalStorage', function ($window) {
     /**
      * set value
      * @param {string} key
@@ -92,7 +150,7 @@ angular.module('services', ['ionic'])
     this.clear = function () {
         $window.localStorage.clear();
     };
-}])
+})
 
 // MediaSrv and following window.Media adopted from
 // http://forum.ionicframework.com/t/how-to-play-local-audio-files/7479/5
@@ -103,7 +161,7 @@ angular.module('services', ['ionic'])
 //      android.permission.RECORD_AUDIO
 //      android.permission.MODIFY_AUDIO_SETTINGS
 //      android.permission.READ_PHONE_STATE
-.factory('MediaSrv', function ($q, $ionicPlatform, $window, $log) {
+.factory('MediaSrv', function ($q, $ionicPlatform, $window, Log) {
     function getErrorMessage(code) {
         if (code === 1) {
             return 'MediaError.MEDIA_ERR_ABORTED';
@@ -119,7 +177,7 @@ angular.module('services', ['ionic'])
     }
 
     function _logError(src, err) {
-        $log.error('media error', {
+        Log.error('media error', {
             code: err.code,
             message: getErrorMessage(err.code)
         });
@@ -173,7 +231,9 @@ angular.module('services', ['ionic'])
         loadMedia(mp3File).then(function (media) {
             // Don't want iOS default, which ignores mute button, see
             // https://www.npmjs.com/package/cordova-plugin-media
-            media.play({ playAudioWhenScreenIsLocked: false });
+            media.play({
+                playAudioWhenScreenIsLocked: false
+            });
         });
     }
 
@@ -186,7 +246,7 @@ angular.module('services', ['ionic'])
 });
 
 window.Media = function (src, mediaSuccess, mediaError, mediaStatus) {
-    // REVIEW several media functions below are stubs
+    // Several media functions below are stubs.
     // src: A URI containing the audio content. (DOMString)
     // mediaSuccess: (Optional) The callback that executes after a Media object has
     // completed the current play, record, or stop action. (Function)
@@ -232,10 +292,10 @@ window.Media = function (src, mediaSuccess, mediaError, mediaStatus) {
         stopRecord: function () {},
         // Stop playing an audio file.
         stop: function () {
-                sound.pause();
-                if (mediaSuccess) {
-                    mediaSuccess();
-                }
+            sound.pause();
+            if (mediaSuccess) {
+                mediaSuccess();
             }
+        }
     };
 };

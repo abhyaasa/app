@@ -24,7 +24,7 @@ describe('Deck', function () {
 
     it('invokes fail handler when local json file does not exist',
         // FIXME fails, if success, test failure also
-        inject(function ($log, $scope, getData) {
+        inject(function (Log, $scope, getData) {
             var handler = jasmine.createSpy('success');
             getData('bogus.json', handler);
             $scope.$digest();
