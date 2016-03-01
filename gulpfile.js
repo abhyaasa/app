@@ -77,10 +77,11 @@ gulp.task('watch', 'Only watches sass files.', function () {
 //         .pipe(gulp.dest('www/js/'));
 // });
 
-gulp.task('index', 'Inject script and css elements into www/index.html',
+gulp.task('index', 'Inject script elements into www/index.html',
     function () {
         var gulpInject = require('gulp-inject');
-        return gulp.src('./index.html')
+        sh.cp('-f', './index.html', './www/index.html');
+        return gulp.src('./www/index.html')
             .pipe(gulpInject(
                 gulp.src(paths.indexJs, {
                     read: false
