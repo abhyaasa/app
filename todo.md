@@ -4,14 +4,12 @@ Things To Do
 There are lots of things to do. Some are recorded as Atom todo-show (ctrl-shift-T) tagged entries (mostly in comments). The `todo-show` tag list in `~/.atom/config.cson` is mirrored by the top-level items below, in roughly decreasing order of priority.
 Order within groups sometimes reflects decreasing priority. Items are only listed here if they do not have a more meaningful location in other files. Excluded from the `todo-show` scan (by the `ignoreThesePaths` configuration list) are this file, library, auto-generated files, and archive files, and for the time being `**spec.js` files.
 
-- XXX 3
-  - status bar and nav bar overlap 
-    <preference name="StatusBarOverlaysWebView" value="true" />
-  - try apple archive run
-  - upload not working
+- XXX 2
+  - scapp upload not working, but ionic and xcode run and emulate working
   - play www/data/media/Omkara.mp3
 
-- FIXME 1
+- FIXME 2
+  - try apple archive run
   - emulator fails to load media file: Feb 18 16:09:31 dram Abhyaasa[45438]: Unknown resource 'data/flavor/media/deck_2/omkara.mp3'
 
 - CHANGED

@@ -37,8 +37,6 @@ angular.module('services', ['ionic'])
 
 .constant('mode', 'debug') // 'debug', 'build', or 'normal'
 
-.constant('clearStorage', false) // clear local storage at startup?
-
 .constant('_', window._) // underscore.js access
 
 /**
@@ -71,17 +69,17 @@ angular.module('services', ['ionic'])
 /* Console Log, because $log does not work in xcode */
 .service('Log', function (_, mode) {
     this.log = function () {
-        console.log.apply(null, ['LOG:'].concat(_.toArray(arguments)));
+        console.log(['LOG:'].concat(_.toArray(arguments)).join(' '));
     };
 
-    this.debug = function (arg) {
+    this.debug = function () {
         if (mode === 'debug') {
-            console.log.apply(null, ['Debug LOG:'].concat(_.toArray(arguments)));
+            console.log(['Debug LOG:'].concat(_.toArray(arguments)).join(' '));
         }
     };
 
     this.error = function () {
-        console.log.apply(null, ['ERROR LOG:'].concat(_.toArray(arguments)));
+        console.log(['ERROR LOG:'].concat(_.toArray(arguments)).join(' '));
     };
 })
 
