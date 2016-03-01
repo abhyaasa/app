@@ -14,7 +14,7 @@ www/lib/
 # created by 'gulp scss'
 # www/css/  # but leave in git for so setup.sh doesn't need gulp
 
-# created from ./index-source.html by 'gulp index'
+# created from ./index.html by 'gulp index'
 www/index.html
 
 # created by 'ionic upload'
