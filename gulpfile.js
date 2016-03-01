@@ -154,18 +154,19 @@ gulp.task('scss-lint', 'scss file linter', function () {
         .pipe(scssLint());
 });
 
-gulp.task('jscs', 'Run jscs linter on all (non-lib) .js files', function () {
-    var jscs = require('gulp-jscs');
-    gulp.src(paths.projectJs)
-        .pipe(jscs())
-        .pipe(jscs.reporter());
-});
-
-gulp.task('jshint', 'Run jshint on all (non-lib) .js files', function () {
+gulp.task('jshint', function () {
     var jshint = require('gulp-jshint');
     gulp.src(paths.projectJs)
-        .pipe(jshint())
-        .pipe(jshint.reporter('default'));
+		.pipe(jshint('.jshintrc'))
+		.pipe(jshint.reporter('jshint-stylish'));
+});
+
+gulp.task('jscs', 'Run jscs on all (non-lib) .js files', function () {
+    var jscs = require('gulp-jscs');
+    var stylish = require('gulp-jscs-stylish');
+    gulp.src(paths.projectJs)
+        .pipe(jscs())
+		.pipe(stylish());
 });
 
 gulp.task('jsonlint', 'Report json errors', function () {
