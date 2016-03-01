@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Setup local iOS app development context after global installs.
 # Called by full_setup.sh.
-set -e
+set -e -v
 exec &> >(tee -a "temp/setup.log")
 ionic state restore  # creates platforms/ and plugins/ per package.json
 bower install

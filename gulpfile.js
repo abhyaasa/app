@@ -80,14 +80,14 @@ gulp.task('watch', 'Only watches sass files.', function () {
 gulp.task('index', 'Inject script and css elements into www/index.html',
     function () {
         var gulpInject = require('gulp-inject');
-        return gulp.src('./www/index-source.html')
+        return gulp.src('./index.html')
             .pipe(gulpInject(
                 gulp.src(paths.indexJs, {
                     read: false
                 }), {
                     relative: true
                 }))
-            .pipe(gulp.dest('./www/index.html'));
+            .pipe(gulp.dest('./www'));
     });
 
 gulp.task('flavor',
@@ -226,7 +226,7 @@ gulp.task('set-version', '-v VERSION : Change app version references to VERSION,
                     version: argv.v
                 }))
                 .pipe(gulp.dest('./'));
-            gulp.src(['./config-source.xml'])
+            gulp.src(['./config.xml'])
                 .pipe(replace(/(<widget.*version=")[^"]*/, '$1' + argv.v))
                 .pipe(gulp.dest('./'));
         });

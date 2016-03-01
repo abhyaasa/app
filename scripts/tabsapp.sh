@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Build ionic app from scratch in ../tabsapp with elements of this app.
-set -e
+set -e -v
 exec &> >(tee -a "temp/tabsapp.log")
 cd ..
 rm -rf tabsapp
