@@ -5,7 +5,7 @@ There are lots of things to do. Some are recorded as Atom todo-show (ctrl-shift-
 Order within groups sometimes reflects decreasing priority. Items are only listed here if they do not have a more meaningful location in other files. Excluded from the `todo-show` scan (by the `ignoreThesePaths` configuration list) are this file, library, auto-generated files, and archive files, and for the time being `**spec.js` files.
 
 - XXX 2
-  - scapp upload not working, but ionic and xcode run and emulate working
+  - reset settings crashes and reset all data doesn't remove deck from library
   - play www/data/media/Omkara.mp3
 
 - FIXME 2

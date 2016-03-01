@@ -31,7 +31,7 @@ var httpStubData = { // REVIEW global httpStubData
         type: 'mind'
     }]
 };
-// XXX httpStubData = false;
+httpStubData = false;
 
 angular.module('services', ['ionic'])
 

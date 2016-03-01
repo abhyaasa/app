@@ -13,22 +13,24 @@ angular.module('app')
         { text: 'Reset settings to defaults', value: 'settings', show: true },
         { text: 'Reset all user data', value: 'all data', warning: 'deck', show: true }
     ];
+
     $scope.selected = function (item) {
         $scope.selection = item.value;
         $scope.hideWarning = item.warning !== 'deck';
         $scope.hideConfirm = false;
     };
+
     $scope.confirmed = function () {
         if ($scope.selection === 'settings') {
             restoreSettings(true);
         } else if ($scope.selection === 'deck') {
             Card.reset();
         } else if ($scope.selection === 'all decks') {
-            Card.reset();
-            Library.resetAllDecks();
+            Card.resetAllDecks();
         } else if ($scope.selection === 'all data') {
             LocalStorage.clear();
             restoreSettings();
+            Card.resetAllDecks();
         }
         $state.go('tabs.settings');
     };
