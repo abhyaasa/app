@@ -4,25 +4,17 @@ Things To Do
 There are lots of things to do. Some are recorded as Atom todo-show (ctrl-shift-T) tagged entries (mostly in comments). The `todo-show` tag list in `~/.atom/config.cson` is mirrored by the top-level items below, in roughly decreasing order of priority.
 Order within groups sometimes reflects decreasing priority. Items are only listed here if they do not have a more meaningful location in other files. Excluded from the `todo-show` scan (by the `ignoreThesePaths` configuration list) are this file, library, auto-generated files, and archive files, and for the time being `**spec.js` files.
 
-- XXX 3
-  - status bar and nav bar overlap 
-    <preference name="StatusBarOverlaysWebView" value="true" />
-  - try apple archive run
-  - upload not working
-  - play www/data/media/Omkara.mp3
+- XXX 
 
-- FIXME 1
-  - emulator fails to load media file: Feb 18 16:09:31 dram Abhyaasa[45438]: Unknown resource 'data/flavor/media/deck_2/omkara.mp3'
+- FIXME
 
 - CHANGED
 
 - PRIORITY
 
 - TODO 5
-  - git merge branch to master (upstream)
+  - try apple archive run
   - move media decks (no clash with sound)
-  - g ri: runs emulator
-  - gulp jshint and jscs color output and exit
   - xcode debugger breakpoints
 
 - IDEA
@@ -47,7 +39,8 @@ Order within groups sometimes reflects decreasing priority. Items are only liste
   - emulation on Windows: genymotion or AMIDuOS? See  http://www.laptopmag.com/articles/run-android-apps-on-pc
   - device testing
 
-- FUTURE lots
+- FUTURE
+- gulp jshint and jscs exit
   - ionic 2, angular 2, typescript coversion
   - replace gulp with npm? http://blog.keithcirkel.co.uk/how-to-use-npm-as-a-build-tool/, https://www.tildedave.com/2015/01/07/i-find-gulp-extremely-frustrating.html
   - splash and icon http://learn.ionicframework.com/formulas/adding-an-icon/ and  http://blog.ionic.io/automating-icons-and-splash-screens/  - Leitner learning algorithm https://en.wikipedia.org/wiki/Leitner_system

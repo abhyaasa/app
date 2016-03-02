@@ -151,7 +151,7 @@ angular.module('app')
     };
 })
 
-.service('Card', function ($sce, Log, $state, Deck, settings, MediaSrv, _) {
+.service('Card', function ($sce, Log, $state, Deck, Library, settings, MediaSrv, _) {
     var _this = this;
     // FIXME pranava deck2 no answer, reverse not working either
     this.submittedAnswer = undefined;
@@ -290,5 +290,10 @@ angular.module('app')
     this.reset = function () {
         _this.question = undefined;
         Deck.reset();
+    };
+
+    this.resetAllDecks = function () {
+        _this.reset();
+        Library.resetAllDecks();
     };
 });

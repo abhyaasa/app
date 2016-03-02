@@ -31,13 +31,11 @@ var httpStubData = { // REVIEW global httpStubData
         type: 'mind'
     }]
 };
-// XXX httpStubData = false;
+httpStubData = false;
 
 angular.module('services', ['ionic'])
 
 .constant('mode', 'debug') // 'debug', 'build', or 'normal'
-
-.constant('clearStorage', false) // clear local storage at startup?
 
 .constant('_', window._) // underscore.js access
 
@@ -70,18 +68,21 @@ angular.module('services', ['ionic'])
 
 /* Console Log, because $log does not work in xcode */
 .service('Log', function (_, mode) {
+    var logger = function (prefix, args) {
+        console.log(prefix + ' LOG ' + args.map(JSON.stringify).join(' '));
+    };
     this.log = function () {
-        console.log.apply(null, ['LOG:'].concat(_.toArray(arguments)));
+        logger('', _.toArray(arguments));
     };
 
-    this.debug = function (arg) {
+    this.debug = function () {
         if (mode === 'debug') {
-            console.log.apply(null, ['Debug LOG:'].concat(_.toArray(arguments)));
+            logger('Debug', _.toArray(arguments));
         }
     };
 
     this.error = function () {
-        console.log.apply(null, ['ERROR LOG:'].concat(_.toArray(arguments)));
+        logger('ERROR', _.toArray(arguments));
     };
 })
 
@@ -152,9 +153,9 @@ angular.module('services', ['ionic'])
     };
 })
 
-// MediaSrv and following window.Media adopted from
+// MediaSrv and following window.Media adopted from loicknuchel's post at
 // http://forum.ionicframework.com/t/how-to-play-local-audio-files/7479/5
-// $ cordova plugin add org.apache.cordova.media
+// org.apache.cordova.media => cordova.plugin.media
 // Also see mawarnes version in forum thread above, and the thread indicates that
 // Android needs:
 //      android.permission.WRITE_EXTERNAL_STORAGE

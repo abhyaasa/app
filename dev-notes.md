@@ -174,18 +174,16 @@ Python and shell scripts. All but `g` are in the `scripts` directory.
 ### Shell scripts
 
 - `g ALIAS` is a shortcut for invoking via `gulp cmd` the script associated with `ALIAS` in the `cmdAliases` dictionary defined early in `gulpfile.js`.
-- `full_setup.sh` installs global and local dependencies.
-- `setup.sh` installs local dependencies.
-- `term.sh` is used by `gulp itest`.
-- `scapp.sh` creates shallow clone of the app.
-- `tabsapp.sh` creates related app from ionic tabs starter template and may partially updates to this app configuration.
-- `psclean.sh` removes stray processes that may be created by ionic development. If the message "An uncaught exception occurred and has been reported to Ionic" is seen, try running this script and confirm with the `ps` output that there are no stray processes. Kill them manually if need be.
+- `scripts/setup.sh` installs local dependencies.
+- `scripts/term.sh` is used by `gulp itest`.
+- `scripts/scapp.sh` creates shallow clone of the app.
+- `scripts/psclean.sh` removes stray processes that may be created by ionic development. If the message "An uncaught exception occurred and has been reported to Ionic" is seen, try running this script and confirm with the `ps` output that there are no stray processes. Kill them manually if need be.
 
 ### Python scripts
 
-- `cdeck.py --format_help` provides documentation on deck and compact deck file formats.
-- `index.py` creates `index.json` files for data `library` directories.
-- `trans.py` converts between Devanagari and several transliteration scripts.
+- `scripts/cdeck.py --format_help` provides documentation on deck and compact deck file formats.
+- `scripts/index.py` creates `index.json` files for data `library` directories.
+- `scripts/trans.py` converts between Devanagari and several transliteration scripts.
 
 Correct `.py` script initial `#!` script lines as needed if `/usr/bin/env python` does not run Python 2.6+ (maybe earlier). Python 3.x will not work.
 

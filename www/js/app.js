@@ -3,7 +3,7 @@
 angular.module('app', ['ionic', 'services'])
 
 .run(function (Log, $ionicPlatform, $rootScope, $state, restoreSettings, settings,
-    mode, clearStorage, LocalStorage) {
+    mode, LocalStorage) {
 
     // https://github.com/angular-ui/ui-router/wiki/Frequently-Asked-Questions\
     // #issue-im-getting-a-blank-screen-and-there-are-no-errors
@@ -22,13 +22,12 @@ angular.module('app', ['ionic', 'services'])
         }
     });
 
+    // LocalStorage.clear();
+
+    restoreSettings();
     $rootScope.settings = settings;
 
-    if (clearStorage) {
-        LocalStorage.clear();
-    }
-    restoreSettings();
-    if (settings.intro) {
+    if (settings.intro && mode !== 'debug') {
         $state.go('tabs.intro');
     }
 })
@@ -223,7 +222,8 @@ angular.module('app', ['ionic', 'services'])
                     $state.go('tabs.settings-help');
                 };
             }
-        });
+        })
+        ;
     $urlRouterProvider.otherwise('/tabs/library');
 });
 

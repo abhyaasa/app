@@ -127,20 +127,14 @@ gulp.task('si',
     });
 
 gulp.task('build', '[-a] for Android, default iOS', ['default'], function () {
-    // BUILD finish this: see https://github.com/leob/ionic-quickstarter
     sh.exec('ionic build ' + (argv.a ? 'android' : 'ios'));
+    gulp.src(['./platforms/ios/*/config.xml'])
+        .pipe(replace(/<allow-navigation.*\/>/, ''))
+        .pipe(gulp.dest('./platforms/ios'));
     logError('If build did not end with "** BUILD SUCCEEDED **", run it again!');
 });
 
-gulp.task('ibuild', 'After build, remove allow-navigation element from ios config.xml',
-    ['build'],
-    function () {
-        gulp.src(['./platforms/ios/*/config.xml'])
-            .pipe(replace(/<allow-navigation.*\/>/, ''))
-            .pipe(gulp.dest('./platforms/ios'));
-    }); // TODO remove config
-
-gulp.task('bx', 'Build for ios and open xcode project', ['ibuild'], function () {
+gulp.task('bx', 'Build for ios and open xcode project', ['build'], function () {
     sh.exec('open platforms/ios/*.xcodeproj');
 });
 
@@ -154,18 +148,19 @@ gulp.task('scss-lint', 'scss file linter', function () {
         .pipe(scssLint());
 });
 
-gulp.task('jscs', 'Run jscs linter on all (non-lib) .js files', function () {
-    var jscs = require('gulp-jscs');
-    gulp.src(paths.projectJs)
-        .pipe(jscs())
-        .pipe(jscs.reporter());
-});
-
-gulp.task('jshint', 'Run jshint on all (non-lib) .js files', function () {
+gulp.task('jshint', function () {
     var jshint = require('gulp-jshint');
     gulp.src(paths.projectJs)
-        .pipe(jshint())
-        .pipe(jshint.reporter('default'));
+		.pipe(jshint('.jshintrc'))
+		.pipe(jshint.reporter('jshint-stylish'));
+});
+
+gulp.task('jscs', 'Run jscs on all (non-lib) .js files', function () {
+    var jscs = require('gulp-jscs');
+    var stylish = require('gulp-jscs-stylish');
+    gulp.src(paths.projectJs)
+        .pipe(jscs())
+		.pipe(stylish());
 });
 
 gulp.task('jsonlint', 'Report json errors', function () {
@@ -182,7 +177,7 @@ gulp.task('jsonlint', 'Report json errors', function () {
 });
 
 gulp.task('publish-pre-build', 'Execute before publishing build', function () {
-    // PUBLISH gulp publishing tasks
+    // PUBLISH pref-building tasks: see https://github.com/leob/ionic-quickstarter
 });
 
 gulp.task('dgeni', 'Generate jsdoc documentation.', function () {
