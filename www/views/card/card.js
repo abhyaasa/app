@@ -153,7 +153,6 @@ angular.module('app')
 
 .service('Card', function ($sce, Log, $state, Deck, Library, settings, MediaSrv, _) {
     var _this = this;
-    // FIXME pranava deck2 no answer, reverse not working either
     this.submittedAnswer = undefined;
 
     this.setup = function (activeCardIndex) {

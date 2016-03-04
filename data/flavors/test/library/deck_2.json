@@ -22,6 +22,7 @@
  },
  {
   "id": 2,
+  "number": 1.0,
   "tags": [],
   "text": [
    "a",
@@ -32,6 +33,7 @@
  {
   "answer": "Cs",
   "id": 3,
+  "number": 2.0,
   "tags": [
    ".cs"
   ],
@@ -41,6 +43,7 @@
  {
   "answer": "Ci",
   "id": 4,
+  "number": 2.5,
   "tags": [
    ".ci"
   ],
@@ -50,6 +53,7 @@
  {
   "answer": "<p>Buddy at shelter</p>",
   "id": 5,
+  "number": 0.12,
   "tags": [
    ".html"
   ],

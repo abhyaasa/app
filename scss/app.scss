@@ -1,4 +1,5 @@
-// app scss other than variables
+// include app-specific scss variables
+@import 'appvar';
 
 .no-response {
   background-color: $no-color; }

@@ -1,14 +1,15 @@
 {
-    "name": "abhyaasa",
-    "private": "true",
-    "devDependencies": {
-        "ionic": "driftyco/ionic-bower#1.2.4"
-    },
-    "resolutions": {
-        "angular": "1.4.3"
-    },
-    "dependencies": {
-        "underscore": "~1.8.3",
-        "angular-mocks": "1.3"
-    }
+  "name": "abhyaasa",
+  "private": "true",
+  "devDependencies": {
+    "ionic": "driftyco/ionic-bower#1.2.4"
+  },
+  "resolutions": {
+    "angular": "1.4.3"
+  },
+  "dependencies": {
+    "underscore": "~1.8.3",
+    "angular-mocks": "1.3",
+    "angularjs-slider": "^2.10.2"
+  }
 }

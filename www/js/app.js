@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app', ['ionic', 'services'])
+angular.module('app', ['ionic', 'services', 'rzModule'])  // XXX, 'rzModule'
 
 .run(function (Log, $ionicPlatform, $rootScope, $state, restoreSettings, settings,
     mode, LocalStorage) {

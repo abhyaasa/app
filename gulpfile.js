@@ -14,9 +14,11 @@ var cmdAliases = {
 };
 
 var paths = {
-    sass: ['./scss/**/*.scss'],
+    scss: ['./scss/**/*.scss'],
+    css: ['./www/**/*.css', '!./www/**/*.min.cs', '!./www/css/ionic.app*.css',
+        '!./www/lib/**'
+    ],
     appJs: ['./www/**/*.js', '!./www/lib/**'],
-    projectScss: ['./scss/**/*.scss'],
     projectJson: ['./ionic.project', './**/*.json',
         '!./node_modules/**/*.json', '!./plugins/**/*.json', '!./platforms/**/*.json'
     ]
@@ -36,6 +38,7 @@ var sh = require('shelljs');
 var _ = require('underscore');
 var replace = require('gulp-replace');
 var fs = require('fs');
+var debug = require('gulp-debug');
 // var concat = require('gulp-concat'); # included in devDependencies, but not used
 var argv = require('minimist')(process.argv.slice(2));
 
@@ -43,8 +46,9 @@ function logError(message) {
     console.log(gutil.colors.magenta(message));
 }
 
-gulp.task('default', 'Run by ionic app build and serve commands',
-    ['sass', 'index', 'md', 'lint']);
+gulp.task('default',
+    'Run by ionic app build and serve commands', ['sass', 'index', 'md', 'lint']
+);
 
 gulp.task('sass', 'Ionic .scss to .css file transformation', function (done) {
     var sass = require('gulp-sass');
@@ -52,6 +56,7 @@ gulp.task('sass', 'Ionic .scss to .css file transformation', function (done) {
     var rename = require('gulp-rename');
     gulp.src('./scss/ionic.app.scss')
         .pipe(sass())
+        .on('error', sass.logError)
         .pipe(gulp.dest('./www/css/'))
         .pipe(minifyCss({
             keepSpecialComments: 0
@@ -63,7 +68,7 @@ gulp.task('sass', 'Ionic .scss to .css file transformation', function (done) {
         .on('end', done);
 });
 
-gulp.task('watch', 'Only watches sass files.', function () {
+gulp.task('watch', 'Only watches scss files.', function () {
     gulp.watch(paths.sass, ['sass']);
 });
 
@@ -79,15 +84,21 @@ gulp.task('watch', 'Only watches sass files.', function () {
 
 gulp.task('index', 'Inject script elements into www/index.html',
     function () {
-        var gulpInject = require('gulp-inject');
+        var inject = require('gulp-inject');
+        var injector = function (paths) {
+            return inject(gulp.src(paths, {
+                    read: false
+                }), // .pipe(debug())
+                {
+                    relative: true
+                });
+        };
         sh.cp('-f', './index.html', './www/index.html');
         return gulp.src('./www/index.html')
-            .pipe(gulpInject(
-                gulp.src(paths.indexJs, {
-                    read: false
-                }), {
-                    relative: true
-                }))
+            .pipe(injector(paths.indexJs))
+            .pipe(gulp.dest('./www'))
+            .pipe(injector(paths.css))
+            // .pipe(debug())
             .pipe(gulp.dest('./www'));
     });
 
@@ -138,21 +149,21 @@ gulp.task('bx', 'Build for ios and open xcode project', ['build'], function () {
     sh.exec('open platforms/ios/*.xcodeproj');
 });
 
-gulp.task('lint', 'Run js, json, and scss linters.',
-    ['jshint', 'jscs', 'jsonlint', 'scss-lint']
+gulp.task('lint',
+    'Run js, json, and scss linters.', ['jshint', 'jscs', 'jsonlint', 'scss-lint']
 );
 
 gulp.task('scss-lint', 'scss file linter', function () {
     var scssLint = require('gulp-scss-lint');
-    return gulp.src(paths.projectScss)
+    return gulp.src(paths.scss)
         .pipe(scssLint());
 });
 
 gulp.task('jshint', function () {
     var jshint = require('gulp-jshint');
     gulp.src(paths.projectJs)
-		.pipe(jshint('.jshintrc'))
-		.pipe(jshint.reporter('jshint-stylish'));
+        .pipe(jshint('.jshintrc'))
+        .pipe(jshint.reporter('jshint-stylish'));
 });
 
 gulp.task('jscs', 'Run jscs on all (non-lib) .js files', function () {
@@ -160,7 +171,7 @@ gulp.task('jscs', 'Run jscs on all (non-lib) .js files', function () {
     var stylish = require('gulp-jscs-stylish');
     gulp.src(paths.projectJs)
         .pipe(jscs())
-		.pipe(stylish());
+        .pipe(stylish());
 });
 
 gulp.task('jsonlint', 'Report json errors', function () {
@@ -178,6 +189,7 @@ gulp.task('jsonlint', 'Report json errors', function () {
 
 gulp.task('publish-pre-build', 'Execute before publishing build', function () {
     // PUBLISH pref-building tasks: see https://github.com/leob/ionic-quickstarter
+    // use https://github.com/scniro/gulp-clean-css
 });
 
 gulp.task('dgeni', 'Generate jsdoc documentation.', function () {

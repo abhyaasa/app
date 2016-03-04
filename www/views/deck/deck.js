@@ -8,6 +8,29 @@ angular.module('app')
     $scope.getCount = function (key) {
         return (Deck.count && (key in Deck.count)) ? Deck.count[key] : 0;
     };
+
+    // adapted from http://ionden.com/a/plugins/ion.rangeSlider/demo_interactions.html
+    $(document).ready(function () {
+        var $range = $('#range');
+        var $result = $('#range');
+        var track = function (data) {
+            delete data.input;
+            delete data.slider;
+            $result.html(JSON.stringify(data, null, 2));
+        };
+        $range.ionRangeSlider({
+            type: 'double',
+            min: 1000,
+            max: 5000,
+            from: 2000,
+            to: 4000,
+            step: 100,
+            onStart: track,
+            onChange: track,
+            onFinish: track,
+            onUpdate: track
+        });
+    });
     // TODO manage filter controls
 })
 
@@ -25,21 +48,12 @@ angular.module('app')
     };
 
     this.setupClosedDeck = function (deckName) {
-        var initialFilterSettings = {
-            max: 50,
-            min: 50,
-            required: [],
-            exclude: [],
-            include: []
-        };
         var copy = function (obj) {
             return _.mapObject(obj, function (val) {
                 return _.clone(val);
             });
         };
-        var filter = function (questions) {
-            // returns list of indices of questions that pass filter
-            // TODO use filter settings
+        var indices = function (questions) {
             var indices = _.range(0, questions.length);
             if (settings.randomQuestions) {
                 indices = _.sample(indices, indices.length);
@@ -48,14 +62,30 @@ angular.module('app')
         };
         Log.debug('Deck setup', JSON.stringify(deckName));
         setupQuestions(deckName.file).then(function () {
+            var numbers = _this.questions.map(function (q) {
+                if (q.number === undefined) {
+                    q.number = 0;
+                }
+                return q.number;
+            });
+            var min = _.min(numbers);
+            var max = _.max(numbers);
             _this.data = {
                 name: deckName,
                 history: _.map(_this.questions, function () {
                     return [];
                 }),
-                filter: copy(initialFilterSettings),
+                range: min === max ? false : {
+                    min: min,
+                    max: max
+                },
+                tags: {
+                    required: [],
+                    excluded: [],
+                    included: []
+                },
                 reverseQandA: false,
-                active: filter(_this.questions), // indices of active quesitons
+                active: indices(_this.questions),
                 activeCardIndex: undefined // current card active index list pointer
             };
             _this.data.outcomes = new Array(_this.data.active.length);

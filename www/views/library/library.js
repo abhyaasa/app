@@ -14,7 +14,7 @@ angular.module('app')
     };
 
     Library.provideIndex(indexPromise);
-    $scope.deckLists = Library.deckLists; // TODO filtering here
+    $scope.deckLists = Library.deckLists; // TODO library filtering here
 
     if (Library.numDecks() === 1 && mode !== 'debug') {
         $rootScope.config.hideLibrary = true;

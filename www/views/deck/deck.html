@@ -39,33 +39,33 @@
           Restore removed cards and restart
         </ion-item>
       </ion-list>
-      <x> TODO implemement question filtering
-        <ion-list>
-          <ion-item class="range range-positive">Max
-            <input type="range" value="50" min="0" max="100">
-          </ion-item>
-          <ion-item class="range range-positive">Min
-            <input type="range" value="50" min="0" max="100">
-          </ion-item>
-          <ion-item>Tag 1</ion-item>
-          <ion-item>Tag 2</ion-item>
-          <label class="item item-select">
-            <span class="input-label">And</span>
-            <select></select>
-          </label>
-          <label class="item item-select">
-            <span class="input-label">And_not</span>
-            <select></select>
-          </label>
-          <label class="item item-select">
-            <span class="input-label">Or</span>
-            <select></select>
-          </label>
-        </ion-list>
-        <div class="button-bar">
-          <button class="button button-stable button-block">Done</button>
+      <div class="list">
+        <input id="range"/>
+        <!-- XXX include, exclude, require / at least one, exclude, all of
+        double slider ion-close-round ion-plus-round 
+    https://github.com/angular-slider/angularjs-slider-->
+        <div class="item item-button-right">
+          Call Ma
+          <button class="button button-positive">
+            <i class="icon ion-ios-telephone"></i>
+          </button>
         </div>
-      </x>
+        <ion-toggle ng-model="shouldShowDelete">
+          Show Delete?
+        </ion-toggle>
+        <label class="item item-select">
+          <span ng-click="Deck.andButton()" class="input-label">And</span>
+          <select></select>
+        </label>
+        <label class="item item-select">
+          <span ng-click="Deck.andButton()" class="input-label">And_not</span>
+          <select></select>
+        </label>
+        <label class="item item-select">
+          <span class="input-label">Or</span>
+          <select></select>
+        </label>
+      </div>
     </div>
   </ion-content>
 </ion-view>
