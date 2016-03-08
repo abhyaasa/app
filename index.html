@@ -1,54 +1,47 @@
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta
-      name="viewport"
-      content="initial-scale=1, maximum-scale=1,
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1,
         user-scalable=no, width=device-width">
-    <title>{{ config.name }}</title>
-    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
-    <link href="css/ionic.app.css" rel="stylesheet">
-    <!-- TODO add slider css -->
-    <!-- inject:css -->
-    <!-- endinject -->
-  </head>
+  <title>{{ config.name }}</title>
+  <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+  <link href="css/ionic.app.css" rel="stylesheet">
+  <!-- TODO add slider css -->
+  <!-- inject:css -->
+  <!-- endinject -->
+</head>
 
-  <body animation="slide-left-right-ios7">
-    <ion-nav-bar class="bar-positive">
-      <ion-nav-title><img src="data/flavor/media/logo-44.png"></ion-nav-title>
-      <ion-nav-back-button class="button-clear">
-        <i class="ion-chevron-left"></i>
-        Back
-      </ion-nav-back-button>
-      <ion-nav-buttons side="secondary">
-        <input
-          type="image"
-          src="data/media/ios-help-outline-invert.svg"
-          alt="Help"
-          height="32"
-          width="32"
-          ng-click="help()">
-      </ion-nav-buttons>
-    </ion-nav-bar>
-    <ion-nav-view></ion-nav-view>
+<body animation="slide-left-right-ios7">
+  <ion-nav-bar class="bar-positive">
+    <ion-nav-title><img src="data/flavor/media/logo-44.png"></ion-nav-title>
+    <ion-nav-back-button class="button-clear">
+      <i class="ion-chevron-left"></i> Back
+    </ion-nav-back-button>
+    <ion-nav-buttons side="secondary">
+      <input type="image" src="data/media/ios-help-outline-invert.svg" alt="Help" height="32"
+          width="32" ng-click="help()">
+    </ion-nav-buttons>
+  </ion-nav-bar>
+  <ion-nav-view></ion-nav-view>
 
-    <!-- <img alt="test image" src="data/flavor/media/deck_2/buddyShelter.jpg"/> -->
+  <!-- <img alt="test image" src="data/flavor/media/deck_2/buddyShelter.jpg"/> -->
 
-    <!-- www/lib js files not loaded by ionic -->
-    <script src="lib/ionic/js/ionic.bundle.js"></script>
+  <!-- www/lib js files not loaded by ionic -->
+  <script src="lib/ionic/js/ionic.bundle.js"></script>
 
-    <!-- <script src="lib/ionic-platform-web-client/dist/ionic.io.bundle.min.js"></script> -->
-    <!-- Cordova is bootstrapped by ionic-platform-web-client, comment out above or following line -->
-    <script src="cordova.js"></script>
+  <!-- <script src="lib/ionic-platform-web-client/dist/ionic.io.bundle.min.js"></script> -->
+  <!-- Cordova is bootstrapped by ionic-platform-web-client, comment out above or following line -->
+  <script src="cordova.js"></script>
 
-    <!-- REVIEW generate lib includes automatically? -->
-    <script src="lib/underscore/underscore-min.js"></script>
-    <script src="lib/angularjs-slider/dist/rzslider.min.js"></script>
+  <!-- REVIEW generate lib includes automatically? -->
+  <script src="lib/underscore/underscore-min.js"></script>
+  <script src="lib/angularjs-slider/dist/rzslider.min.js"></script>
 
-    <!-- js/app.js must be loaded first; other app js files injected by gulp -->
-    <script src="js/app.js"></script>
-    <!-- inject:js -->
-    <!-- endinject -->
-  </body>
+  <!-- js/app.js must be loaded first; other app js files injected by gulp -->
+  <script src="js/app.js"></script>
+  <!-- inject:js -->
+  <!-- endinject -->
+</body>
 
 </html>

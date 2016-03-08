@@ -79,7 +79,7 @@ angular.module('app')
             var max = _.max(numbers);
             var allTags = _.uniq(_.flatten(_.pluck(_this.questions, 'tags'))).sort();
             var isNormalTag = function (tag) {
-                return tag.startsWith('.');
+                return !tag.startsWith('.');
             };
             _this.data = {
                 name: deckName,
@@ -106,8 +106,6 @@ angular.module('app')
             };
             _this.data.outcomes = new Array(_this.data.active.length);
             _this.save();
-            Log.debug('Deck range', _this.data.range);
-            Log.debug('Deck tags', _this.data.filterTags, _this.data.tags);
             $state.go('tabs.card');
         });
     };

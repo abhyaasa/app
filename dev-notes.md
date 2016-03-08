@@ -103,17 +103,18 @@ This app is early in development, with plenty to do. See
 Atom plugins are indicated by the following list
 ```
 $ /bin/ls ~/.atom/packages
-README.md		docblockr		
-atom-beautify		editor-settings		linter-jscs
-atom-html-preview	emmet			linter-pylint
-atom-material-syntax	file-icons		linter-scss-lint
-atom-material-ui	file-types		linter-xmllint
-atomic-emacs		highlight-line		local-history
-autocomplete-python	jshint			merge-conflicts
-autoprefixer		jsonlint		pretty-json
-color-picker		linter			select-rectangle
-csscomb			linter-coffeelint	todo-show
-csslint			linter-coffeescript	xml-formatter
+README.md		csslint			linter-flake8
+atom-beautify		docblockr		linter-jscs
+atom-html-preview	editor-settings		linter-scss-lint
+atom-htmltidy		emmet			linter-tidy
+atom-material-syntax	file-icons		linter-xmllint
+atom-material-ui	file-types		local-history
+atom-typescript		highlight-line		merge-conflicts
+atomic-emacs		jshint			pretty-json
+autocomplete-python	jsonlint		select-rectangle
+autoprefixer		linter			todo-show
+color-picker		linter-coffeelint	xml-formatter
+csscomb			linter-coffeescript
 ```
 
 `config.cson` links to `~/.atom/config.cson` for version control.
@@ -176,6 +177,7 @@ Python and shell scripts. All but `g` are in the `scripts` directory.
 ### Shell scripts
 
 - `g ALIAS` is a shortcut for invoking via `gulp cmd` the script associated with `ALIAS` in the `cmdAliases` dictionary defined early in `gulpfile.js`.
+- `tidylint.py` provides a custom interface to the `tidy` html/xml linter.
 - `scripts/setup.sh` installs local dependencies.
 - `scripts/term.sh` is used by `gulp itest`.
 - `scripts/scapp.sh` creates shallow clone of the app.

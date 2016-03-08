@@ -151,11 +151,11 @@ gulp.task('bx', 'Build for ios and open xcode project', ['build'], function () {
 
 gulp.task('lint',
     'Run js, json, scss, and html/xml linters.', [
-        'jshint', 'jscs', 'jsonlint', 'scss-lint', 'html-lint'
+        'jshint', 'jscs', 'jsonlint', 'scsslint', 'htmllint'
     ]
 );
 
-gulp.task('scss-lint', 'scss file linter', function () {
+gulp.task('scsslint', 'scss file linter', function () {
     var scssLint = require('gulp-scss-lint');
     return gulp.src(paths.scss)
         .pipe(scssLint());

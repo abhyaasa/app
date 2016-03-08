@@ -23,7 +23,9 @@
  {
   "id": 2,
   "number": 1.0,
-  "tags": [],
+  "tags": [
+   "a"
+  ],
   "text": [
    "a",
    "\u0905"
@@ -35,7 +37,8 @@
   "id": 3,
   "number": 2.0,
   "tags": [
-   ".cs"
+   ".cs",
+   "b"
   ],
   "text": "case sensitive",
   "type": "mind"
@@ -45,7 +48,8 @@
   "id": 4,
   "number": 2.5,
   "tags": [
-   ".ci"
+   ".ci",
+   "c"
   ],
   "text": "case insensitive",
   "type": "mind"
