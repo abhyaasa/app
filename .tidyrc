@@ -1,0 +1,27 @@
+// tidy (tidy-html5) config file: http://www.html-tidy.org/documentation/
+// config options: http://api.html-tidy.org/tidy/quickref_5.1.25.html#tab-size
+indent: auto
+indent-spaces: 2
+wrap: 72
+markup: yes
+output-xml: no
+input-xml: no
+show-warnings: yes
+numeric-entities: yes
+quote-marks: yes
+quote-nbsp: yes
+quote-ampersand: no
+break-before-br: no
+uppercase-tags: no
+uppercase-attributes: no
+char-encoding: latin1
+new-inline-tags: ion-nav-bar, ion-toggle, ion-item, ion-list, ion-content, ion-view,
+  ion-nav-title, ion-nav-back-button, ion-nav-buttons, ion-nav-view, x, ion-radio,
+  ion-slide, ion-slide-box, ion-checkbox, rzslider, ion-tab, ion-tabs, ion-content,
+  content, author, access, description, name, preference, allow-navigation, widget,
+  feature, platform, icon, splash
+new-blocklevel-tags:
+new-empty-tags:
+write-back: no
+quiet: yes
+output-file: /dev/null

@@ -2,44 +2,51 @@
 
 angular.module('app')
 
-.controller('DeckController', function ($scope, Deck) {
+.controller('DeckController', function ($scope, Deck, Log) {
     $scope.Deck = Deck;
 
     $scope.getCount = function (key) {
         return (Deck.count && (key in Deck.count)) ? Deck.count[key] : 0;
     };
 
-    // adapted from http://ionden.com/a/plugins/ion.rangeSlider/demo_interactions.html
-    $(document).ready(function () {
-        var $range = $('#range');
-        var $result = $('#range');
-        var track = function (data) {
-            delete data.input;
-            delete data.slider;
-            $result.html(JSON.stringify(data, null, 2));
-        };
-        $range.ionRangeSlider({
-            type: 'double',
-            min: 1000,
-            max: 5000,
-            from: 2000,
-            to: 4000,
-            step: 100,
-            onStart: track,
-            onChange: track,
-            onFinish: track,
-            onUpdate: track
-        });
-    });
-    // TODO manage filter controls
+    $scope.tagDelete = function (filterName, tag) {
+        // TODO tag delete
+        var tags = $scope.tagFilters[filterName].tags;
+        var index = tags.indexOf(tag);
+        if (index === -1) {
+            Log.error('tagDelete', filterName, tag);
+        }
+        tags.splice(index, 1);
+    };
 })
 
 .controller('DeckHelpController', function () {})
+
+.controller('DeckTagsController', function ($scope, $stateParams, Deck, _) {
+    var filterKey = $stateParams.filterKey;
+    $scope.filterText = Deck.tagFilterText[filterKey];
+    var tags = Deck.data.tags;
+    var filterTags = Deck.data.filterTags[filterKey];
+    var filterTagArray = _.map(tags, function (tag) {
+        return _.contains(filterTags, tag);
+    });
+
+    $scope.tagSelect = function (tag) {
+        // TODO tagselect
+    };
+})
 
 .service('Deck', function (Log, $state, $rootScope, settings, getData, Library, _,
     LocalStorage) {
     var _this = this;
     this.count = undefined; // maintained by this.setCount()
+
+    this.tagFilterText = { // REVIEW at least one, exclude, all of
+        include: 'Include only',
+        exclude: 'Exclude',
+        require: 'Require'
+    };
+    this.tagFilterKeys = _.keys(this.tagFilterText);
 
     var setupQuestions = function (fileName) {
         return getData('flavor/library/' + fileName).then(function (promise) {
@@ -70,6 +77,10 @@ angular.module('app')
             });
             var min = _.min(numbers);
             var max = _.max(numbers);
+            var allTags = _.uniq(_.flatten(_.pluck(_this.questions, 'tags'))).sort();
+            var isNormalTag = function (tag) {
+                return tag.startsWith('.');
+            };
             _this.data = {
                 name: deckName,
                 history: _.map(_this.questions, function () {
@@ -77,9 +88,14 @@ angular.module('app')
                 }),
                 range: min === max ? false : {
                     min: min,
-                    max: max
+                    max: max,
+                    options: {
+                        floor: min,
+                        ceil: max
+                    }
                 },
-                tags: {
+                tags: _.filter(allTags, isNormalTag),
+                filterTags: {
                     required: [],
                     excluded: [],
                     included: []
@@ -90,6 +106,8 @@ angular.module('app')
             };
             _this.data.outcomes = new Array(_this.data.active.length);
             _this.save();
+            Log.debug('Deck range', _this.data.range);
+            Log.debug('Deck tags', _this.data.filterTags, _this.data.tags);
             $state.go('tabs.card');
         });
     };

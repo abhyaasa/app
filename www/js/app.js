@@ -22,7 +22,7 @@ angular.module('app', ['ionic', 'services', 'rzModule'])  // XXX, 'rzModule'
         }
     });
 
-    // LocalStorage.clear();
+    LocalStorage.clear();  // TODO enable local storage
 
     restoreSettings();
     $rootScope.settings = settings;
@@ -102,11 +102,6 @@ angular.module('app', ['ionic', 'services', 'rzModule'])  // XXX, 'rzModule'
                     templateUrl: 'views/library/help.html',
                     controller: 'LibraryHelpController'
                 }
-            },
-            onEnter: function ($rootScope, $state) {
-                $rootScope.help = function () {
-                    $state.go('tabs.library-help');
-                };
             }
         })
         .state('tabs.deck', {
@@ -124,6 +119,15 @@ angular.module('app', ['ionic', 'services', 'rzModule'])  // XXX, 'rzModule'
                 Deck.enterTab();
             }
         })
+        .state('tabs.tags', {
+            url: '/tags/:filterKey',
+            views: {
+                'deck-tab': {
+                    templateUrl: 'views/deck/tags.html',
+                    controller: 'DeckTagsController'
+                }
+            }
+        })
         .state('tabs.deck-help', {
             url: '/deckHelp',
             views: {
@@ -131,11 +135,6 @@ angular.module('app', ['ionic', 'services', 'rzModule'])  // XXX, 'rzModule'
                     templateUrl: 'views/deck/help.html',
                     controller: 'DeckHelpController'
                 }
-            },
-            onEnter: function ($rootScope, $state) {
-                $rootScope.help = function () {
-                    $state.go('tabs.deck-help');
-                };
             }
         })
         .state('tabs.card', {
@@ -159,11 +158,6 @@ angular.module('app', ['ionic', 'services', 'rzModule'])  // XXX, 'rzModule'
                     templateUrl: 'views/card/help.html',
                     controller: 'CardHelpController'
                 }
-            },
-            onEnter: function ($rootScope, $state) {
-                $rootScope.help = function () {
-                    $state.go('tabs.card-help');
-                };
             }
         })
         .state('tabs.settings', {
@@ -216,11 +210,6 @@ angular.module('app', ['ionic', 'services', 'rzModule'])  // XXX, 'rzModule'
                     templateUrl: 'views/settings/help.html',
                     controller: 'SettingsHelpController'
                 }
-            },
-            onEnter: function ($rootScope, $state) {
-                $rootScope.help = function () {
-                    $state.go('tabs.settings-help');
-                };
             }
         })
         ;

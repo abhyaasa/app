@@ -75,6 +75,8 @@ $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/inst
 $ brew nvm
 ```
 
+`tidy`, the recommended html linter, is also updated with `brew install tidy-html5`.
+
 Recommended OSX development tools with standard app installers:
 
 - `genymotion`: Android app emulation
@@ -101,7 +103,7 @@ This app is early in development, with plenty to do. See
 Atom plugins are indicated by the following list
 ```
 $ /bin/ls ~/.atom/packages
-README.md		docblockr		linter-htmlhint
+README.md		docblockr		
 atom-beautify		editor-settings		linter-jscs
 atom-html-preview	emmet			linter-pylint
 atom-material-syntax	file-icons		linter-scss-lint

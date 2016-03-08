@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<ion-view>
+    <ion-content padding="true" class="has-header">
+        <div class="subHeading">{{ filterText }}</div>
+        <ion-list>
+            <!-- http://www.codelord.net/2014/05/10/understanding-angulars-magic-dont-bind-to-primitives/ -->
+            <ion-checkbox ng-model="isChecked">Checkbox Label</ion-checkbox>
+              <ion-toggle toggle-class="toggle-positive" ng-model="???">
+                Reverse Q &amp; A
+            </ion-toggle>
+            <!-- REVIEW or checkbox?  ng-disabled="expression" -->
+            <input type="checkbox" ng-model="checked">
+            <button ng-repeat="tag in tags" class="button button-primary button-block" ng-click="tagSelect(tag)">
+              tag
+            </button>
+        </ion-list>
+    </ion-content>
+</ion-view>

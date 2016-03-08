@@ -82,7 +82,9 @@ angular.module('services', ['ionic'])
     };
 
     this.error = function () {
-        logger('ERROR', _.toArray(arguments));
+        var args = _.toArray(arguments);
+        window.alert('ERROR: ' + JSON.stringify(args)); // TODO test error alert
+        logger('ERROR', args);
     };
 })
 

@@ -150,7 +150,9 @@ gulp.task('bx', 'Build for ios and open xcode project', ['build'], function () {
 });
 
 gulp.task('lint',
-    'Run js, json, and scss linters.', ['jshint', 'jscs', 'jsonlint', 'scss-lint']
+    'Run js, json, scss, and html/xml linters.', [
+        'jshint', 'jscs', 'jsonlint', 'scss-lint', 'html-lint'
+    ]
 );
 
 gulp.task('scss-lint', 'scss file linter', function () {
@@ -185,6 +187,11 @@ gulp.task('jsonlint', 'Report json errors', function () {
     gulp.src(paths.projectJson)
         .pipe(jsonlint())
         .pipe(jsonlint.report(reporter));
+});
+
+gulp.task('htmllint', 'Report html errors', function () {
+    var files = 'config.xml index.html www/views/*.html www/views/*/*.html';
+    sh.exec('scripts/tidylint.py ' + files);
 });
 
 gulp.task('publish-pre-build', 'Execute before publishing build', function () {
