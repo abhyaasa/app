@@ -66,6 +66,13 @@ angular.module('services', ['ionic'])
     };
 })
 
+.filter('capitalize', function () {
+    return function (input) {
+        return (!!input) ? input.charAt(0).toUpperCase() +
+            input.substr(1).toLowerCase() : '';
+    };
+})
+
 /* Console Log, because $log does not work in xcode */
 .service('Log', function (_, mode) {
     var logger = function (prefix, args) {
@@ -104,7 +111,9 @@ angular.module('services', ['ionic'])
             if (httpStubData) { // REVIEW stub getData, includse $q inject above
                 var data = httpStubData[path];
                 var deferred = $q.defer();
-                deferred.resolve({ data: data });
+                deferred.resolve({
+                    data: data
+                });
                 console.log('STUB LOG: getStubData', path, deferred.promise.data);
                 return deferred.promise;
             }
@@ -246,8 +255,10 @@ angular.module('services', ['ionic'])
         getErrorMessage: getErrorMessage,
         playSound: playSound
     };
-});
+})
+;
 
+// BUILD needed for browser testing, but ignored on device
 window.Media = function (src, mediaSuccess, mediaError, mediaStatus) {
     // Several media functions below are stubs.
     // src: A URI containing the audio content. (DOMString)

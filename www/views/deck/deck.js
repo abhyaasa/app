@@ -24,7 +24,6 @@ angular.module('app')
 
 .controller('DeckTagsController', function ($scope, $stateParams, Deck, _) {
     var filterKey = $stateParams.filterKey;
-    $scope.filterText = Deck.tagFilterText[filterKey];
     var tags = Deck.data.tags;
     var filterTags = Deck.data.filterTags[filterKey];
     var filterTagArray = _.map(tags, function (tag) {
@@ -37,16 +36,25 @@ angular.module('app')
 })
 
 .service('Deck', function (Log, $state, $rootScope, settings, getData, Library, _,
-    LocalStorage) {
+    LocalStorage, $filter) {
     var _this = this;
     this.count = undefined; // maintained by this.setCount()
 
-    this.tagFilterText = { // REVIEW at least one, exclude, all of
-        include: 'Include only',
-        exclude: 'Exclude',
-        require: 'Require'
+    this.filterTagsProto = { // REVIEW at least one, exclude, all of
+        include: [],
+        exclude: [],
+        require: []
     };
-    this.tagFilterKeys = _.keys(this.tagFilterText);
+    this.filterTagsKeys = _.keys(this.filterTagsProto);
+
+    this.tagFilterText = function (filterKey) {
+        var tags = _this.data.filterTags[filterKey];
+        if (tags.length === 0) {
+            return 'Edit to ' + filterKey + ' only cards with selected tags';
+        } else {
+            return $filter('capitalize')(filterKey) + ' tags: ' + tags.join(' ');
+        }
+    };
 
     var setupQuestions = function (fileName) {
         return getData('flavor/library/' + fileName).then(function (promise) {
@@ -95,11 +103,7 @@ angular.module('app')
                     }
                 },
                 tags: _.filter(allTags, isNormalTag),
-                filterTags: {
-                    required: [],
-                    excluded: [],
-                    included: []
-                },
+                filterTags: _.clone(_this.filterTagsProto),
                 reverseQandA: false,
                 active: indices(_this.questions),
                 activeCardIndex: undefined // current card active index list pointer

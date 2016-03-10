@@ -55,8 +55,8 @@ TAG_RANGE -> BOL ; [ / ] TAG,.. EOL
 A ;tag,.. line tag range is terminated by EOF its appearance in a ;/tag,.. line.
 Questions in a tag range all have its tags.
 
-A numeric tag has the form of an unsigned number with optional decimal
-point. A question may not have more than one numeric tag.
+A numeric tag has the form of an unsigned integer. A question may not have more than
+one numeric tag.
 
 SEMANTIC NOTES
 
@@ -150,7 +150,7 @@ def html_escape(text):
     """Produce entities within text."""
     return "".join(html_escape_table.get(c, c) for c in text)
 
-number_cre = re.compile(r'.\d+|\d+.\d*|\d+')
+number_cre = re.compile(r'\d+')
 media_prefix_cre = re.compile(r'<img [^>]*src="')
 isnumber = number_cre.match
 from_tags = set('.iast .harvard-kyoto .itrans .velthuis .slp1 .devanagari'.split())

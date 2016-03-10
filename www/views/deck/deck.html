@@ -39,28 +39,19 @@
         <ion-item ng-show="Deck.count['removed']" ng-click="Deck.restart(true)">
           Restore removed cards and restart
         </ion-item>
-      </ion-list>
-      <div class="list">
         <!-- see https://github.com/angular-slider/angularjs-slider -->
-        <rzslider ng-show="Deck.data.range" rz-slider-model="Deck.data.range.min" rz-slider-high="Deck.data.range.max" rz-slider-options="Deck.data.range.options">
-        </rzslider>
-        <div class="item filter-header">Tags</div>
+        <ion-item>
+          <rzslider ng-show="Deck.data.range" rz-slider-model="Deck.data.range.min" rz-slider-high="Deck.data.range.max"
+              rz-slider-options="Deck.data.range.options">
+          </rzslider>
+        </ion-item>
         <!-- http://ionicframework.com/docs/components/#cards for tag lists -->
-        <div ng-repeat="filterKey in Deck.tagFilterKeys">
-          <div class="item item-button-right">
-            {{ Data.tagFilterText[filterKey] }}
-            <button class="button button-positive">
-              <i class="icon ion-plus-round" ng-click="filterClick(filterKey)"></i>
-            </button>
-          </div>
-          <div ng-repeat="tag in Deck.data.filterTags[filterKey]" class="item item-button-right">
-            {{ tag }}
-            <button class="button button-positive">
-              <i class="icon ion-close-round" ng-click="tagDelete(filterKey, tag)"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+        <ion-item ng-show="Deck.data.tags.length > 0" ng-repeat="filterKey in Deck.filterTagsKeys" class="item item-button-right">
+          {{ Deck.tagFilterText(filterKey) }}
+          <button class="button button-positive">
+            <i class="icon ion-edit" ui-sref="tabs.tags({ filterKey: filterKey })"></i>
+          </button>
+        </ion-item>
+      </ion-list>
   </ion-content>
 </ion-view>

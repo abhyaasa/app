@@ -36,9 +36,7 @@ angular.module('app')
 
 .service('saveSettings', function (Log, settings, LocalStorage, _) {
     return function () {
-        var s = {};
-        _.extendOwn(s, settings);
-        LocalStorage.setObject('*settings*', s);
+        LocalStorage.setObject('*settings*', settings);
         Log.debug('SAVED SETTINGS');
     };
 })

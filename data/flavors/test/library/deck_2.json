@@ -46,7 +46,7 @@
  {
   "answer": "Ci",
   "id": 4,
-  "number": 2.5,
+  "number": 3.0,
   "tags": [
    ".ci",
    "c"
@@ -57,7 +57,7 @@
  {
   "answer": "<p>Buddy at shelter</p>",
   "id": 5,
-  "number": 0.12,
+  "number": 2.0,
   "tags": [
    ".html"
   ],
