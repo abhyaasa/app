@@ -180,6 +180,10 @@ angular.module('app')
         _this.haveHint = _this.question.hints !== undefined;
         _this.hint = null;
         _this.answer = _this.question.answer;
+        var number = _this.question.number;
+        var numString = number === undefined ? '' : number.toString();
+        var tags = Deck.filterNormalTags(_this.question.tags);
+        _this.tagList = [numString].concat(tags).join(', ');
         var mp3File = _this.question.mp3;
         if (mp3File !== undefined) {
             MediaSrv.playSound(mp3File);

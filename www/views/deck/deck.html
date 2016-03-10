@@ -31,6 +31,9 @@
         <ion-toggle toggle-class="toggle-positive" ng-model="Deck.data.reverseQandA">
           Reverse Q &amp; A
         </ion-toggle>
+        <ion-toggle ng-show="Deck.data.range || Deck.data.tags.length > 0" toggle-class="toggle-positive" ng-model="Deck.data.showTags">
+          Show tags in card
+        </ion-toggle>
       </ion-list>
       <ion-list ng-show="Deck.data.activeCardIndex !== undefined">
         <ion-item ng-click="Deck.restart(false)">
@@ -40,16 +43,18 @@
           Restore removed cards and restart
         </ion-item>
         <!-- see https://github.com/angular-slider/angularjs-slider -->
+
         <ion-item>
           <rzslider ng-show="Deck.data.range" rz-slider-model="Deck.data.range.min" rz-slider-high="Deck.data.range.max"
               rz-slider-options="Deck.data.range.options">
           </rzslider>
         </ion-item>
         <!-- http://ionicframework.com/docs/components/#cards for tag lists -->
-        <ion-item ng-show="Deck.data.tags.length > 0" ng-repeat="filterKey in Deck.filterTagsKeys" class="item item-button-right">
+        <ion-item ng-show="Deck.data.tags.length > 0" ng-repeat="filterKey in Deck.filterTagsKeys"
+            class="item item-button-right">
           {{ Deck.tagFilterText(filterKey) }}
-          <button class="button button-positive">
-            <i class="icon ion-edit" ui-sref="tabs.tags({ filterKey: filterKey })"></i>
+          <button class="button button-positive" ui-sref="tabs.tags({filterKey: filterKey})">
+            <i class="icon ion-edit"></i>
           </button>
         </ion-item>
       </ion-list>

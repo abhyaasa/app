@@ -2,8 +2,9 @@
 
 angular.module('app')
 
-.controller('DeckController', function ($scope, Deck, Log) {
+.controller('DeckController', function ($scope, $state, Deck, Log) {
     $scope.Deck = Deck;
+    $scope.$state = $state;
 
     $scope.getCount = function (key) {
         return (Deck.count && (key in Deck.count)) ? Deck.count[key] : 0;
@@ -23,9 +24,10 @@ angular.module('app')
 .controller('DeckHelpController', function () {})
 
 .controller('DeckTagsController', function ($scope, $stateParams, Deck, _) {
-    var filterKey = $stateParams.filterKey;
+    $scope.filterKey = $stateParams.filterKey;
+
     var tags = Deck.data.tags;
-    var filterTags = Deck.data.filterTags[filterKey];
+    var filterTags = Deck.data.filterTags[$scope.filterKey];
     var filterTagArray = _.map(tags, function (tag) {
         return _.contains(filterTags, tag);
     });
@@ -62,6 +64,12 @@ angular.module('app')
         });
     };
 
+    this.filterNormalTags = function (tags) {
+        return _.filter(tags, function (tag) {
+            return !tag.startsWith('.');
+        });
+    };
+
     this.setupClosedDeck = function (deckName) {
         var copy = function (obj) {
             return _.mapObject(obj, function (val) {
@@ -86,9 +94,6 @@ angular.module('app')
             var min = _.min(numbers);
             var max = _.max(numbers);
             var allTags = _.uniq(_.flatten(_.pluck(_this.questions, 'tags'))).sort();
-            var isNormalTag = function (tag) {
-                return !tag.startsWith('.');
-            };
             _this.data = {
                 name: deckName,
                 history: _.map(_this.questions, function () {
@@ -102,7 +107,8 @@ angular.module('app')
                         ceil: max
                     }
                 },
-                tags: _.filter(allTags, isNormalTag),
+                showTags: false,
+                tags: _this.filterNormalTags(allTags),
                 filterTags: _.clone(_this.filterTagsProto),
                 reverseQandA: false,
                 active: indices(_this.questions),

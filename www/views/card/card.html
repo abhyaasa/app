@@ -58,6 +58,9 @@
       <button ng-show="Card.haveHint" class="button button-stable button-block" ng-click="hint()">
         Give me a hint
       </button>
+      <div ng-show="Deck.data.showTags" class="showTags">
+          Tags: {{ Card.tagList }}
+      </div>
     </div>
   </ion-content>
 </ion-view>
