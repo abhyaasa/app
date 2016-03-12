@@ -10,11 +10,11 @@ Below the deck usage statistics are controls for deck-specific settings.
 
 **Restore removed cards:** Add removed cards back into the deck and restart the deck.
 
-A card may have any number of alpha-numeric tags and one numeric tag. Controls on this page allow you to limit the active cards to those that satisfy certain conditions. Controls are hidden when there are no applicable tags in the deck.
+A card may have any number of alpha-numeric tags and one numeric tag. Controls on this page allow you to limit the active cards to those that satisfy certain conditions. Controls are hidden when there are no applicable tags in the deck. Any change in the tag settings will restart the deck.
 
 **Range slider:** Use to limit active cards to those whose with numeric values within a selected range.
 
-You may select a collection of alpha-numeric tags associated with each of the following three controls. A tag may be included in at most one of these collections. Use the edit icon at the right to view a list of all tags in the deck, from which those with those in the control's collection may be selected. Tags already included in one of the other collections are disabled (greyed-out) in these lists.
+You may select a collection of alpha-numeric tags associated with each of the following three controls. A tag may be included in at most one of these collections. Tap the edit icon at the right to view a list of all tags in the deck, from which those with those in the control's collection may be selected. Tags already included in one of the other collections are disabled (greyed-out) in these lists. 
 
 **Include tags:** Only cards with one of the indicated tags may be active.
 

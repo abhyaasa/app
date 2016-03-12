@@ -35,7 +35,7 @@
   "disallowTrailingWhitespace": true,
   "disallowTrailingComma": true,
   "requireDotNotation": true,
-  "requireSpaceAfterLineComment": true,
+  "requireSpaceAfterLineComment": false,
   "requirePaddingNewLinesBeforeLineComments": false,
   "requirePaddingNewLinesAfterBlocks": false,
   "requireTrailingComma": false,

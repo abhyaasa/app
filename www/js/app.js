@@ -132,8 +132,7 @@ angular.module('app', ['ionic', 'services', 'rzModule'])
             url: '/deckHelp',
             views: {
                 'deck-tab': {
-                    templateUrl: 'views/deck/help.html',
-                    controller: 'DeckHelpController'
+                    templateUrl: 'views/deck/help.html'
                 }
             }
         })

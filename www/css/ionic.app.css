@@ -9733,6 +9733,9 @@ a.button {
 .answer {
   background-color: #afa; }
 
+.disabled {
+  background-color: #bbb; }
+
 .major-text {
   font-size: 120%; }
 

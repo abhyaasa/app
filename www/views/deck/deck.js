@@ -10,51 +10,106 @@ angular.module('app')
         return (Deck.count && (key in Deck.count)) ? Deck.count[key] : 0;
     };
 
-    $scope.tagDelete = function (filterName, tag) {
-        // TODO tag delete
-        var tags = $scope.tagFilters[filterName].tags;
-        var index = tags.indexOf(tag);
-        if (index === -1) {
-            Log.error('tagDelete', filterName, tag);
-        }
-        tags.splice(index, 1);
-    };
+    // TODO slider timeout do filtering
 })
 
-.controller('DeckHelpController', function () {})
+.controller('DeckHelpController', function () {}) // TODO remove help controllers
 
-.controller('DeckTagsController', function ($scope, $stateParams, Deck, _) {
-    $scope.filterKey = $stateParams.filterKey;
+.controller('DeckTagsController', function ($scope, $state, $stateParams, Deck, _) {
+    var setup = function () {
+        $scope.tagObjects = _.map(tags, function (tag) {
+            var tagObj = {
+                tag: tag,
+                value: undefined,
+                disabled: false
+            };
+            for (var key in filterTags) {
+                var hasTag = _.contains(filterTags[key], tag);
+                if (key === filterKey) {
+                    tagObj.value = hasTag;
+                } else {
+                    tagObj.disabled = tagObj.disabled || hasTag;
+                }
+            }
+            return tagObj;
+        });
+    };
 
+    var filterKey = $stateParams.filterKey;
+    $scope.filterKey = filterKey;
+    $scope.noCards = false;
     var tags = Deck.data.tags;
-    var filterTags = Deck.data.filterTags[$scope.filterKey];
-    var filterTagArray = _.map(tags, function (tag) {
-        return _.contains(filterTags, tag);
-    });
+    var filterTags = Deck.data.filterTags;
+    setup();
 
-    $scope.tagSelect = function (tag) {
-        // TODO tagselect
+    $scope.save = function () {
+        var selected = _.filter($scope.tagObjects, _.property('value'));
+        var savedTags = filterTags[filterKey];
+        filterTags[filterKey] = _.pluck(selected, 'tag');
+        if (Deck.activeIndices()) {
+            $state.go('tabs.deck');
+        } else {
+            filterTags[filterKey] = savedTags;
+            $scope.noCards = true;
+            setup();
+        }
     };
 })
 
 .service('Deck', function (Log, $state, $rootScope, settings, getData, Library, _,
     LocalStorage, $filter) {
     var _this = this;
-    this.count = undefined; // maintained by this.setCount()
 
-    this.filterTagsProto = { // REVIEW at least one, exclude, all of
+    var filterTagsProto = {
         include: [],
         exclude: [],
         require: []
     };
-    this.filterTagsKeys = _.keys(this.filterTagsProto);
+
+    this.count = undefined; // maintained by this.setCount()
+
+    this.filterTagsKeys = _.keys(filterTagsProto);
 
     this.tagFilterText = function (filterKey) {
         var tags = _this.data.filterTags[filterKey];
         if (tags.length === 0) {
             return 'Edit to ' + filterKey + ' only cards with selected tags';
         } else {
-            return $filter('capitalize')(filterKey) + ' tags: ' + tags.join(' ');
+            return $filter('capitalize')(filterKey) + ' tags: ' + tags.join(', ');
+        }
+    };
+
+    this.filterNormalTags = function (tags) {
+        return _.filter(tags, function (tag) {
+            return !tag.startsWith('.');
+        });
+    };
+
+    var qNumber = function (q) {
+        return q.number === undefined ? 0 : q.number;
+    };
+
+    this.activeIndices = function () {
+        var filterTags = _this.data.filterTags;
+        var questions = _.filter(_this.questions, function (q) {
+            return ((filterTags.include.length === 0 ||
+                    _.intersection(filterTags.include, q.tags).length > 0) &&
+                _.intersection(filterTags.exclude, q.tags).length === 0 &&
+                _.difference(filterTags.require, q.tags).length === 0 &&
+                _this.data.range.max >= qNumber(q) &&
+                _this.data.range.min <= qNumber(q));
+        });
+        var indices = _.pluck(questions, 'id');
+        if (settings.randomQuestions) {
+            indices = _.sample(indices, indices.length);
+        }
+        if (indices.length === 0) {
+            return false;
+        } else {
+            _this.data.active = indices;
+            Log.debug('indices', indices);
+            _this.restart(true);
+            return true;
         }
     };
 
@@ -64,33 +119,15 @@ angular.module('app')
         });
     };
 
-    this.filterNormalTags = function (tags) {
-        return _.filter(tags, function (tag) {
-            return !tag.startsWith('.');
-        });
-    };
-
     this.setupClosedDeck = function (deckName) {
         var copy = function (obj) {
             return _.mapObject(obj, function (val) {
                 return _.clone(val);
             });
         };
-        var indices = function (questions) {
-            var indices = _.range(0, questions.length);
-            if (settings.randomQuestions) {
-                indices = _.sample(indices, indices.length);
-            }
-            return indices;
-        };
         Log.debug('Deck setup', JSON.stringify(deckName));
         setupQuestions(deckName.file).then(function () {
-            var numbers = _this.questions.map(function (q) {
-                if (q.number === undefined) {
-                    q.number = 0;
-                }
-                return q.number;
-            });
+            var numbers = _.map(_this.questions, qNumber);
             var min = _.min(numbers);
             var max = _.max(numbers);
             var allTags = _.uniq(_.flatten(_.pluck(_this.questions, 'tags'))).sort();
@@ -109,12 +146,13 @@ angular.module('app')
                 },
                 showTags: false,
                 tags: _this.filterNormalTags(allTags),
-                filterTags: _.clone(_this.filterTagsProto),
+                filterTags: _.clone(filterTagsProto),
                 reverseQandA: false,
-                active: indices(_this.questions),
-                activeCardIndex: undefined // current card active index list pointer
+                activeCardIndex: undefined, // initially assigned by Card.setup()
+                active: undefined, // assigned by _this.activeIndices()
+                outcomes: undefined // assigned by _this.restart()
             };
-            _this.data.outcomes = new Array(_this.data.active.length);
+            _this.activeIndices();
             _this.save();
             $state.go('tabs.card');
         });
@@ -152,9 +190,8 @@ angular.module('app')
                 return outcome === 'removed' ? 'removed' : undefined;
             });
         }
-        _this.data.activeCardIndex = undefined;
+        _this.data.activeCardIndex = 0;
         _this.save();
-        $state.go('tabs.card');
     };
 
     this.enterTab = function () {
