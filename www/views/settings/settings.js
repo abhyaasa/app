@@ -30,8 +30,6 @@ angular.module('app')
     // };
 })
 
-.controller('SettingsHelpController', function () {})
-
 .value('settings', {})
 
 .service('saveSettings', function (Log, settings, LocalStorage, _) {

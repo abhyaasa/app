@@ -99,8 +99,7 @@ angular.module('app', ['ionic', 'services', 'rzModule'])
             url: '/libraryHelp',
             views: {
                 'library-tab': {
-                    templateUrl: 'views/library/help.html',
-                    controller: 'LibraryHelpController'
+                    templateUrl: 'views/library/help.html'
                 }
             }
         })
@@ -154,8 +153,7 @@ angular.module('app', ['ionic', 'services', 'rzModule'])
             url: '/cardHelp',
             views: {
                 'card-tab': {
-                    templateUrl: 'views/card/help.html',
-                    controller: 'CardHelpController'
+                    templateUrl: 'views/card/help.html'
                 }
             }
         })
@@ -206,8 +204,7 @@ angular.module('app', ['ionic', 'services', 'rzModule'])
             url: '/settingsHelp',
             views: {
                 'settings-tab': {
-                    templateUrl: 'views/settings/help.html',
-                    controller: 'SettingsHelpController'
+                    templateUrl: 'views/settings/help.html'
                 }
             }
         })

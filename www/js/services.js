@@ -68,7 +68,7 @@ angular.module('services', ['ionic'])
 
 .filter('capitalize', function () {
     return function (input) {
-        return (!!input) ? input.charAt(0).toUpperCase() +
+        return !!input ? input.charAt(0).toUpperCase() +
             input.substr(1).toLowerCase() : '';
     };
 })
@@ -90,7 +90,7 @@ angular.module('services', ['ionic'])
 
     this.error = function () {
         var args = _.toArray(arguments);
-        window.alert('ERROR: ' + JSON.stringify(args)); // TODO test error alert
+        window.alert('ERROR: ' + JSON.stringify(args));
         logger('ERROR', args);
     };
 })

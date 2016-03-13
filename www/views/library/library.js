@@ -42,8 +42,6 @@ angular.module('app')
     // });
 })
 
-.controller('LibraryHelpController', function () {})
-
 .service('Library', function (Log, $state, getData, LocalStorage, _) {
     var _this = this;
     var openDecks;

@@ -11,19 +11,19 @@
         <table>
           <tr>
             <td>Right</td>
-            <td>{{ getCount('right') }}</td>
+            <td>{{ Deck.count.right }}</td>
             <td>Wrong</td>
-            <td>{{ getCount('wrong') }}</td>
+            <td>{{ Deck.count.wrong }}</td>
             <td>Skipped</td>
-            <td>{{ getCount('skipped') }}</td>
+            <td>{{ Deck.count.skipped }}</td>
           </tr>
           <tr>
             <td>Removed</td>
-            <td>{{ getCount('removed') }}</td>
+            <td>{{ Deck.count.removed }}</td>
             <td>Hints</td>
-            <td>{{ getCount('hints') }}</td>
+            <td>{{ Deck.count.hints }}</td>
             <td>Remaining</td>
-            <td>{{ getCount('remaining') }}</td>
+            <td>{{ Deck.count.remaining }}</td>
           </tr>
         </table>
       </div>
@@ -52,7 +52,7 @@
         <!-- http://ionicframework.com/docs/components/#cards for tag lists -->
         <ion-item ng-show="Deck.data.tags.length > 0" ng-repeat="filterKey in Deck.filterTagsKeys"
             class="item item-button-right">
-          {{ Deck.tagFilterText(filterKey) }}
+          {{ Deck.tagFilterText[filterKey] }}
           <button class="button button-positive" ui-sref="tabs.tags({filterKey: filterKey})">
             <i class="icon ion-edit"></i>
           </button>

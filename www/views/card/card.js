@@ -135,8 +135,6 @@ angular.module('app')
     };
 })
 
-.controller('CardHelpController', function () {})
-
 .filter('unsafe', function ($sce, _, settings) {
     return function (value) {
         var text = value;
@@ -168,7 +166,7 @@ angular.module('app')
         _this.question = Deck.questions[Deck.data.active[activeCardIndex]];
         _this.isMA = _.contains(_this.question.tags, '.ma');
         _this.answerClass = 'answer';
-        _this.isInput = (_.contains(_this.question.tags, '.cs') ||
+        _this.isInput = _.contains(_this.question.tags, '.cs' ||
             _.contains(_this.question.tags, '.ci'));
         if (_this.isInput) {
             _this.submittedAnswer = undefined;
@@ -255,7 +253,7 @@ angular.module('app')
                 }
             }
         }
-        Log.debug('_this.setup', JSON.stringify(_this));
+        Log.debug('Card setup _this', JSON.stringify(_this));
     };
 
     this.outcome = function (outcome) {

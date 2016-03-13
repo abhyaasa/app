@@ -7,21 +7,21 @@ Order within groups sometimes reflects decreasing priority. Items are only liste
 
 Excluded from the `todo-show` scan (by the `ignoreThesePaths` configuration list) are library, auto-generated, and archive files, and for the time being `**spec.js` files.
 
-- XXX/
+- XXX /
 
-- FIXME/
+- FIXME /
 
-- CHANGED/
+- CHANGED /
 
-- PRIORITY/
+- PRIORITY /
 
 - TODO
   - try apple archive run
   - xcode debugger breakpoints
 
-- IDEA/
+- IDEA /
 
-- HACK/
+- HACK /
 
 - REVIEW
   - gulp error handling, wait for gulp4? http://artandlogic.com/2014/05/error-handling-in-gulp/, https://www.npmjs.com/package/gulp-exit
