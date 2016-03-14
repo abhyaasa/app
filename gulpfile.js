@@ -228,24 +228,33 @@ gulp.task('cmd', '[-a ALIAS] : Execute shell command named ALIAS in aliases dict
         }
     });
 
-gulp.task('set-version', '-v VERSION : Change app version references to VERSION, ' +
+gulp.task('bump', '[-v VERSION | -t (major|minor|patch|prerelease)] : Change app ' +
+    'version to VERSION or to result of bumping of given type (-t, default patch), ' +
     'and create annotated git tag.',
     function () {
         var bump = require('gulp-bump');
+        var semver = require('semver');
         fs.readFile('./package.json', function (err, data) {
             var version = JSON.parse(data).version;
-            console.log('Setting version ' + version + ' to ' + argv.v);
+            var newVersion = argv.v;
+            if (!argv.v) {
+                if (!argv.t) {
+                    argv.t = 'patch';
+                }
+                newVersion = semver.inc(version, argv.t);
+            }
+            console.log('Bumping version ' + version + ' to ' + newVersion);
             gulp.src(['./www/data/config.json', './package.json'])
                 // see https://www.npmjs.com/package/gulp-bump
                 .pipe(bump({
-                    version: argv.v
+                    version: newVersion
                 }))
                 .pipe(gulp.dest('./'));
             gulp.src(['./config.xml'])
-                .pipe(replace(/(<widget.*version=")[^"]*/, '$1' + argv.v))
+                .pipe(replace(/(<widget.*version=")[^"]*/, '$1' + newVersion))
                 .pipe(gulp.dest('./'));
+            sh.exec('git tag -a v' + newVersion + ' -m "version ' + newVersion + '"');
         });
-        sh.exec('git tag -a v' + argv.v + ' -m "version ' + argv.v + '"');
     });
 
 // ------------------ Testing tasks follow -------------------------------------

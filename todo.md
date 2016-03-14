@@ -16,8 +16,11 @@ Excluded from the `todo-show` scan (by the `ignoreThesePaths` configuration list
 - PRIORITY /
 
 - TODO
+  - ionic view, emulator, and device testing
+  - minor version, github push, ionic view
   - try apple archive run
   - xcode debugger breakpoints
+  - android
 
 - IDEA /
 

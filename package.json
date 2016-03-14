@@ -41,6 +41,7 @@
     "minimist": "^1.2.0",
     "requirejs": "^2.1.20",
     "scsslint": "^0.0.3",
+    "semver": "^5.1.0",
     "shelljs": "^0.3.0",
     "underscore": "^1.8.3"
   },
@@ -59,6 +60,7 @@
       "platform": "ios",
       "version": "",
       "locator": "ios"
-    }
+    },
+    "android"
   ]
 }

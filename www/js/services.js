@@ -1,6 +1,8 @@
 'use strict';
 
-var httpStubData = { // REVIEW global httpStubData
+angular.module('services', ['ionic'])
+
+.constant('httpStubData', {
     'config.json': {
         flavor: 'test',
         email: 'abhyaasa108@gmail.com',
@@ -30,10 +32,7 @@ var httpStubData = { // REVIEW global httpStubData
             ' title="Buddy at shelter" /></p>',
         type: 'mind'
     }]
-};
-httpStubData = false;
-
-angular.module('services', ['ionic'])
+})
 
 .constant('mode', 'debug') // 'debug', 'build', or 'normal'
 
@@ -101,7 +100,8 @@ angular.module('services', ['ionic'])
  * @param {function} optional callback accepts error object
  * @returns {object} promise yielding json file contents
  */
-.provider('getData', function () {
+.provider('getData', function (httpStubData) {
+    httpStubData = false;
     var injector = angular.injector(['ng']);
     var $http = injector.get('$http');
     var urlPrefix = ionic.Platform.isAndroid() ? '/android_asset/www/' : '';
