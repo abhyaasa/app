@@ -7,9 +7,13 @@ var cmdAliases = {
     cd: 'cd data/cdecks/test; update.sh deck_2',
     ct: 'cd scripts; cdeck.py -t -m "prefix"',
     si: 'gulp si -i',
+    sa: 'gulp si -a',
+    sl: 'gulp si -l',
     bi: 'gulp build',
+    ba: 'gulp build -a',
     ei: 'ionic emulate ios -lcs',
     ri: 'ionic run ios -lcs',
+    ra: 'ionic run android -lcs',
     bx: 'gulp bx'
 };
 

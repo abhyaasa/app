@@ -105,5 +105,6 @@ angular.module('app')
         });
         openDecks = [];
         LocalStorage.setObject('*openDecks*', openDecks);
+        $state.go('tabs.settings');
     };
 });

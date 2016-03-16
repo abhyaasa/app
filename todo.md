@@ -16,11 +16,26 @@ Excluded from the `todo-show` scan (by the `ignoreThesePaths` configuration list
 - PRIORITY /
 
 - TODO
-  - ionic view, emulator, and device testing
-  - minor version, github push, ionic view
+  - xcode device run won't compile
   - try apple archive run
   - xcode debugger breakpoints
-  - android
+  - android build error```
+  Running command: /Users/home/DD/app/hooks/after_prepare/020_remove_sass_from_platforms.js /Users/home/DD/app
+ERROR building one of the platforms: Please install Android target: "android-23".
+
+Hint: Open the SDK manager by running: /Users/home/dd/lib/android-sdk-macosx/tools/android
+You will require:
+1. "SDK Platform" for android-23
+2. "Android SDK Platform-tools (latest)
+3. "Android SDK Build-tools" (latest)
+You may not have the required environment or OS to build this project
+Error: Please install Android target: "android-23".
+
+Hint: Open the SDK manager by running: /Users/home/dd/lib/android-sdk-macosx/tools/android
+You will require:
+1. "SDK Platform" for android-23
+2. "Android SDK Platform-tools (latest)
+3. "Android SDK Build-tools" (latest)```
 
 - IDEA /
 
@@ -45,7 +60,10 @@ Excluded from the `todo-show` scan (by the `ignoreThesePaths` configuration list
   - device testing
 
 - FUTURE
+  - cdeck and library file headers, include sanskrit
+  - sanskrit settings only if in deck
   - gulp jshint and jscs exit
+  - convert to Python 3
   - ionic 2, angular 2, typescript coversion
   - replace gulp with npm? http://blog.keithcirkel.co.uk/how-to-use-npm-as-a-build-tool/, https://www.tildedave.com/2015/01/07/i-find-gulp-extremely-frustrating.html
   - splash and icon http://learn.ionicframework.com/formulas/adding-an-icon/ and  http://blog.ionic.io/automating-icons-and-splash-screens/  - Leitner learning algorithm https://en.wikipedia.org/wiki/Leitner_system

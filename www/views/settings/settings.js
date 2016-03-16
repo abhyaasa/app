@@ -39,6 +39,7 @@ angular.module('app')
     };
 })
 
+// TODO create a provider version of this for app.js promise for settings controller
 .service('restoreSettings', function (Log, settings, LocalStorage, _) {
     var defaultSettings = {
         intro: true,

@@ -296,7 +296,7 @@ def main(args):
             if len(numbers) > 1:
                 error('number tag already present')
             elif len(numbers) == 1:
-                q['number'] = float(numbers[0])
+                q['number'] = int(numbers[0])
 
             # question, response, and hint response processing
             if not question:

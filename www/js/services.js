@@ -108,7 +108,9 @@ angular.module('services', ['ionic'])
     var $q = injector.get('$q');
     this.$get = function () {
         return function (path, failure) {
-            if (httpStubData) { // REVIEW stub getData, includse $q inject above
+            // REVIEW create stub getData (normal one w/o $q) that includes
+            // httpStubData and use constant load switch in app.js provider
+            if (httpStubData) {
                 var data = httpStubData[path];
                 var deferred = $q.defer();
                 deferred.resolve({

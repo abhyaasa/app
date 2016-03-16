@@ -79,7 +79,7 @@ $ brew nvm
 
 Recommended OSX development tools with standard app installers:
 
-- `genymotion`: Android app emulation
+- `genymotion`, with `VirtualBox`: Android app emulation
 - `atom`: preferred for most text editing
 - `GitHub Desktop`: makes routine git operations convenient (`SourceTree` might be preferable)
 - `iTerm`: better OSX upterminal emulator
