@@ -79,7 +79,7 @@ angular.module('app')
 
     this.filterNormalTags = function (tags) {
         return _.filter(tags, function (tag) {
-            return !tag.startsWith('.');
+            return tag.charAt(0) !== '.';
         });
     };
 

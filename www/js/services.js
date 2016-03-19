@@ -169,12 +169,7 @@ angular.module('services', ['ionic'])
 // MediaSrv and following window.Media adopted from loicknuchel's post at
 // http://forum.ionicframework.com/t/how-to-play-local-audio-files/7479/5
 // org.apache.cordova.media => cordova.plugin.media
-// Also see mawarnes version in forum thread above, and the thread indicates that
-// Android needs:
-//      android.permission.WRITE_EXTERNAL_STORAGE
-//      android.permission.RECORD_AUDIO
-//      android.permission.MODIFY_AUDIO_SETTINGS
-//      android.permission.READ_PHONE_STATE
+// Also see mawarnes version in forum thread above.
 .factory('MediaSrv', function ($q, $ionicPlatform, $window, Log) {
     function getErrorMessage(code) {
         if (code === 1) {

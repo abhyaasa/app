@@ -16,32 +16,16 @@ Excluded from the `todo-show` scan (by the `ignoreThesePaths` configuration list
 - PRIORITY /
 
 - TODO
-  - xcode device run won't compile
+  - sort between text heading cards
   - try apple archive run
   - xcode debugger breakpoints
-  - android build error```
-  Running command: /Users/home/DD/app/hooks/after_prepare/020_remove_sass_from_platforms.js /Users/home/DD/app
-ERROR building one of the platforms: Please install Android target: "android-23".
-
-Hint: Open the SDK manager by running: /Users/home/dd/lib/android-sdk-macosx/tools/android
-You will require:
-1. "SDK Platform" for android-23
-2. "Android SDK Platform-tools (latest)
-3. "Android SDK Build-tools" (latest)
-You may not have the required environment or OS to build this project
-Error: Please install Android target: "android-23".
-
-Hint: Open the SDK manager by running: /Users/home/dd/lib/android-sdk-macosx/tools/android
-You will require:
-1. "SDK Platform" for android-23
-2. "Android SDK Platform-tools (latest)
-3. "Android SDK Build-tools" (latest)```
 
 - IDEA /
 
 - HACK /
 
 - REVIEW
+  - which iOS versions supported? Document for android also.
   - gulp error handling, wait for gulp4? http://artandlogic.com/2014/05/error-handling-in-gulp/, https://www.npmjs.com/package/gulp-exit
   - sanskrit embedded in text
   - typescript http://blog.ionic.io/ionic-and-typescript-part-2/
@@ -52,6 +36,7 @@ You will require:
 - PUBLISH
   - make injected functions minifiable, e.g. function (a, b){} => ['a', 'b', function (a, b){}, use ng-strict-di: AngularJS Web Application Development Cookbook p 281
   - remove Log.debug calls
+  - check xcode compile warnings, such as first Images.xcassets
   - iTunes publication
 
 - ANDROID

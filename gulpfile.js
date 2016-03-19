@@ -11,17 +11,14 @@ var cmdAliases = {
     sl: 'gulp si -l',
     bi: 'gulp build',
     ba: 'gulp build -a',
-    ei: 'ionic emulate ios -lcs',
-    ri: 'ionic run ios -lcs',
-    ra: 'ionic run android -lcs',
+    ei: 'gulp default; ionic emulate ios -lcs',
+    ri: 'gulp default; ionic run ios -lcs',
+    ra: 'gulp default; ionic run android -cs',
     bx: 'gulp bx'
 };
 
 var paths = {
     scss: ['./scss/**/*.scss'],
-    css: ['./www/**/*.css', '!./www/**/*.min.cs', '!./www/css/ionic.app*.css',
-        '!./www/lib/**'
-    ],
     appJs: ['./www/**/*.js', '!./www/lib/**'],
     projectJson: ['./ionic.project', './**/*.json',
         '!./node_modules/**/*.json', '!./plugins/**/*.json', '!./platforms/**/*.json'
@@ -100,8 +97,6 @@ gulp.task('index', 'Inject script elements into www/index.html',
         sh.cp('-f', './index.html', './www/index.html');
         return gulp.src('./www/index.html')
             .pipe(injector(paths.indexJs))
-            .pipe(gulp.dest('./www'))
-            .pipe(injector(paths.css))
             // .pipe(debug())
             .pipe(gulp.dest('./www'));
     });
@@ -143,9 +138,11 @@ gulp.task('si',
 
 gulp.task('build', '[-a] for Android, default iOS', ['default'], function () {
     sh.exec('ionic build ' + (argv.a ? 'android' : 'ios'));
-    gulp.src(['./platforms/ios/*/config.xml'])
-        .pipe(replace(/<allow-navigation.*\/>/, ''))
-        .pipe(gulp.dest('./platforms/ios'));
+    if (!argv.a) {
+        gulp.src(['./platforms/ios/*/config.xml'])
+            .pipe(replace(/<allow-navigation.*\/>/, ''))
+            .pipe(gulp.dest('./platforms/ios'));
+    }
     logError('If build did not end with "** BUILD SUCCEEDED **", run it again!');
 });
 
