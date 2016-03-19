@@ -30,19 +30,16 @@ angular.module('app')
     // };
 })
 
-.controller('SettingsHelpController', function () {})
-
 .value('settings', {})
 
 .service('saveSettings', function (Log, settings, LocalStorage, _) {
     return function () {
-        var s = {};
-        _.extendOwn(s, settings);
-        LocalStorage.setObject('*settings*', s);
+        LocalStorage.setObject('*settings*', settings);
         Log.debug('SAVED SETTINGS');
     };
 })
 
+// TODO create a provider version of this for app.js promise for settings controller
 .service('restoreSettings', function (Log, settings, LocalStorage, _) {
     var defaultSettings = {
         intro: true,

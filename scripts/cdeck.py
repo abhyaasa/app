@@ -55,8 +55,8 @@ TAG_RANGE -> BOL ; [ / ] TAG,.. EOL
 A ;tag,.. line tag range is terminated by EOF its appearance in a ;/tag,.. line.
 Questions in a tag range all have its tags.
 
-A numeric tag has the form of an unsigned non-negataive number with optional decimal
-point. A question may not have more than one numeric tag.
+A numeric tag has the form of an unsigned integer. A question may not have more than
+one numeric tag.
 
 SEMANTIC NOTES
 
@@ -129,7 +129,7 @@ responses (absent in text, t/f, sequence and mind question types):
 answer (t/f, matching or mind type): boolean (t/f) or text (mind)
 tags (optional): list of tag strings
 hints (optional): list of hint strings
-number (optional): difficulty number
+number (optional): difficulty number (default 0)
 matchingBegin (only if .matching in tags): id of first question in matching range
 matchingEnd (only if .matching in tags): id of last question in matching range
 
@@ -150,7 +150,7 @@ def html_escape(text):
     """Produce entities within text."""
     return "".join(html_escape_table.get(c, c) for c in text)
 
-number_cre = re.compile(r'.\d+|\d+.\d*|\d+')
+number_cre = re.compile(r'\d+')
 media_prefix_cre = re.compile(r'<img [^>]*src="')
 isnumber = number_cre.match
 from_tags = set('.iast .harvard-kyoto .itrans .velthuis .slp1 .devanagari'.split())
@@ -296,7 +296,7 @@ def main(args):
             if len(numbers) > 1:
                 error('number tag already present')
             elif len(numbers) == 1:
-                q['number'] = float(numbers[0])
+                q['number'] = int(numbers[0])
 
             # question, response, and hint response processing
             if not question:

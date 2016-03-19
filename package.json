@@ -1,6 +1,6 @@
 {
   "name": "abhyaasa",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Flash card app for SGS Datta Deepam and personal use",
   "private": "true",
   "dependencies": {
@@ -8,7 +8,7 @@
     "gulp-concat": "^2.2.0",
     "gulp-minify-css": "^0.3.0",
     "gulp-rename": "^1.2.0",
-    "gulp-sass": "^0.7.1"
+    "gulp-sass": "^2.2.0"
   },
   "devDependencies": {
     "angular-marked": "^0.0.18",
@@ -17,6 +17,7 @@
     "dgeni": "^0.4.1",
     "dgeni-packages": "^0.10.19",
     "gulp-bump": "^1.0.0",
+    "gulp-debug": "^2.1.2",
     "gulp-help": "^1.6.1",
     "gulp-inject": "^1.5.0",
     "gulp-jscs": "^3.0.2",
@@ -40,6 +41,7 @@
     "minimist": "^1.2.0",
     "requirejs": "^2.1.20",
     "scsslint": "^0.0.3",
+    "semver": "^5.1.0",
     "shelljs": "^0.3.0",
     "underscore": "^1.8.3"
   },
@@ -58,6 +60,7 @@
       "platform": "ios",
       "version": "",
       "locator": "ios"
-    }
+    },
+    "android"
   ]
 }

@@ -22,7 +22,10 @@
  },
  {
   "id": 2,
-  "tags": [],
+  "number": 1,
+  "tags": [
+   "a"
+  ],
   "text": [
    "a",
    "\u0905"
@@ -32,8 +35,10 @@
  {
   "answer": "Cs",
   "id": 3,
+  "number": 2,
   "tags": [
-   ".cs"
+   ".cs",
+   "b"
   ],
   "text": "case sensitive",
   "type": "mind"
@@ -41,8 +46,10 @@
  {
   "answer": "Ci",
   "id": 4,
+  "number": 3,
   "tags": [
-   ".ci"
+   ".ci",
+   "c"
   ],
   "text": "case insensitive",
   "type": "mind"
@@ -50,6 +57,7 @@
  {
   "answer": "<p>Buddy at shelter</p>",
   "id": 5,
+  "number": 2,
   "tags": [
    ".html"
   ],

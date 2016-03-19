@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<ion-view>
+  <ion-content padding="true" class="has-header">
+    <h2 align="center">{{ filterKey | capitalize }} tags</h2>
+    <ion-list>
+      <ion-item ng-click="save()">Save changes</ion-item>
+      <ion-item ng-show="noCards" class="warning">
+          No cards met the new selection criteria, so changes were not made.
+      </ion-item>
+      <ion-checkbox ng-repeat="tagObj in tagObjects" ng-model="tagObj.value" ng-disabled="tagObj.disabled" ng-class="tagObj.disabled ? 'disabled' : ''">
+        {{ tagObj.tag }}
+    </ion-checkbox>
+    </ion-list>
+  </ion-content>
+</ion-view>

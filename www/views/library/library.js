@@ -14,7 +14,7 @@ angular.module('app')
     };
 
     Library.provideIndex(indexPromise);
-    $scope.deckLists = Library.deckLists; // TODO filtering here
+    $scope.deckLists = Library.deckLists; // TODO library filtering here
 
     if (Library.numDecks() === 1 && mode !== 'debug') {
         $rootScope.config.hideLibrary = true;
@@ -41,8 +41,6 @@ angular.module('app')
     //     }
     // });
 })
-
-.controller('LibraryHelpController', function () {})
 
 .service('Library', function (Log, $state, getData, LocalStorage, _) {
     var _this = this;
@@ -107,5 +105,6 @@ angular.module('app')
         });
         openDecks = [];
         LocalStorage.setObject('*openDecks*', openDecks);
+        $state.go('tabs.settings');
     };
 });

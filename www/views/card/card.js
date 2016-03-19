@@ -135,8 +135,6 @@ angular.module('app')
     };
 })
 
-.controller('CardHelpController', function () {})
-
 .filter('unsafe', function ($sce, _, settings) {
     return function (value) {
         var text = value;
@@ -153,7 +151,6 @@ angular.module('app')
 
 .service('Card', function ($sce, Log, $state, Deck, Library, settings, MediaSrv, _) {
     var _this = this;
-    // FIXME pranava deck2 no answer, reverse not working either
     this.submittedAnswer = undefined;
 
     this.setup = function (activeCardIndex) {
@@ -169,7 +166,7 @@ angular.module('app')
         _this.question = Deck.questions[Deck.data.active[activeCardIndex]];
         _this.isMA = _.contains(_this.question.tags, '.ma');
         _this.answerClass = 'answer';
-        _this.isInput = (_.contains(_this.question.tags, '.cs') ||
+        _this.isInput = _.contains(_this.question.tags, '.cs' ||
             _.contains(_this.question.tags, '.ci'));
         if (_this.isInput) {
             _this.submittedAnswer = undefined;
@@ -181,6 +178,10 @@ angular.module('app')
         _this.haveHint = _this.question.hints !== undefined;
         _this.hint = null;
         _this.answer = _this.question.answer;
+        var number = _this.question.number;
+        var numString = number === undefined ? '' : number.toString();
+        var tags = Deck.filterNormalTags(_this.question.tags);
+        _this.tagList = [numString].concat(tags).join(', ');
         var mp3File = _this.question.mp3;
         if (mp3File !== undefined) {
             MediaSrv.playSound(mp3File);
@@ -252,7 +253,7 @@ angular.module('app')
                 }
             }
         }
-        Log.debug('_this.setup', JSON.stringify(_this));
+        Log.debug('Card setup _this', JSON.stringify(_this));
     };
 
     this.outcome = function (outcome) {

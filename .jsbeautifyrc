@@ -20,6 +20,7 @@
     "wrap_attributes_indent_size": 4,
     "end_with_newline": false,
     "js": {
+        "indent_size": 4,
         "eol": "\n",
         "indent_level": 0,
         "preserve_newlines": true,
@@ -38,6 +39,14 @@
         "end_with_newline": true
     },
     "css": {
+        "indent_size": 2,
+        "eol": "\n",
+        "end_with_newline": true,
+        "selector_separator_newline": true,
+        "newline_between_rules": true
+    },
+    "scss": {
+        "indent_size": 2,
         "eol": "\n",
         "end_with_newline": true,
         "selector_separator_newline": true,

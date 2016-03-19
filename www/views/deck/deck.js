@@ -2,21 +2,115 @@
 
 angular.module('app')
 
-.controller('DeckController', function ($scope, Deck) {
+.controller('DeckController', function ($scope, $state, Deck, Log) {
     $scope.Deck = Deck;
+    $scope.$state = $state;
 
     $scope.getCount = function (key) {
-        return (Deck.count && (key in Deck.count)) ? Deck.count[key] : 0;
+        return Deck.count && (key in Deck.count) ? Deck.count[key] : 0;
     };
-    // TODO manage filter controls
 })
 
-.controller('DeckHelpController', function () {})
+.controller('DeckTagsController', function ($scope, $state, $stateParams, Deck, _) {
+    var filterKey = $stateParams.filterKey;
+    var tags = Deck.data.tags;
+    var filterTags = Deck.data.filterTags;
+    $scope.filterKey = filterKey;
+    $scope.noCards = false;
+
+    var setup = function () {
+        $scope.tagObjects = _.map(tags, function (tag) {
+            var tagObj = {
+                tag: tag,
+                value: undefined,
+                disabled: false
+            };
+            _.mapObject(filterTags, function (tags, key) {
+                var hasTag = _.contains(tags, tag);
+                if (key === filterKey) {
+                    tagObj.value = hasTag;
+                } else {
+                    tagObj.disabled = tagObj.disabled || hasTag;
+                }
+            });
+            return tagObj;
+        });
+    };
+    setup();
+
+    $scope.save = function () {
+        var selected = _.filter($scope.tagObjects, _.property('value'));
+        var savedTags = filterTags[filterKey];
+        filterTags[filterKey] = _.pluck(selected, 'tag');
+        if (Deck.activeIndices()) {
+            $state.go('tabs.deck');
+        } else {
+            filterTags[filterKey] = savedTags;
+            $scope.noCards = true;
+            setup();
+        }
+    };
+})
 
 .service('Deck', function (Log, $state, $rootScope, settings, getData, Library, _,
-    LocalStorage) {
+    LocalStorage, $filter) {
     var _this = this;
-    this.count = undefined; // maintained by this.setCount()
+
+    var filterTagsProto = {
+        include: [],
+        exclude: [],
+        require: []
+    };
+
+    var countKeys = 'right wrong skipped removed hints remaining'.split(' ');
+    this.count = _.object(countKeys, _.map(_.range(countKeys.length), _.constant(0)));
+
+    this.filterTagsKeys = _.keys(filterTagsProto);
+
+    this.tagFilterText = _.mapObject(filterTagsProto, _.constant(''));
+
+    this.updateFilterText = function () {
+        _.mapObject(_this.data.filterTags, function (tags, key) {
+            _this.tagFilterText[key] = (tags.length === 0 ?
+                'Edit to ' + key + ' only cards with selected tags' :
+                $filter('capitalize')(key) + ' tags: ' + tags.join(', '));
+        });
+    };
+
+    this.filterNormalTags = function (tags) {
+        return _.filter(tags, function (tag) {
+            return tag.charAt(0) !== '.';
+        });
+    };
+
+    var qNumber = function (q) {
+        return q.number === undefined ? 0 : q.number;
+    };
+
+    this.activeIndices = function () {
+        var filterTags = _this.data.filterTags;
+        var questions = _.filter(_this.questions, function (q) {
+            return ((filterTags.include.length === 0 ||
+                    _.intersection(filterTags.include, q.tags).length > 0) &&
+                _.intersection(filterTags.exclude, q.tags).length === 0 &&
+                _.difference(filterTags.require, q.tags).length === 0 &&
+                _this.data.range.max >= qNumber(q) &&
+                _this.data.range.min <= qNumber(q));
+        });
+        var indices = _.pluck(questions, 'id');
+        if (settings.randomQuestions) {
+            indices = _.sample(indices, indices.length);
+        }
+        _this.updateFilterText();
+        if (indices.length === 0) {
+            return false;
+        } else {
+            _this.data.active = indices;
+            Log.debug('indices', indices);
+            _this.restart(true);
+            return true;
+        }
+    };
 
     var setupQuestions = function (fileName) {
         return getData('flavor/library/' + fileName).then(function (promise) {
@@ -24,51 +118,55 @@ angular.module('app')
         });
     };
 
-    this.setupClosedDeck = function (deckName) {
-        var initialFilterSettings = {
-            max: 50,
-            min: 50,
-            required: [],
-            exclude: [],
-            include: []
+    var finishSetup = function () {
+        _this.data.range.options.onEnd = function (id, newMin, newMax) {
+            _this.activeIndices();
         };
+        $state.go('tabs.card');
+    };
+
+    this.setupClosedDeck = function (deckName) {
         var copy = function (obj) {
             return _.mapObject(obj, function (val) {
                 return _.clone(val);
             });
         };
-        var filter = function (questions) {
-            // returns list of indices of questions that pass filter
-            // TODO use filter settings
-            var indices = _.range(0, questions.length);
-            if (settings.randomQuestions) {
-                indices = _.sample(indices, indices.length);
-            }
-            return indices;
-        };
         Log.debug('Deck setup', JSON.stringify(deckName));
         setupQuestions(deckName.file).then(function () {
+            var numbers = _.map(_this.questions, qNumber);
+            var min = _.min(numbers);
+            var max = _.max(numbers);
+            var allTags = _.uniq(_.flatten(_.pluck(_this.questions, 'tags'))).sort();
             _this.data = {
                 name: deckName,
                 history: _.map(_this.questions, function () {
                     return [];
                 }),
-                filter: copy(initialFilterSettings),
+                range: min === max ? false : {
+                    min: min,
+                    max: max,
+                    options: {
+                        floor: min,
+                        ceil: max
+                    }
+                },
+                showTags: false,
+                tags: _this.filterNormalTags(allTags),
+                filterTags: _.clone(filterTagsProto),
                 reverseQandA: false,
-                active: filter(_this.questions), // indices of active quesitons
-                activeCardIndex: undefined // current card active index list pointer
+                activeCardIndex: undefined, // initially assigned by Card.setup()
+                active: undefined, // assigned by _this.activeIndices()
+                outcomes: undefined // assigned by _this.restart()
             };
-            _this.data.outcomes = new Array(_this.data.active.length);
+            _this.activeIndices();
             _this.save();
-            $state.go('tabs.card');
+            finishSetup();
         });
     };
 
     this.setupOpenDeck = function (displayName) {
         _this.data = LocalStorage.getObject(displayName);
-        setupQuestions(_this.data.name.file).then(function () {
-            $state.go('tabs.card');
-        });
+        setupQuestions(_this.data.name.file).then(finishSetup);
     };
 
     this.reset = function () {
@@ -96,9 +194,9 @@ angular.module('app')
                 return outcome === 'removed' ? 'removed' : undefined;
             });
         }
-        _this.data.activeCardIndex = undefined;
+        _this.data.activeCardIndex = 0;
         _this.save();
-        $state.go('tabs.card');
+        _this.enterTab();
     };
 
     this.enterTab = function () {
@@ -119,8 +217,9 @@ angular.module('app')
             return value === undefined;
         };
         if (_this.data) {
-            _this.count = multiset(_this.data.outcomes);
+            _.extendOwn(_this.count, multiset(_this.data.outcomes));
             _this.count.remaining = _.filter(_this.data.outcomes, isUndefined).length;
         }
+        _this.updateFilterText();
     };
 });

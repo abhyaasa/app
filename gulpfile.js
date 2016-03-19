@@ -7,16 +7,19 @@ var cmdAliases = {
     cd: 'cd data/cdecks/test; update.sh deck_2',
     ct: 'cd scripts; cdeck.py -t -m "prefix"',
     si: 'gulp si -i',
+    sa: 'gulp si -a',
+    sl: 'gulp si -l',
     bi: 'gulp build',
-    ei: 'ionic emulate ios -lcs',
-    ri: 'ionic run ios -lcs',
+    ba: 'gulp build -a',
+    ei: 'gulp default; ionic emulate ios -lcs',
+    ri: 'gulp default; ionic run ios -lcs',
+    ra: 'gulp default; ionic run android -cs',
     bx: 'gulp bx'
 };
 
 var paths = {
-    sass: ['./scss/**/*.scss'],
+    scss: ['./scss/**/*.scss'],
     appJs: ['./www/**/*.js', '!./www/lib/**'],
-    projectScss: ['./scss/**/*.scss'],
     projectJson: ['./ionic.project', './**/*.json',
         '!./node_modules/**/*.json', '!./plugins/**/*.json', '!./platforms/**/*.json'
     ]
@@ -36,6 +39,7 @@ var sh = require('shelljs');
 var _ = require('underscore');
 var replace = require('gulp-replace');
 var fs = require('fs');
+var debug = require('gulp-debug');
 // var concat = require('gulp-concat'); # included in devDependencies, but not used
 var argv = require('minimist')(process.argv.slice(2));
 
@@ -43,8 +47,9 @@ function logError(message) {
     console.log(gutil.colors.magenta(message));
 }
 
-gulp.task('default', 'Run by ionic app build and serve commands',
-    ['sass', 'index', 'md', 'lint']);
+gulp.task('default',
+    'Run by ionic app build and serve commands', ['sass', 'index', 'md', 'lint']
+);
 
 gulp.task('sass', 'Ionic .scss to .css file transformation', function (done) {
     var sass = require('gulp-sass');
@@ -52,6 +57,7 @@ gulp.task('sass', 'Ionic .scss to .css file transformation', function (done) {
     var rename = require('gulp-rename');
     gulp.src('./scss/ionic.app.scss')
         .pipe(sass())
+        .on('error', sass.logError)
         .pipe(gulp.dest('./www/css/'))
         .pipe(minifyCss({
             keepSpecialComments: 0
@@ -63,7 +69,7 @@ gulp.task('sass', 'Ionic .scss to .css file transformation', function (done) {
         .on('end', done);
 });
 
-gulp.task('watch', 'Only watches sass files.', function () {
+gulp.task('watch', 'Only watches scss files.', function () {
     gulp.watch(paths.sass, ['sass']);
 });
 
@@ -79,15 +85,19 @@ gulp.task('watch', 'Only watches sass files.', function () {
 
 gulp.task('index', 'Inject script elements into www/index.html',
     function () {
-        var gulpInject = require('gulp-inject');
+        var inject = require('gulp-inject');
+        var injector = function (paths) {
+            return inject(gulp.src(paths, {
+                    read: false
+                }), // .pipe(debug())
+                {
+                    relative: true
+                });
+        };
         sh.cp('-f', './index.html', './www/index.html');
         return gulp.src('./www/index.html')
-            .pipe(gulpInject(
-                gulp.src(paths.indexJs, {
-                    read: false
-                }), {
-                    relative: true
-                }))
+            .pipe(injector(paths.indexJs))
+            // .pipe(debug())
             .pipe(gulp.dest('./www'));
     });
 
@@ -128,9 +138,11 @@ gulp.task('si',
 
 gulp.task('build', '[-a] for Android, default iOS', ['default'], function () {
     sh.exec('ionic build ' + (argv.a ? 'android' : 'ios'));
-    gulp.src(['./platforms/ios/*/config.xml'])
-        .pipe(replace(/<allow-navigation.*\/>/, ''))
-        .pipe(gulp.dest('./platforms/ios'));
+    if (!argv.a) {
+        gulp.src(['./platforms/ios/*/config.xml'])
+            .pipe(replace(/<allow-navigation.*\/>/, ''))
+            .pipe(gulp.dest('./platforms/ios'));
+    }
     logError('If build did not end with "** BUILD SUCCEEDED **", run it again!');
 });
 
@@ -138,21 +150,23 @@ gulp.task('bx', 'Build for ios and open xcode project', ['build'], function () {
     sh.exec('open platforms/ios/*.xcodeproj');
 });
 
-gulp.task('lint', 'Run js, json, and scss linters.',
-    ['jshint', 'jscs', 'jsonlint', 'scss-lint']
+gulp.task('lint',
+    'Run js, json, scss, and html/xml linters.', [
+        'jshint', 'jscs', 'jsonlint', 'scsslint', 'htmllint'
+    ]
 );
 
-gulp.task('scss-lint', 'scss file linter', function () {
+gulp.task('scsslint', 'scss file linter', function () {
     var scssLint = require('gulp-scss-lint');
-    return gulp.src(paths.projectScss)
+    return gulp.src(paths.scss)
         .pipe(scssLint());
 });
 
 gulp.task('jshint', function () {
     var jshint = require('gulp-jshint');
     gulp.src(paths.projectJs)
-		.pipe(jshint('.jshintrc'))
-		.pipe(jshint.reporter('jshint-stylish'));
+        .pipe(jshint('.jshintrc'))
+        .pipe(jshint.reporter('jshint-stylish'));
 });
 
 gulp.task('jscs', 'Run jscs on all (non-lib) .js files', function () {
@@ -160,7 +174,7 @@ gulp.task('jscs', 'Run jscs on all (non-lib) .js files', function () {
     var stylish = require('gulp-jscs-stylish');
     gulp.src(paths.projectJs)
         .pipe(jscs())
-		.pipe(stylish());
+        .pipe(stylish());
 });
 
 gulp.task('jsonlint', 'Report json errors', function () {
@@ -176,8 +190,14 @@ gulp.task('jsonlint', 'Report json errors', function () {
         .pipe(jsonlint.report(reporter));
 });
 
+gulp.task('htmllint', 'Report html errors', function () {
+    var files = 'config.xml index.html www/views/*.html www/views/*/*.html';
+    sh.exec('scripts/tidylint.py ' + files);
+});
+
 gulp.task('publish-pre-build', 'Execute before publishing build', function () {
     // PUBLISH pref-building tasks: see https://github.com/leob/ionic-quickstarter
+    // use https://github.com/scniro/gulp-clean-css
 });
 
 gulp.task('dgeni', 'Generate jsdoc documentation.', function () {
@@ -209,24 +229,33 @@ gulp.task('cmd', '[-a ALIAS] : Execute shell command named ALIAS in aliases dict
         }
     });
 
-gulp.task('set-version', '-v VERSION : Change app version references to VERSION, ' +
+gulp.task('bump', '[-v VERSION | -t (major|minor|patch|prerelease)] : Change app ' +
+    'version to VERSION or to result of bumping of given type (-t, default patch), ' +
     'and create annotated git tag.',
     function () {
         var bump = require('gulp-bump');
+        var semver = require('semver');
         fs.readFile('./package.json', function (err, data) {
             var version = JSON.parse(data).version;
-            console.log('Setting version ' + version + ' to ' + argv.v);
+            var newVersion = argv.v;
+            if (!argv.v) {
+                if (!argv.t) {
+                    argv.t = 'patch';
+                }
+                newVersion = semver.inc(version, argv.t);
+            }
+            console.log('Bumping version ' + version + ' to ' + newVersion);
             gulp.src(['./www/data/config.json', './package.json'])
                 // see https://www.npmjs.com/package/gulp-bump
                 .pipe(bump({
-                    version: argv.v
+                    version: newVersion
                 }))
                 .pipe(gulp.dest('./'));
             gulp.src(['./config.xml'])
-                .pipe(replace(/(<widget.*version=")[^"]*/, '$1' + argv.v))
+                .pipe(replace(/(<widget.*version=")[^"]*/, '$1' + newVersion))
                 .pipe(gulp.dest('./'));
+            sh.exec('git tag -a v' + newVersion + ' -m "version ' + newVersion + '"');
         });
-        sh.exec('git tag -a v' + argv.v + ' -m "version ' + argv.v + '"');
     });
 
 // ------------------ Testing tasks follow -------------------------------------

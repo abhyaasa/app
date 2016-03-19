@@ -1,44 +1,65 @@
-// app scss other than variables
+// include app-specific scss variables
+@import 'appvar';
 
 .no-response {
-  background-color: $no-color; }
+  background-color: $no-color;
+}
 
 .right-response {
-  background-color: $right-color; }
+  background-color: $right-color;
+}
 
 .wrong-response {
-  background-color: $wrong-color; }
+  background-color: $wrong-color;
+}
 
 .missed-response {
-  background-color: $missed-color; }
+  background-color: $missed-color;
+}
 
 .selected-match {
-  background-color: $selected-color; }
+  background-color: $selected-color;
+}
 
 .answer {
-  background-color: $answer-color; }
+  background-color: $answer-color;
+}
+
+.disabled {
+  background-color: $disabled;
+}
 
 .major-text {
-  font-size: 120%; }
+  font-size: 120%;
+}
 
 .minor-text {
-  font-size: 90%; }
+  font-size: 90%;
+}
 
 .fine-print {
-  font-size: 80%; }
+  font-size: 80%;
+}
 
 .warning {
-  color: $warning-color; }
+  color: $warning-color;
+}
 
 .deck-table {
   margin: auto;
-  width: 90%; }
+  width: 90%;
+}
 
-.em { // needed, since <em> and <i> are not recognized
-  font-style: italic; }
+.em {
+  // needed, since <em> and <i> are not recognized
+  font-style: italic;
+}
 
 td {
   padding-left: 10px;
-  padding-right: 5px; }
+  padding-right: 5px;
+}
 
-tr td:nth-child(odd) { font-weight: bold; }
+tr td:nth-child(odd) {
+  font-weight: bold;
+}

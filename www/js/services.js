@@ -1,6 +1,8 @@
 'use strict';
 
-var httpStubData = { // REVIEW global httpStubData
+angular.module('services', ['ionic'])
+
+.constant('httpStubData', {
     'config.json': {
         flavor: 'test',
         email: 'abhyaasa108@gmail.com',
@@ -30,10 +32,7 @@ var httpStubData = { // REVIEW global httpStubData
             ' title="Buddy at shelter" /></p>',
         type: 'mind'
     }]
-};
-httpStubData = false;
-
-angular.module('services', ['ionic'])
+})
 
 .constant('mode', 'debug') // 'debug', 'build', or 'normal'
 
@@ -66,6 +65,13 @@ angular.module('services', ['ionic'])
     };
 })
 
+.filter('capitalize', function () {
+    return function (input) {
+        return !!input ? input.charAt(0).toUpperCase() +
+            input.substr(1).toLowerCase() : '';
+    };
+})
+
 /* Console Log, because $log does not work in xcode */
 .service('Log', function (_, mode) {
     var logger = function (prefix, args) {
@@ -82,7 +88,9 @@ angular.module('services', ['ionic'])
     };
 
     this.error = function () {
-        logger('ERROR', _.toArray(arguments));
+        var args = _.toArray(arguments);
+        window.alert('ERROR: ' + JSON.stringify(args));
+        logger('ERROR', args);
     };
 })
 
@@ -92,17 +100,22 @@ angular.module('services', ['ionic'])
  * @param {function} optional callback accepts error object
  * @returns {object} promise yielding json file contents
  */
-.provider('getData', function () {
+.provider('getData', function (httpStubData) {
+    httpStubData = false;
     var injector = angular.injector(['ng']);
     var $http = injector.get('$http');
     var urlPrefix = ionic.Platform.isAndroid() ? '/android_asset/www/' : '';
     var $q = injector.get('$q');
     this.$get = function () {
         return function (path, failure) {
-            if (httpStubData) { // REVIEW stub getData, includse $q inject above
+            // REVIEW create stub getData (normal one w/o $q) that includes
+            // httpStubData and use constant load switch in app.js provider
+            if (httpStubData) {
                 var data = httpStubData[path];
                 var deferred = $q.defer();
-                deferred.resolve({ data: data });
+                deferred.resolve({
+                    data: data
+                });
                 console.log('STUB LOG: getStubData', path, deferred.promise.data);
                 return deferred.promise;
             }
@@ -156,12 +169,7 @@ angular.module('services', ['ionic'])
 // MediaSrv and following window.Media adopted from loicknuchel's post at
 // http://forum.ionicframework.com/t/how-to-play-local-audio-files/7479/5
 // org.apache.cordova.media => cordova.plugin.media
-// Also see mawarnes version in forum thread above, and the thread indicates that
-// Android needs:
-//      android.permission.WRITE_EXTERNAL_STORAGE
-//      android.permission.RECORD_AUDIO
-//      android.permission.MODIFY_AUDIO_SETTINGS
-//      android.permission.READ_PHONE_STATE
+// Also see mawarnes version in forum thread above.
 .factory('MediaSrv', function ($q, $ionicPlatform, $window, Log) {
     function getErrorMessage(code) {
         if (code === 1) {
@@ -244,8 +252,10 @@ angular.module('services', ['ionic'])
         getErrorMessage: getErrorMessage,
         playSound: playSound
     };
-});
+})
+;
 
+// BUILD needed for browser testing, but ignored on device
 window.Media = function (src, mediaSuccess, mediaError, mediaStatus) {
     // Several media functions below are stubs.
     // src: A URI containing the audio content. (DOMString)

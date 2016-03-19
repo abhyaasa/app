@@ -8,6 +8,15 @@ To open discussion of collaboration possibilities, please email <abhyaasa108@gma
 This project uses [semantic versioning](http://semver.org).
 
 
+## Tasks
+
+This app is early in development, with plenty to do. See
+
+- `todo.md` file
+- tags listed in `.todo` througout source files
+- GitHub [Issues](https://github.com/abhyaasa/app/issues) list
+
+
 ## Repository setup and test
 
 The following assumes an OSX (MaxOS) development platform, which is required for iOS development.
@@ -23,7 +32,7 @@ Clone the app repository, creating an `app` directory in the current directory:
 $ git clone https://github.com/abhyaasa/app
 $ cd app
 ```
-Unless noted otherwise, throughout the development process all subsequent CLI commands are to be executed in the project directory.
+CLI commands are prefixed in these notes by the `$` prompt, and unless otherwise indicated they are to be run in the project (`app`) directory.
 
 Next, install global dependencies:
 ```
@@ -35,11 +44,9 @@ The following command line completes a minimal app development installation. The
 $ ./scripts/setup.sh | tee temp/setup.txt
 ```
 
-Install [Chrome Canary](https://www.google.com/chrome/browser/canary.html) for server app testing in the preferred development browser. Try it out with the CLI shortcut command `g si`.
+Install [Chrome Canary](https://www.google.com/chrome/browser/canary.html) for server app testing in the preferred development browser. Try it out with the shortcut `$ g si`.
 
-Test the app in the iOS emulator with `g ei`.
-
-An Apple developer membership is required for testing on a usb-connected device, as with `g ri`.
+Test the app in the iOS emulator with `$ g ei`. An Apple developer membership is required for testing on a usb-connected device, as with `$ g ri`.
 
 You now have exercised a minimal development setup.
 
@@ -56,7 +63,7 @@ This section lists the development tools required or recommended for this projec
 - `cordova`: cross-platform app framework
 - `gulp`: development task manager
 - `node`: development Javascript interpreter
-- `python`: preferred language for stand-alone development scripts
+- `python 2`: preferred language for stand-alone development scripts
 - `bower`: app package manager
 - `chrome`: development test browser (`Chrome Canary` preferred)
 - `css` and `scss`: HTML style manager, and syntactically-superior development-time variant
@@ -69,30 +76,30 @@ The following are used for automatic testing and installed with `npm`:
 - `karma`: test runner
 - `protractor`: integration task manager
 
-The node version manager, `nvm`, allows `npm` to be used without `sudo`. Install it using `npm`: https://www.npmjs.com/package/nvm.  Or the Ruby package manager `brew`, may be used:
-```
-$ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-$ brew nvm
-```
+- `nvm`, the node version manager, allows `npm` to be used without `sudo`. Install it using `npm` (see https://www.npmjs.com/package/nvm), or using Ruby package manager, `brew`:
+  ```
+  $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  $ brew nvm
+  ```
+
+- `tidy`, the recommended html linter, is also updated with `brew install tidy-html5`.
 
 Recommended OSX development tools with standard app installers:
 
-- `genymotion`: Android app emulation
 - `atom`: preferred for most text editing
 - `GitHub Desktop`: makes routine git operations convenient (`SourceTree` might be preferable)
 - `iTerm`: better OSX upterminal emulator
 - `inkscape`: svg to png conversion and other vector graphic editing
 - `P4Merge`: setup as git external diff and merge tool
 
+For Android testing:
 
-## Tasks
-
-This app is early in development, with plenty to do. See
-
-- `todo.md` file
-- tags listed in `.todo` througout source files
-- GitHub [Issues](https://github.com/abhyaasa/app/issues) list
-
+- `genymotion` simulator (actually a fast and fairly accurate emulator)
+  - requires `VirtualBox` platform emulator
+- `adb` Chrome extension for debugging
+- Android SDK Manager (`android` CLI command)
+  - `brew install android-sdk`
+  - also installs `adb` (android CLI debugger)
 
 ### Atom editor
 
@@ -101,17 +108,18 @@ This app is early in development, with plenty to do. See
 Atom plugins are indicated by the following list
 ```
 $ /bin/ls ~/.atom/packages
-README.md		docblockr		linter-htmlhint
-atom-beautify		editor-settings		linter-jscs
-atom-html-preview	emmet			linter-pylint
-atom-material-syntax	file-icons		linter-scss-lint
-atom-material-ui	file-types		linter-xmllint
-atomic-emacs		highlight-line		local-history
-autocomplete-python	jshint			merge-conflicts
-autoprefixer		jsonlint		pretty-json
-color-picker		linter			select-rectangle
-csscomb			linter-coffeelint	todo-show
-csslint			linter-coffeescript	xml-formatter
+README.md		csslint			linter-flake8
+atom-beautify		docblockr		linter-jscs
+atom-html-preview	editor-settings		linter-scss-lint
+atom-htmltidy		emmet			linter-tidy
+atom-material-syntax	file-icons		linter-xmllint
+atom-material-ui	file-types		local-history
+atom-typescript		highlight-line		merge-conflicts
+atomic-emacs		jshint			pretty-json
+autocomplete-python	jsonlint		select-rectangle
+autoprefixer		linter			todo-show
+color-picker		linter-coffeelint	xml-formatter
+csscomb			linter-coffeescript
 ```
 
 `config.cson` links to `~/.atom/config.cson` for version control.
@@ -124,15 +132,11 @@ The atom config files, including those of the plugins, indicates preferred codin
 
 ### gulp
 
-Use the gulp CLI command only in the project directory.
+`$ gulp help` provides an annotated list of gulp project management tasks.
 
-Run `gulp help` for an annotated list of gulp project management tasks.
+`$ gulp index` generates `./www/index.html` from `./index.html`, so edit only the latter. This avoids superfluous version control changes, as script injection order is unpredictable.
 
-`gulp index` generates `./www/index.html` from `./index.html`, so edit only the latter. This avoids superfluous version control changes, as script injection order is unpredictable.
-
-The `g` script runs shortcuts in the gulp `cmdAliases` configuration variable. For example, to initiate the most common debugging run, execute `g si`. This runs `gulp cmd si | tee temp/cmd.txt`, which runs `gulp si -i`, which runs the default gulp test build tasks and then `ionic serve -c -t ios --browser /Applications/Google\ Chrome\ Canary.app`, with output appearing on the console and saved in `temp/cmd.txt`. Run `gulp cmd` for alias list.
-
-Use `g help` for a list of the `gulp cmd` aliases.
+The `g` script runs shortcuts in the gulp `cmdAliases` configuration variable. For example, `$ g si` initiates the most common debugging run. This runs `$ gulp cmd si | tee temp/cmd.txt`, which runs `$ gulp si -i`, which runs the default gulp test build tasks and then `$ ionic serve -c -t ios --browser /Applications/Google\ Chrome\ Canary.app`, with output appearing on the console and saved in `temp/cmd.txt`. `$ g help` lists the aliases.
 
 
 ## Config
@@ -155,6 +159,18 @@ In build mode:
 
 - the angular compiler is told not to include debug information, such as dom state links
 
+### Android testing
+
+After Android testing installations in the above Tools section, run `$ g ba`. If it fails with a request to load specific android packages, run `$ android` command and do so, installing among other packages SDK Platforms for each major version from 4.4 up.
+
+Run `$ genymotion` and install desired virtual devices with Android 4.4 (API 19) or more recent, and compatible with the genymotion version (emulated device runs without version complaint, presenting unlocked screen). 
+
+In every Android device used for debugging (real or virtual), select `Settings > Developer options > USB debugging`. If `Developer options` is not in the to-level settings list, click `Settings > About phone > Build number` 7 times and it appears there.
+
+After this setup, and a current ionic build (`g ba`), with a device or emulator USB-attached run `g ra` for ionic build and run, which should end with successful build and launch messages. The app should then be uploaded and open in the device or simulator. 
+
+In Chrome, click the ADB plugin icon dropdown `View Inspection Targets`. Check `Discover USB devices` and click `Inspect` under the attached WebView device. This opens an inspector window, including Console tab to view errors messages.
+
 
 ## Flavors and data directory structure
 
@@ -174,6 +190,7 @@ Python and shell scripts. All but `g` are in the `scripts` directory.
 ### Shell scripts
 
 - `g ALIAS` is a shortcut for invoking via `gulp cmd` the script associated with `ALIAS` in the `cmdAliases` dictionary defined early in `gulpfile.js`.
+- `tidylint.py` provides a custom interface to the `tidy` html/xml linter.
 - `scripts/setup.sh` installs local dependencies.
 - `scripts/term.sh` is used by `gulp itest`.
 - `scripts/scapp.sh` creates shallow clone of the app.

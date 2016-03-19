@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app', ['ionic', 'services'])
+angular.module('app', ['ionic', 'services', 'rzModule'])
 
 .run(function (Log, $ionicPlatform, $rootScope, $state, restoreSettings, settings,
     mode, LocalStorage) {
@@ -22,7 +22,7 @@ angular.module('app', ['ionic', 'services'])
         }
     });
 
-    // LocalStorage.clear();
+    LocalStorage.clear();  // TODO enable local storage
 
     restoreSettings();
     $rootScope.settings = settings;
@@ -99,14 +99,8 @@ angular.module('app', ['ionic', 'services'])
             url: '/libraryHelp',
             views: {
                 'library-tab': {
-                    templateUrl: 'views/library/help.html',
-                    controller: 'LibraryHelpController'
+                    templateUrl: 'views/library/help.html'
                 }
-            },
-            onEnter: function ($rootScope, $state) {
-                $rootScope.help = function () {
-                    $state.go('tabs.library-help');
-                };
             }
         })
         .state('tabs.deck', {
@@ -124,18 +118,21 @@ angular.module('app', ['ionic', 'services'])
                 Deck.enterTab();
             }
         })
+        .state('tabs.tags', {
+            url: '/tags/:filterKey',
+            views: {
+                'deck-tab': {
+                    templateUrl: 'views/deck/tags.html',
+                    controller: 'DeckTagsController'
+                }
+            }
+        })
         .state('tabs.deck-help', {
             url: '/deckHelp',
             views: {
                 'deck-tab': {
-                    templateUrl: 'views/deck/help.html',
-                    controller: 'DeckHelpController'
+                    templateUrl: 'views/deck/help.html'
                 }
-            },
-            onEnter: function ($rootScope, $state) {
-                $rootScope.help = function () {
-                    $state.go('tabs.deck-help');
-                };
             }
         })
         .state('tabs.card', {
@@ -156,14 +153,8 @@ angular.module('app', ['ionic', 'services'])
             url: '/cardHelp',
             views: {
                 'card-tab': {
-                    templateUrl: 'views/card/help.html',
-                    controller: 'CardHelpController'
+                    templateUrl: 'views/card/help.html'
                 }
-            },
-            onEnter: function ($rootScope, $state) {
-                $rootScope.help = function () {
-                    $state.go('tabs.card-help');
-                };
             }
         })
         .state('tabs.settings', {
@@ -213,14 +204,8 @@ angular.module('app', ['ionic', 'services'])
             url: '/settingsHelp',
             views: {
                 'settings-tab': {
-                    templateUrl: 'views/settings/help.html',
-                    controller: 'SettingsHelpController'
+                    templateUrl: 'views/settings/help.html'
                 }
-            },
-            onEnter: function ($rootScope, $state) {
-                $rootScope.help = function () {
-                    $state.go('tabs.settings-help');
-                };
             }
         })
         ;
