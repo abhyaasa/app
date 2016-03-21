@@ -10,19 +10,21 @@
       <ion-toggle toggle-class="toggle-positive" ng-model="settings.randomQuestions">
         Randomize questions
       </ion-toggle>
-      <x> TODO hint percent not implemented yet
-        <ion-item class="range range-positive" ng-model="settings.hintPercent">
-          Hint percent
-          <input type="range" value="50" min="0" max="100">
-        </ion-item>
-      </x>
+      <!-- PRIORITY add percent numbers -->
+      <ion-item>
+        Mind answer hint proportion
+        <div class="button-bar">
+          <a ng-repeat="num in numMindHints" class="button" ng-click="settings.mindHints = num" ng-class="num === settings.mindHints ? 'disabled' : ''">
+              {{ mindHintFractions[$index] }}
+          </a>
+        </div>
+      </ion-item>
       <ion-item ui-sref="tabs.reset">Reset...</ion-item>
     </ion-list>
 
     <hr>
-
+    <p>Sanskrit text</p>
     <ion-list>
-      <div class="item item-divider">Sanskrit text</div>
       <ion-radio ng-model="settings.devanagari" ng-value="false">Transliteration</ion-radio>
       <ion-radio ng-model="settings.devanagari" ng-value="'only'">Devanagari</ion-radio>
       <ion-radio ng-model="settings.devanagari" ng-value="'both'">Both</ion-radio>
@@ -34,7 +36,7 @@
         Check for updates
       </button>
       <button class="button button-stable button-block button-pulse" ng-if="hasUpdate"
-          ng-click="doUpdate()">
+        ng-click="doUpdate()">
         Download update
       </button>
     </x>

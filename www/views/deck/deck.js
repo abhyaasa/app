@@ -87,6 +87,22 @@ angular.module('app')
         return q.number === undefined ? 0 : q.number;
     };
 
+    // Randomize within each group of indices separated by text-type question indices.
+    var randomizeIndices = function (questions) {
+        var indices = [];
+        var group = [];
+        for (var q in questions) {
+            if (q.type === 'text') {
+                indices = indices.concat(_.sample(group, group.length));
+                group = [];
+                indices.push(q.id);
+            } else {
+                group.push(q.id);
+            }
+        }
+        return indices.concat(_.sample(group, group.length));
+    };
+
     this.activeIndices = function () {
         var filterTags = _this.data.filterTags;
         var questions = _.filter(_this.questions, function (q) {
@@ -99,7 +115,7 @@ angular.module('app')
         });
         var indices = _.pluck(questions, 'id');
         if (settings.randomQuestions) {
-            indices = _.sample(indices, indices.length);
+            indices = randomizeIndices(questions);
         }
         _this.updateFilterText();
         if (indices.length === 0) {

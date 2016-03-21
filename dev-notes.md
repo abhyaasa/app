@@ -96,6 +96,7 @@ For Android testing:
 
 - `genymotion` simulator (actually a fast and fairly accurate emulator)
   - requires `VirtualBox` platform emulator
+  - on Windows, AMIDuOS might be preferable. See  http://www.laptopmag.com/articles/run-android-apps-on-pc.
 - `adb` Chrome extension for debugging
 - Android SDK Manager (`android` CLI command)
   - `brew install android-sdk`

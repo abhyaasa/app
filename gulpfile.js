@@ -180,7 +180,7 @@ gulp.task('jscs', 'Run jscs on all (non-lib) .js files', function () {
 gulp.task('jsonlint', 'Report json errors', function () {
     var jsonlint = require('gulp-json-lint');
     var reporter = function (lint, file) {
-        // HACK avoid jsonlint bug: https://github.com/codenothing/jsonlint/issues/2
+        // avoid jsonlint bug: https://github.com/codenothing/jsonlint/issues/2
         if (lint.error !== 'Invalid Reverse Solidus \'\\\' declaration.') {
             console.log(file.path + ': ' + lint.error);
         }

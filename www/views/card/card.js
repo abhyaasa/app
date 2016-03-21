@@ -3,7 +3,7 @@
 angular.module('app')
 
 .controller('CardController', function ($scope, $state, Log, $ionicGesture, _,
-    Deck, Card) {
+    Deck, Card, settings) {
 
     $scope.Card = Card;
     $scope.Deck = Deck;
@@ -47,13 +47,12 @@ angular.module('app')
     };
     gestureSetup();
 
-    // FUTURE swipedown to review card stack
-
     $scope.hint = function () {
-        // TODO add mc and auto mind hints using settings.hintPercent
-        Card.hint = Card.question.hints[Card.hintIndex];
+        // TODO add mc hints
+        Deck.count.hints++;
+        Card.hint = Card.hints[Card.hintIndex];
         Card.hintIndex++;
-        Card.haveHint = Card.hintIndex < Card.question.hints.length;
+        Card.haveHint = Card.hintIndex < Card.hints.length;
     };
 
     $scope.setOutcome = function (outcome) {
@@ -174,9 +173,6 @@ angular.module('app')
         _this.text = _this.question.text;
         _this.type = _this.question.type;
         _this.responses = _this.question.responses;
-        _this.hintIndex = _this.question.hints ? 0 : undefined;
-        _this.haveHint = _this.question.hints !== undefined;
-        _this.hint = null;
         _this.answer = _this.question.answer;
         var number = _this.question.number;
         var numString = number === undefined ? '' : number.toString();
@@ -253,6 +249,22 @@ angular.module('app')
                 }
             }
         }
+        // TODO hint proportion settings help
+        _this.hints = _this.question.hints;
+        var mindHints = settings.mindHints;
+        if (!_this.hints) {
+            if  (_this.type === 'mind' && mindHints > 0) {
+                _this.haveHint = true;
+                _this.hints = _.uniq(_.map(_.range(1, mindHints + 1), function (num) {
+                    return _this.answer.substr(0, num * _this.answer.length / mindHints);
+                }));
+            } else if (_this.type === 'multiple-choice' && _this.responses.length > 2) {
+                // TODO mc hints
+            }
+        }
+        _this.haveHint = _this.hints !== undefined;
+        _this.hintIndex = _this.haveHInt ? 0 : undefined;
+        _this.hint = null;
         Log.debug('Card setup _this', JSON.stringify(_this));
     };
 

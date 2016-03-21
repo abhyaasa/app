@@ -16,9 +16,8 @@ Excluded from the `todo-show` scan (by the `ignoreThesePaths` configuration list
 - PRIORITY /
 
 - TODO
-  - sort between text heading cards
   - try apple archive run
-  - xcode debugger breakpoints
+  - sanskrit embedded in text
 
 - IDEA /
 
@@ -27,42 +26,35 @@ Excluded from the `todo-show` scan (by the `ignoreThesePaths` configuration list
 - REVIEW
   - which iOS versions supported? Document for android also.
   - gulp error handling, wait for gulp4? http://artandlogic.com/2014/05/error-handling-in-gulp/, https://www.npmjs.com/package/gulp-exit
-  - sanskrit embedded in text
-  - typescript http://blog.ionic.io/ionic-and-typescript-part-2/
-  - Coffee, jade, NOT stylus
+  - consider Coffee, jade, NOT stylus
   - Chrome developer > angularjs > hints
-  - check for unused variables: .jshintrc "unused": true
+  - sanskrit settings only if in deck
+  - convert to Python 3 
+  - Leitner learning algorithm https://en.wikipedia.org/wiki/Leitner_system
+  
+- ANDROID
+  - device testing
 
 - PUBLISH
+  - check for unused variables: .jshintrc "unused": true
   - make injected functions minifiable, e.g. function (a, b){} => ['a', 'b', function (a, b){}, use ng-strict-di: AngularJS Web Application Development Cookbook p 281
   - remove Log.debug calls
   - check xcode compile warnings, such as first Images.xcassets
   - iTunes publication
-
-- ANDROID
-  - emulator testing
-  - emulation on Windows: genymotion or AMIDuOS? See  http://www.laptopmag.com/articles/run-android-apps-on-pc
-  - device testing
+  - android publication
 
 - FUTURE
   - cdeck and library file headers, include sanskrit
-  - sanskrit settings only if in deck
   - gulp jshint and jscs exit
-  - convert to Python 3
-  - ionic 2, angular 2, typescript coversion
+  - ionic 2, angular 2, typescript coversion http://blog.ionic.io/ionic-and-typescript-part-2/
   - replace gulp with npm? http://blog.keithcirkel.co.uk/how-to-use-npm-as-a-build-tool/, https://www.tildedave.com/2015/01/07/i-find-gulp-extremely-frustrating.html
-  - splash and icon http://learn.ionicframework.com/formulas/adding-an-icon/ and  http://blog.ionic.io/automating-icons-and-splash-screens/  - Leitner learning algorithm https://en.wikipedia.org/wiki/Leitner_system
+  - splash and icon http://learn.ionicframework.com/formulas/adding-an-icon/ and  http://blog.ionic.io/automating-icons-and-splash-screens/ 
   - devanagari q, transliteration a
   - deck state copy, rename, reorder, etc
-  - add python and xml linting
   - document code, e.g. https://www.npmjs.com/package/gulp-ngdocs
   - flesh out jsdoc documentation and improve dgeni formatting
   - consider adding other features, as in notes/features.txt
-  - ionic 1.2 issues
-    - `<label -> <ion-label`
-  - add sound directive
   - show scrollbar when full text not visible
-  - deck filtering to subtab
   - unit and integration tests
     - remove .atom/config.cson>"todo-show">ignoreThesePaths>...spec.js
     - https://github.com/CaryLandholt/ng-classify

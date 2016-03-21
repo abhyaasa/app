@@ -2,8 +2,12 @@
 
 angular.module('app')
 
-.controller('SettingsController', function ($scope, settings, MediaSrv) {
+.controller('SettingsController', function ($scope, settings, _) {
     $scope.settings = settings;
+    $scope.numMindHints = _.map('0 6 4 2'.split(' '), Number);
+    $scope.mindHintFractions = _.map($scope.numMindHints, function (num) {
+        return num === 0 ? String(num) : '1 / ' + num;
+    });
 
     // // from http://docs.ionic.io/v1.0/docs/deploy-install
     // // FUTURE implement and test deploy
@@ -39,14 +43,13 @@ angular.module('app')
     };
 })
 
-// TODO create a provider version of this for app.js promise for settings controller
 .service('restoreSettings', function (Log, settings, LocalStorage, _) {
     var defaultSettings = {
         intro: true,
         randomQuestions: false,
         randomResponses: false,
         devanagari: false,
-        hintPercent: 10
+        mindHints: 0
     };
     return function (reset) {
         _.extendOwn(settings, defaultSettings);

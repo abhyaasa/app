@@ -76,6 +76,10 @@ Tags interpreted by this program and removed from output:
            At least two lines required, no responses or hints allowed,
            and all questions in a sequence share the same tags.
 .text : question of "text" type, for preferatory text (not a question)
+        Only special and range tags may be associated with this type. If questions are
+        randomized, they are randomized in groups separated by this type of question,
+        so tags associated with preferatory text should apply to all and only following
+        questions up to the next one of text type.
 .md : question, response, and hints text is in ascii markdown format
       (requires markdown module and associated python version, implies .html tag)
 .sa : sanskrit answer/distractor text
@@ -312,6 +316,8 @@ def main(args):
             if '.text' in qtags:
                 if responses or hints:
                     error('no hints or responses in text mode')
+                if any([isnumber(t) or isapptime(t) for t in qtaglst]):
+                    error('filterable question-specific tags allowed in text mode')
                 q['type'] = 'text'
             elif '.st' in qtags:
                 if responses:

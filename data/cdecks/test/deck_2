@@ -3,7 +3,7 @@
 ;.sq;श्रद्धावाँल्ल =f
 ;/.devanagari
 ;.st,1,a;a
-;.cs,2,b;case sensitive =Cs
+;.cs,2,b;case sensitive =Cs ?hint1 ?hint 2
 ;.ci,3,c;case insensitive =Ci
 ;.md,2;image ![Buddy](buddyShelter.jpg "Buddy at shelter") =Buddy at shelter
 ;.md;image ![Buddy](buddyShelter550w.jpg "Buddy 550px wide") =Big Buddy
