@@ -22,7 +22,7 @@ angular.module('app', ['ionic', 'services', 'rzModule'])
         }
     });
 
-    LocalStorage.clear();  // TODO enable local storage
+    LocalStorage.clear();  // PUBLISH enable local storage
 
     restoreSettings();
     $rootScope.settings = settings;

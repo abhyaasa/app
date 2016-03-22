@@ -167,7 +167,10 @@ angular.module('app')
                     max: max,
                     options: {
                         floor: min,
-                        ceil: max
+                        ceil: max,
+                        // hack to avoid bad behavior when range is 1
+                        step: max - min === 1 ? 0.5 : 1,
+                        precision: max - min === 1 ? 1 : 0
                     }
                 },
                 showTags: false,
@@ -239,9 +242,6 @@ angular.module('app')
         if (_this.data) {
             _.extendOwn(_this.count, multiset(_this.data.outcomes));
             _this.count.remaining = _.filter(_this.data.outcomes, isUndefined).length;
-            // if (_this.data.range) { // HACK rzslider bug
-            //     this.data.range.max = _this.data.range.max;
-            // }
             _this.updateFilterText();
         }
     };

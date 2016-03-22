@@ -229,9 +229,9 @@ gulp.task('cmd', '[-a ALIAS] : Execute shell command named ALIAS in aliases dict
         }
     });
 
-gulp.task('bump', '[-v VERSION | -t (major|minor|patch|prerelease)] : Change app ' +
-    'version to VERSION or to result of bumping of given type (-t, default patch), ' +
-    'and create annotated git tag.',
+gulp.task('bump', '[-v VERSION | -t (major | minor | patch | (prerelease [-n NAME])] : ' +
+    'Change app version to VERSION or to result of bumping of given type (-t, default ' +
+    'prerelease), and create annotated git tag.',
     function () {
         var bump = require('gulp-bump');
         var semver = require('semver');
@@ -240,9 +240,9 @@ gulp.task('bump', '[-v VERSION | -t (major|minor|patch|prerelease)] : Change app
             var newVersion = argv.v;
             if (!argv.v) {
                 if (!argv.t) {
-                    argv.t = 'patch';
+                    argv.t = 'prerelease';
                 }
-                newVersion = semver.inc(version, argv.t);
+                newVersion = semver.inc(version, argv.t, argv.n);
             }
             console.log('Bumping version ' + version + ' to ' + newVersion);
             gulp.src(['./www/data/config.json', './package.json'])
