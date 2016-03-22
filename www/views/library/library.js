@@ -14,7 +14,7 @@ angular.module('app')
     };
 
     Library.provideIndex(indexPromise);
-    $scope.deckLists = Library.deckLists; // TODO library filtering here
+    $scope.deckLists = Library.deckLists;
 
     if (Library.numDecks() === 1 && mode !== 'debug') {
         $rootScope.config.hideLibrary = true;
@@ -24,22 +24,6 @@ angular.module('app')
             Deck.setupClosedDeck($scope.Decklists.closed[0]);
         }
     }
-
-    // TODO implement search, Ionic in action 6.3, p 140
-    // try AngularJS cookbook p 64 http://jsfiddle.net/msfrisbie/ghsa3nym/
-    // angular.extend($scope, {
-    //     model: {searchText: ''}, // used in itest
-    //     search: function () {
-    //         $scope.deckList = _.filter(allDeckNames, function(deckName) {
-    //             var name = deckName.display.toLowerCase;
-    //             return name.indexOf($scope.model.searchText.toLowerCase) !== -1;
-    //         });
-    //     },
-    //     clearSearch: function () {
-    //         $scope.deckList = allDeckNames;
-    //         $scope.model.searchText = '';
-    //     }
-    // });
 })
 
 .service('Library', function (Log, $state, getData, LocalStorage, _) {

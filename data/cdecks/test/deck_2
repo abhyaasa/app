@@ -7,3 +7,16 @@
 ;.ci,3,c;case insensitive =Ci
 ;.md,2;image ![Buddy](buddyShelter.jpg "Buddy at shelter") =Buddy at shelter
 ;.md;image ![Buddy](buddyShelter550w.jpg "Buddy 550px wide") =Big Buddy
+;.html;following is text from deck help page tests long question text<h2 id="deck-tab">Deck tab</h2>
+<p>Below the deck usage statistics are controls for deck-specific settings.</p>
+<p><strong>Reverse Q &amp; A:</strong> Select to have the question answer presented as the question, and visa versa.</p>
+<p><strong>Show tags in card:</strong> Select to have the card tab include the tags associated with the card.</p>
+<p><strong>Restart:</strong> Move to the first (active) card in the deck.</p>
+<p><strong>Restore removed cards:</strong> Add removed cards back into the deck and restart the deck.</p>
+<p>A card may have any number of alpha-numeric tags and one numeric tag. Controls on this page allow you to limit the active cards to those that satisfy certain conditions. Controls are hidden when there are no applicable tags in the deck. Any change in the tag settings will restart the deck.</p>
+<p><strong>Range slider:</strong> Use to limit active cards to those whose with numeric values within a selected range.</p>
+<p>You may select a collection of alpha-numeric tags associated with each of the following three controls. A tag may be included in at most one of these collections. Tap the edit icon at the right to view a list of all tags in the deck, from which those with those in the control&#39;s collection may be selected. Tags already included in one of the other collections are disabled (greyed-out) in these lists. </p>
+<p><strong>Include tags:</strong> Only cards with one of the indicated tags may be active.</p>
+<p><strong>Exclude tags:</strong> Cards with the indicated tags are not active, regardless of other settings.</p>
+<p><strong>Require tags:</strong> Only cards with all of the indicated tags may be active.</p>
+=answer

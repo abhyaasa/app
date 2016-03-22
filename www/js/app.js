@@ -51,7 +51,6 @@ angular.module('app', ['ionic', 'services', 'rzModule'])
             templateUrl: 'views/tabs.html',
             resolve: {
                 configPromise: function () {
-                    // REVIEW why is config.json fetched multipel times?
                     return getDataProvider.$get()('config.json');
                 }
             },

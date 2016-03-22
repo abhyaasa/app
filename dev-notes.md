@@ -211,7 +211,7 @@ Use `-h` argument for script usage information.
 
 `gulp dengi` generates jsdoc documentation in the `doc/build/` directory.
 
-REVIEW flesh out this documentation
+REVIEW flesh out jsdoc documentation
 
 
 ## `$rootScope` variables

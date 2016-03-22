@@ -289,7 +289,7 @@ window.Media = function (src, mediaSuccess, mediaError, mediaStatus) {
             sound.pause();
         },
         // Releases the underlying operating system's audio resources.
-        // REVIEW Should be called on a ressource when it's no longer needed!
+        // Should be called on a ressource when it's no longer needed!
         release: function () {},
         // Moves the position within the audio file.
         seekTo: function (milliseconds) {},

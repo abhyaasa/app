@@ -36,14 +36,16 @@ A grammar expression may contain the following notation.
 {...} grouping, [...] optional, | or, +/* one/zero or more of the preceding form.
 ,.. non-empty comma-separated sequence of preceding form.
 Spaces are not significant in grammar rules. Sequences are non-empty.
-BOL/EOL beginning/end of line. EOF end of file.
+
+BOL, EOL, EOF, and WS represent beginning of line, end of line, end of file,
+and whitespace, respectively.
 
 INPUT -> { QUESTION | TAG_RANGE } +
 
 QUESTION -> BOL ; [ TAG,.. ] ; TEXT
-            { <ws>= ANSWER } | <ws>/ DISTRACTOR } *
-            { <ws>? HINT } *
-where TEXT, ANSWER, DISTRACTOR, and HINT are strings in which the <ws> prefixed
+            { WS= ANSWER } | WS/ DISTRACTOR } *
+            { WS? HINT } *
+where TEXT, ANSWER, DISTRACTOR, and HINT are strings in which the WS prefixed
 sequences above may not appear. This may be avoided by using \?, \=, or \/,
 with the backslash escape characters removed after parsing.
 

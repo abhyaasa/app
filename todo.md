@@ -18,6 +18,8 @@ Excluded from the `todo-show` scan (by the `ignoreThesePaths` configuration list
 - TODO
   - try apple archive run
   - sanskrit embedded in text
+  - devanagari q, transliteration a
+  - Leitner learning algorithm https://en.wikipedia.org/wiki/Leitner_system
 
 - IDEA /
 
@@ -29,8 +31,7 @@ Excluded from the `todo-show` scan (by the `ignoreThesePaths` configuration list
   - consider Coffee, jade, NOT stylus
   - Chrome developer > angularjs > hints
   - sanskrit settings only if in deck
-  - convert to Python 3 
-  - Leitner learning algorithm https://en.wikipedia.org/wiki/Leitner_system
+  - convert to Python 3
   
 - ANDROID
   - device testing
@@ -49,12 +50,10 @@ Excluded from the `todo-show` scan (by the `ignoreThesePaths` configuration list
   - ionic 2, angular 2, typescript coversion http://blog.ionic.io/ionic-and-typescript-part-2/
   - replace gulp with npm? http://blog.keithcirkel.co.uk/how-to-use-npm-as-a-build-tool/, https://www.tildedave.com/2015/01/07/i-find-gulp-extremely-frustrating.html
   - splash and icon http://learn.ionicframework.com/formulas/adding-an-icon/ and  http://blog.ionic.io/automating-icons-and-splash-screens/ 
-  - devanagari q, transliteration a
   - deck state copy, rename, reorder, etc
   - document code, e.g. https://www.npmjs.com/package/gulp-ngdocs
   - flesh out jsdoc documentation and improve dgeni formatting
   - consider adding other features, as in notes/features.txt
-  - show scrollbar when full text not visible
   - unit and integration tests
     - remove .atom/config.cson>"todo-show">ignoreThesePaths>...spec.js
     - https://github.com/CaryLandholt/ng-classify
