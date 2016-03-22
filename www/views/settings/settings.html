@@ -10,15 +10,6 @@
       <ion-toggle toggle-class="toggle-positive" ng-model="settings.randomQuestions">
         Randomize questions
       </ion-toggle>
-      <!-- PRIORITY add percent numbers -->
-      <ion-item>
-        Mind answer hint proportion
-        <div class="button-bar">
-          <a ng-repeat="num in numMindHints" class="button" ng-click="settings.mindHints = num" ng-class="num === settings.mindHints ? 'disabled' : ''">
-              {{ mindHintFractions[$index] }}
-          </a>
-        </div>
-      </ion-item>
       <ion-item ui-sref="tabs.reset">Reset...</ion-item>
     </ion-list>
 

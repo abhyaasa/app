@@ -63,6 +63,9 @@ angular.module('app')
     };
 
     var countKeys = 'right wrong skipped removed hints remaining'.split(' ');
+
+    this.isDefined = false;
+
     this.count = _.object(countKeys, _.map(_.range(countKeys.length), _.constant(0)));
 
     this.filterTagsKeys = _.keys(filterTagsProto);
@@ -138,6 +141,7 @@ angular.module('app')
         _this.data.range.options.onEnd = function (id, newMin, newMax) {
             _this.activeIndices();
         };
+        _this.isDefined = true;
         $state.go('tabs.card');
     };
 
@@ -188,7 +192,7 @@ angular.module('app')
     this.reset = function () {
         if (_this.data) {
             Library.resetDeck(_this.data.name);
-            _this.data = undefined;
+            _this.isDefined = false;
         }
     };
 
@@ -216,11 +220,11 @@ angular.module('app')
     };
 
     this.enterTab = function () {
-        var multiset = function (array) {
+        var multiset = function (outcomes) {
             var ms = {
                 remaining: 0
             };
-            array.map(function (value) {
+            outcomes.map(function (value) {
                 if (_.has(ms, value)) {
                     ms[value] += 1;
                 } else {
@@ -235,7 +239,10 @@ angular.module('app')
         if (_this.data) {
             _.extendOwn(_this.count, multiset(_this.data.outcomes));
             _this.count.remaining = _.filter(_this.data.outcomes, isUndefined).length;
+            // if (_this.data.range) { // HACK rzslider bug
+            //     this.data.range.max = _this.data.range.max;
+            // }
+            _this.updateFilterText();
         }
-        _this.updateFilterText();
     };
 });

@@ -8,11 +8,11 @@ angular.module('app')
     $scope.Card = Card;
     $scope.Deck = Deck;
     $scope.$on('$ionicView.enter', function () {
-        if (!Deck.data) { // Deck.data undefined by source auto-reload
-            Card.question = undefined;
+        if (!Deck.isDefined) { // Deck.data undefined by source auto-reload
+            Card.isDefined = false;
         } else if (!Deck.data.activeCardIndex) {
             Card.setup(0);
-        } else if (!Card.question) {
+        } else if (!Card.isDefined) {
             Card.setup(Deck.data.activeCardIndex);
         }
     });
@@ -48,7 +48,6 @@ angular.module('app')
     gestureSetup();
 
     $scope.hint = function () {
-        // TODO add mc hints
         Deck.count.hints++;
         Card.hint = Card.hints[Card.hintIndex];
         Card.hintIndex++;
@@ -150,6 +149,9 @@ angular.module('app')
 
 .service('Card', function ($sce, Log, $state, Deck, Library, settings, MediaSrv, _) {
     var _this = this;
+
+    this.isDefined = false;
+
     this.submittedAnswer = undefined;
 
     this.setup = function (activeCardIndex) {
@@ -249,22 +251,11 @@ angular.module('app')
                 }
             }
         }
-        // TODO hint proportion settings help
         _this.hints = _this.question.hints;
-        var mindHints = settings.mindHints;
-        if (!_this.hints) {
-            if  (_this.type === 'mind' && mindHints > 0) {
-                _this.haveHint = true;
-                _this.hints = _.uniq(_.map(_.range(1, mindHints + 1), function (num) {
-                    return _this.answer.substr(0, num * _this.answer.length / mindHints);
-                }));
-            } else if (_this.type === 'multiple-choice' && _this.responses.length > 2) {
-                // TODO mc hints
-            }
-        }
         _this.haveHint = _this.hints !== undefined;
         _this.hintIndex = _this.haveHInt ? 0 : undefined;
         _this.hint = null;
+        _this.isDefined = true;
         Log.debug('Card setup _this', JSON.stringify(_this));
     };
 
@@ -301,7 +292,7 @@ angular.module('app')
     };
 
     this.reset = function () {
-        _this.question = undefined;
+        _this.isDefined = false;
         Deck.reset();
     };
 

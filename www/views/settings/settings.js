@@ -4,10 +4,6 @@ angular.module('app')
 
 .controller('SettingsController', function ($scope, settings, _) {
     $scope.settings = settings;
-    $scope.numMindHints = _.map('0 6 4 2'.split(' '), Number);
-    $scope.mindHintFractions = _.map($scope.numMindHints, function (num) {
-        return num === 0 ? String(num) : '1 / ' + num;
-    });
 
     // // from http://docs.ionic.io/v1.0/docs/deploy-install
     // // FUTURE implement and test deploy
@@ -48,8 +44,7 @@ angular.module('app')
         intro: true,
         randomQuestions: false,
         randomResponses: false,
-        devanagari: false,
-        mindHints: 0
+        devanagari: false
     };
     return function (reset) {
         _.extendOwn(settings, defaultSettings);
