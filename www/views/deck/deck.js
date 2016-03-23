@@ -187,6 +187,7 @@ angular.module('app')
                 filterTags: _.clone(filterTagsProto),
                 reverseQandA: false,
                 activeCardIndex: undefined, // initially assigned by Card.setup()
+                devanagari: false,
                 active: undefined, // assigned by _this.activeIndices()
                 outcomes: undefined // assigned by _this.restart()
             };

@@ -330,7 +330,7 @@ def main(args):
                 if any([isnumber(t) or isapptime(t) for t in qtaglst]):
                     error('filterable question-specific tags allowed in text mode')
                 q['type'] = 'text'
-            elif '.d-t' in qtags or '.t-d' in qtags: # XXX
+            elif '.d-t' in qtags or '.t-d' in qtags:
                 if responses:
                     error('no answers or responses for transliteration question')
                 q['type'] = 'd-t' if '.d-t' in qtags else 't-d'

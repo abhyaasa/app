@@ -133,12 +133,12 @@ angular.module('app')
     };
 })
 
-.filter('unsafe', function ($sce, _, settings) {
+.filter('unsafe', function ($sce, _, settings, Deck) {
     return function (value) {
         var text = value;
         if (_.isArray(value)) {
-            text = value[settings.devanagari ? 1 : 0];
-            if (settings.devanagari === 'both') {
+            text = value[Deck.data.devanagari ? 1 : 0];
+            if (Deck.data.devanagari === 'both') {
                 text += value[0].length > 20 ? '\n' : ' ';
                 text += value[0];
             }
