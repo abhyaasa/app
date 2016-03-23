@@ -1,5 +1,8 @@
 [
  {
+  "sanskrit": true
+ },
+ {
   "answer": [
    "om",
    "\u0950"
@@ -11,26 +14,22 @@
   "type": "mind"
  },
  {
-  "answer": false,
   "id": 1,
   "tags": [],
   "text": [
    "\u015braddh\u0101v\u0101~lla",
    "\u0936\u094d\u0930\u0926\u094d\u0927\u093e\u0935\u093e\u0901\u0932\u094d\u0932"
   ],
-  "type": "true-false"
+  "type": "d-t"
  },
  {
   "id": 2,
-  "number": 1,
-  "tags": [
-   "a"
-  ],
+  "tags": [],
   "text": [
-   "a",
-   "\u0905"
+   "om",
+   "\u0950"
   ],
-  "type": "transliteration"
+  "type": "t-d"
  },
  {
   "answer": "Cs",

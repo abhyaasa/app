@@ -207,6 +207,8 @@ Correct `.py` script initial `#!` script lines as needed if `/usr/bin/env python
 
 Use `-h` argument for script usage information.
 
+Python scripts should pass `flake8` linter, with maximum line length 90 and ignoring the following error codes: E203, E202, E261.
+
 ### jsdoc documentation
 
 `gulp dengi` generates jsdoc documentation in the `doc/build/` directory.

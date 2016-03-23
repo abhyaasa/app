@@ -16,9 +16,9 @@ Excluded from the `todo-show` scan (by the `ignoreThesePaths` configuration list
 - PRIORITY /
 
 - TODO
+  - sanskrit settings only if in deck
+  - sanskrit embedded in text `...`, with \` escape
   - try apple archive run
-  - sanskrit embedded in text
-  - devanagari q, transliteration a
   - Leitner learning algorithm https://en.wikipedia.org/wiki/Leitner_system
 
 - IDEA /
@@ -30,7 +30,6 @@ Excluded from the `todo-show` scan (by the `ignoreThesePaths` configuration list
   - gulp error handling, wait for gulp4? http://artandlogic.com/2014/05/error-handling-in-gulp/, https://www.npmjs.com/package/gulp-exit
   - consider Coffee, jade, NOT stylus
   - Chrome developer > angularjs > hints
-  - sanskrit settings only if in deck
   - convert to Python 3
   
 - ANDROID
@@ -45,7 +44,7 @@ Excluded from the `todo-show` scan (by the `ignoreThesePaths` configuration list
   - android publication
 
 - FUTURE
-  - cdeck and library file headers, include sanskrit
+  - cdeck and library file s, include sanskrit
   - gulp jshint and jscs exit
   - ionic 2, angular 2, typescript coversion http://blog.ionic.io/ionic-and-typescript-part-2/
   - replace gulp with npm? http://blog.keithcirkel.co.uk/how-to-use-npm-as-a-build-tool/, https://www.tildedave.com/2015/01/07/i-find-gulp-extremely-frustrating.html

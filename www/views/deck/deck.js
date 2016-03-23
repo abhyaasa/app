@@ -62,6 +62,10 @@ angular.module('app')
         require: []
     };
 
+    var defaultHeader = {
+        sanskrit: false
+    };
+
     var countKeys = 'right wrong skipped removed hints remaining'.split(' ');
 
     this.isDefined = false;
@@ -134,6 +138,11 @@ angular.module('app')
     var setupQuestions = function (fileName) {
         return getData('flavor/library/' + fileName).then(function (promise) {
             _this.questions = promise.data;
+            _this.header = _.clone(defaultHeader);
+            if (!('id' in _this.questions[0])) {
+                _.extendOwn(_this.header, _this.questions[0]);
+                _this.questions.splice(0, 1);
+            }
         });
     };
 
@@ -220,6 +229,9 @@ angular.module('app')
         _this.data.activeCardIndex = 0;
         _this.save();
         _this.enterTab();
+        if (!restoreRemoved) {
+            $state.go('tabs.card');
+        }
     };
 
     this.enterTab = function () {

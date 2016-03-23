@@ -44,7 +44,7 @@ angular.module('app')
         intro: true,
         randomQuestions: false,
         randomResponses: false,
-        devanagari: false
+        devanagari: false // XXX move to deck
     };
     return function (reset) {
         _.extendOwn(settings, defaultSettings);

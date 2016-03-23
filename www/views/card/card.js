@@ -200,9 +200,13 @@ angular.module('app')
             } else {
                 _this.question.answer = Deck.questions[answerIndex].text;
             }
-        } else if (_this.question.type === 'transliteration') {
+        } else if (_this.question.type === 'd-t') {
             _this.answer = _this.text[0];
             _this.text = _this.text[1];
+            _this.type = 'mind';
+        } else if (_this.question.type === 't-d') {
+            _this.answer = _this.text[1];
+            _this.text = _this.text[0];
             _this.type = 'mind';
         } else if (_this.question.type === 'matching') {
             // Rewrite matching as multiple-choice, including random order, this
@@ -253,7 +257,7 @@ angular.module('app')
         }
         _this.hints = _this.question.hints;
         _this.haveHint = _this.hints !== undefined;
-        _this.hintIndex = _this.haveHInt ? 0 : undefined;
+        _this.hintIndex = _this.haveHint ? 0 : undefined;
         _this.hint = null;
         _this.isDefined = true;
         Log.debug('Card setup _this', JSON.stringify(_this));
