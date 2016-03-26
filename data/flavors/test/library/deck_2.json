@@ -1,24 +1,31 @@
 [
  {
+  "date": "2016-03-26",
   "sanskrit": true
  },
  {
   "answer": [
-   "om",
-   "\u0950"
+   [
+    "om",
+    "\u0950"
+   ]
   ],
   "id": 0,
   "mp3": "data/flavor/media/deck_2/omkara.mp3",
   "tags": [],
-  "text": "pranava",
+  "text": [
+   "pranava"
+  ],
   "type": "mind"
  },
  {
   "id": 1,
   "tags": [],
   "text": [
-   "\u015braddh\u0101v\u0101~lla",
-   "\u0936\u094d\u0930\u0926\u094d\u0927\u093e\u0935\u093e\u0901\u0932\u094d\u0932"
+   [
+    "\u015braddh\u0101v\u0101~lla",
+    "\u0936\u094d\u0930\u0926\u094d\u0927\u093e\u0935\u093e\u0901\u0932\u094d\u0932"
+   ]
   ],
   "type": "d-t"
  },
@@ -26,63 +33,116 @@
   "id": 2,
   "tags": [],
   "text": [
-   "om",
-   "\u0950"
+   [
+    "om",
+    "\u0950"
+   ]
   ],
   "type": "t-d"
  },
  {
-  "answer": "Cs",
-  "hints": [
-   "hint1",
-   "hint 2"
+  "answer": [
+   "service"
   ],
   "id": 3,
+  "tags": [],
+  "text": [
+   [
+    "sev",
+    "\u0938\u0947\u0935\u094d"
+   ]
+  ],
+  "type": "mind"
+ },
+ {
+  "id": 4,
+  "tags": [],
+  "text": [
+   "embedded ",
+   [
+    "om",
+    "\u0950"
+   ],
+   " in sanskrit"
+  ],
+  "type": "mind"
+ },
+ {
+  "answer": [
+   "Cs"
+  ],
+  "hints": [
+   [
+    "hint1"
+   ],
+   [
+    "hint 2"
+   ]
+  ],
+  "id": 5,
   "number": 2,
   "tags": [
    ".cs",
    "b"
   ],
-  "text": "case sensitive",
+  "text": [
+   "case sensitive"
+  ],
   "type": "mind"
  },
  {
-  "answer": "Ci",
-  "id": 4,
+  "answer": [
+   "Ci"
+  ],
+  "id": 6,
   "number": 3,
   "tags": [
    ".ci",
    "c"
   ],
-  "text": "case insensitive",
+  "text": [
+   "case insensitive"
+  ],
   "type": "mind"
  },
  {
-  "answer": "<p>Buddy at shelter</p>",
-  "id": 5,
+  "answer": [
+   "<p>Buddy at shelter</p>"
+  ],
+  "id": 7,
   "number": 2,
   "tags": [
    ".html"
   ],
-  "text": "<p>image <img alt=\"Buddy\" src=\"data/flavor/media/deck_2/buddyShelter.jpg\" title=\"Buddy at shelter\" /></p>",
+  "text": [
+   "<p>image <img alt=\"Buddy\" src=\"data/flavor/media/deck_2/buddyShelter.jpg\" title=\"Buddy at shelter\" /></p>"
+  ],
   "type": "mind"
  },
  {
-  "answer": "<p>Big Buddy</p>",
-  "id": 6,
+  "answer": [
+   "<p>Big Buddy</p>"
+  ],
+  "id": 8,
   "tags": [
    ".html"
   ],
-  "text": "<p>image <img alt=\"Buddy\" src=\"data/flavor/media/deck_2/buddyShelter550w.jpg\" title=\"Buddy 550px wide\" /></p>",
+  "text": [
+   "<p>image <img alt=\"Buddy\" src=\"data/flavor/media/deck_2/buddyShelter550w.jpg\" title=\"Buddy 550px wide\" /></p>"
+  ],
   "type": "mind"
  },
  {
-  "answer": "answer",
-  "id": 7,
+  "answer": [
+   "answer"
+  ],
+  "id": 9,
   "tags": [
    ".html"
   ],
-  "text": "following is text from deck help page tests long question text<h2 id=\"deck-tab\">Deck tab</h2>\n<p>Below the deck usage statistics are controls for deck-specific settings.</p>\n<p><strong>Reverse Q &amp; A:</strong> Select to have the question answer presented as the question, and visa versa.</p>\n<p><strong>Show tags in card:</strong> Select to have the card tab include the tags associated with the card.</p>\n<p><strong>Restart:</strong> Move to the first (active) card in the deck.</p>\n<p><strong>Restore removed cards:</strong> Add removed cards back into the deck and restart the deck.</p>\n<p>A card may have any number of alpha-numeric tags and one numeric tag. Controls on this page allow you to limit the active cards to those that satisfy certain conditions. Controls are hidden when there are no applicable tags in the deck. Any change in the tag settings will restart the deck.</p>\n<p><strong>Range slider:</strong> Use to limit active cards to those whose with numeric values within a selected range.</p>\n<p>You may select a collection of alpha-numeric tags associated with each of the following three controls. A tag may be included in at most one of these collections. Tap the edit icon at the right to view a list of all tags in the deck, from which those with those in the control&#39;s collection may be selected. Tags already included in one of the other collections are disabled (greyed-out) in these lists. </p>\n<p><strong>Include tags:</strong> Only cards with one of the indicated tags may be active.</p>\n<p><strong>Exclude tags:</strong> Cards with the indicated tags are not active, regardless of other settings.</p>\n<p><strong>Require tags:</strong> Only cards with all of the indicated tags may be active.</p>",
+  "text": [
+   "following is text from deck help page tests long question text<h2 id=\"deck-tab\">Deck tab</h2>\n<p>Below the deck usage statistics are controls for deck-specific settings.</p>\n<p><strong>Reverse Q &amp; A:</strong> Select to have the question answer presented as the question, and visa versa.</p>\n<p><strong>Show tags in card:</strong> Select to have the card tab include the tags associated with the card.</p>\n<p><strong>Restart:</strong> Move to the first (active) card in the deck.</p>\n<p><strong>Restore removed cards:</strong> Add removed cards back into the deck and restart the deck.</p>\n<p>A card may have any number of alpha-numeric tags and one numeric tag. Controls on this page allow you to limit the active cards to those that satisfy certain conditions. Controls are hidden when there are no applicable tags in the deck. Any change in the tag settings will restart the deck.</p>\n<p><strong>Range slider:</strong> Use to limit active cards to those whose with numeric values within a selected range.</p>\n<p>You may select a collection of alpha-numeric tags associated with each of the following three controls. A tag may be included in at most one of these collections. Tap the edit icon at the right to view a list of all tags in the deck, from which those with those in the control&#39;s collection may be selected. Tags already included in one of the other collections are disabled (greyed-out) in these lists. </p>\n<p><strong>Include tags:</strong> Only cards with one of the indicated tags may be active.</p>\n<p><strong>Exclude tags:</strong> Cards with the indicated tags are not active, regardless of other settings.</p>\n<p><strong>Require tags:</strong> Only cards with all of the indicated tags may be active.</p>"
+  ],
   "type": "mind"
  }
 ]

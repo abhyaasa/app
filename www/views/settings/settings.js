@@ -43,8 +43,7 @@ angular.module('app')
     var defaultSettings = {
         intro: true,
         randomQuestions: false,
-        randomResponses: false,
-        devanagari: false // XXX move to deck
+        randomResponses: false
     };
     return function (reset) {
         _.extendOwn(settings, defaultSettings);

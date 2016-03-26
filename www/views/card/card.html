@@ -1,5 +1,4 @@
 <ion-view>
-  <x>on-swipe-left="next()" does not work in ion-content</x>
   <ion-content id="content" padding="true" class="has-header">
     <div ng-hide="Card.isDefined">
       Please select a deck in the library.
@@ -54,7 +53,7 @@
         </div>
         <div ng-switch-when="text" ng-init="isText()"></div>
       </div>
-      <div ng-show="Card.hint">{{ Card.hint }}</div>
+      <div ng-show="Card.hint">{{ Card.hint | unsafe }}</div>
       <button ng-show="Card.haveHint" class="button button-stable button-block" ng-click="hint()">
         Give me a hint
       </button>

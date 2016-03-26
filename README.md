@@ -3,7 +3,9 @@ Abhyaasa
 
 ## SGS Datta Deepam Flash Card Application
 
-*Abhyaasa* is a Sanskrit term for practice, repetition, and study. It may refer to spiritual disciplines such as meditation, and also academic studies. This app simulates decks of physical flashcards, which have long been used for academic study. This app is designed to eventually support [SGS Datta Deepam](http://www.sgsdattadeepam.org) with an expanding set of flashcard *decks* (question databases), with the intention that it continue to be maintained as an open source platform for other flashcard apps. It is suitable for a wide range of study through user-created flashcard decks and derivative apps.
+*Abhyaasa* is a Sanskrit term for practice, repetition, and study. It may refer to spiritual disciplines such as meditation, and also academic studies. This app simulates decks of physical flashcards, which have long been used for academic study. 
+
+Initially development of this app is designed to support [SGS Datta Deepam](http://www.sgsdattadeepam.org) with an expanding set of flashcard *decks* (question databases). However, it is intended that this app continue to be maintained as an open source platform for flashcard apps serving a variety of needs. A relatively small part of the code provides support for the Sanskrit language, which may be ignored or, with minor modification, repurposed to support other languages that have multiple written forms.
 
 > SGS Datta Deepam is devoted to the study of Vedic Dharma: "SGS Datta Deepam is an online gurukulam envisioned by HisHoliness Sri Ganapathy Sachchidananda Swamiji which unravels the boundless wisdom and truth in our Scriptures and brings to light the glory of Sanatana Dharma."
 

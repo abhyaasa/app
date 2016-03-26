@@ -16,8 +16,10 @@ Excluded from the `todo-show` scan (by the `ignoreThesePaths` configuration list
 - PRIORITY /
 
 - TODO
-  - sanskrit settings only if in deck
   - sanskrit embedded in text `...`, with \` escape
+  - range slider right margin
+  - deck info http://codepen.io/ionic/pen/uJkCz also for sanskrit, filtering
+  - sanskrit -> .sanskrit
   - try apple archive run
   - Leitner learning algorithm https://en.wikipedia.org/wiki/Leitner_system
 
@@ -26,7 +28,8 @@ Excluded from the `todo-show` scan (by the `ignoreThesePaths` configuration list
 - HACK /
 
 - REVIEW
-  - which iOS versions supported? Document for android also.
+  - which iOS versions supported? Document for android also
+  - on-swipe-left="next()" does not work in ion-content
   - gulp error handling, wait for gulp4? http://artandlogic.com/2014/05/error-handling-in-gulp/, https://www.npmjs.com/package/gulp-exit
   - consider Coffee, jade, NOT stylus
   - Chrome developer > angularjs > hints
@@ -44,7 +47,7 @@ Excluded from the `todo-show` scan (by the `ignoreThesePaths` configuration list
   - android publication
 
 - FUTURE
-  - cdeck and library file s, include sanskrit
+  - https://www.npmjs.com/package/gulp-ng-constant ?
   - gulp jshint and jscs exit
   - ionic 2, angular 2, typescript coversion http://blog.ionic.io/ionic-and-typescript-part-2/
   - replace gulp with npm? http://blog.keithcirkel.co.uk/how-to-use-npm-as-a-build-tool/, https://www.tildedave.com/2015/01/07/i-find-gulp-extremely-frustrating.html

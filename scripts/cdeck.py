@@ -9,6 +9,7 @@ import json
 import argparse
 import codecs
 import re
+from datetime import date
 
 from trans import translate
 
@@ -136,21 +137,21 @@ objects with keys:
               list of [is_answer, response_text] pairs, where is_answer is boolean
     answer (t/f, matching or mind type): boolean (t/f) or text (mind)
     tags (optional): list of tag strings
-    hints (optional): list of hint strings
+    hints (optional): list of hint text
     number (optional): difficulty number (default 0)
     matchingBegin (only if .matching in tags): id of first question in matching range
     matchingEnd (only if .matching in tags): id of last question in matching range
 
-The "text" of a question, response, answer, or hint may be a unicode string or a
-[trans_to-text, devanagari] pair of unicode strings, where the trans_to program
-argument indicates the transliteration scheme of the first element.
+The "text" of a question, response, answer, or hint is list of values that may be unicode
+strings or pairs of unicode strings of the form [trans_to-text, devanagari], where the
+trans_to program argument indicates the transliteration scheme of the first element.
 
 HTML markups are interpreted in all text.
 
 The answer of a sequence question is automatically the text of the following question.
 
 Header object keys:
-    sanskrit: true if any sanskrit text pairs in deck
+    "sanskrit: true" if any sanskrit text pairs in deck
 """
 
 # from https://wiki.python.org/moin/EscapingHtml
@@ -161,6 +162,7 @@ def html_escape(text):
     """Produce entities within text."""
     return "".join(html_escape_table.get(c, c) for c in text)
 
+sanskrit_quote = '``' # '' if none
 number_cre = re.compile(r'\d+')
 media_prefix_cre = re.compile(r'<img [^>]*src="')
 isnumber = number_cre.match
@@ -208,21 +210,35 @@ def main(args):
             exit()
 
     def unescape(text):  # strip text, and remove \ from \= and \/ sequences
-        return re.sub(r'\\([=/]?)', r'\1', text.strip())
+        return re.sub(r'\\([=/]?)', r'\1', text)
+
+    def do_trans(text):
+        return [translate(text, trans_from, args.trans_to),
+                translate(text, trans_from, 'devanagari')]
 
     def do_text(text, translit=False):
         global sanskrit
         text = unescape(text)
+        if sanskrit_quote and not translit:
+            sanskrit = True
+            tlist = []
+            split = text.split(sanskrit_quote)
+            if len(split) > 1:
+                for i in range(0, len(split), 2):
+                    if split[i]:
+                        tlist.append(do_text(split[i])[0])
+                    if i + 1 < len(split):
+                        tlist.append(do_trans(split[i + 1]))
+                return tlist
         if markdown_mode:
             text = markdown(text)
         if translit:
             sanskrit = True
-            return (translate(text, trans_from, args.trans_to),
-                    translate(text, trans_from, 'devanagari'))
+            return [do_trans(text)]
         elif qtags.intersection(['.html', '.md']):
-            return str(process_html(text, args.media))
+            return [str(process_html(text, args.media))]
         else:
-            return html_escape(text)
+            return [html_escape(text)]
 
     def end_matching():
         for i in range(matching_start, len(deck)):
@@ -281,7 +297,7 @@ def main(args):
             tags_str, question = elt.split(';', 1)
 
             # tag processing
-            qtaglst = filter(None, map(unescape, tags_str.split(',')))
+            qtaglst = filter(None, map(unicode.strip, map(unescape, tags_str.split(','))))
             if filter(None, [not istag(tag) for tag in qtaglst]):
                 error('bad tag')
             qtags = set(qtaglst)
@@ -320,30 +336,15 @@ def main(args):
             if hints:
                 q['hints'] = hints
             trlst = re.split(r'\s(?==)|\s(?=/)', qlst[0])
-            q['text'] = do_text(trlst[0],
-                                '.sq' in qtags or '.d-t' in qtags or '.t-d' in qtags)
-            responses = [(r[0] == '=', do_text(r[1:], '.sa' in qtags))
-                         for r in trlst[1:]]
-            if '.text' in qtags:
-                if responses or hints:
-                    error('no hints or responses in text mode')
-                if any([isnumber(t) or isapptime(t) for t in qtaglst]):
-                    error('filterable question-specific tags allowed in text mode')
-                q['type'] = 'text'
-            elif '.d-t' in qtags or '.t-d' in qtags:
-                if responses:
-                    error('no answers or responses for transliteration question')
-                q['type'] = 'd-t' if '.d-t' in qtags else 't-d'
-            elif '.lineseq' in qtags:
-                if responses or hints:
-                    error('no responses or hints in .lineseq mode')
-                lines = [do_text(line, '.sq' in qtags)
-                         for line in q['text'].split('\n')]
+            if '.lineseq' in qtags:
+                if '.d-t' in qtags or '.t-d' in qtags:
+                    error('.d-t and .t-d tags not allowed with .lineseq')
+                lines = trlst[0].split('\n')
                 if len(lines) < 2:
                     error('at least two lines in .lineseq mode')
                 for line in lines[:-2]:
                     aq = {'id': id_num,
-                          'text': line,
+                          'text': do_text(line, '.sq' in qtags),
                           'tags': tag_filter(qtags),
                           'type': 'mind'
                           }
@@ -354,23 +355,38 @@ def main(args):
                 q['type'] = ''
                 q['text'] = lines[-2]
                 q['answer'] = lines[-1]
-            elif not responses:
-                q['type'] = 'mind'  # sequence question
-            elif len(responses) == 1:
-                response = responses[0][1]
-                if (type(response) == unicode
-                   and response.lower() in ['t', 'f', 'true', 'false']):
-                    q['type'] = 'true-false'
-                    q['answer'] = response.lower() in ['t', 'true']
-                else:
-                    q['type'] = 'matching' if '.matching' in tags else 'mind'
-                    q['answer'] = response
             else:
-                q['responses'] = responses
-                q['type'] = 'multiple-choice'
-                if len(filter(None, map(lambda r: r[0], responses))) != 1:
-                    if '.ma' not in qtags:
-                        error('".ma" tag required if not one answer')
+                q['text'] = do_text(trlst[0],
+                                    '.sq' in qtags or '.d-t' in qtags or '.t-d' in qtags)
+                responses = [(r[0] == '=', do_text(r[1:], '.sa' in qtags))
+                             for r in trlst[1:]]
+                if '.text' in qtags:
+                    if responses or hints:
+                        error('no hints or responses in text mode')
+                    if any([isnumber(t) or isapptime(t) for t in qtaglst]):
+                        error('filterable question-specific tags allowed in text mode')
+                    q['type'] = 'text'
+                elif '.d-t' in qtags or '.t-d' in qtags:
+                    if responses:
+                        error('no answers or responses for transliteration question')
+                    q['type'] = 'd-t' if '.d-t' in qtags else 't-d'
+                elif not responses:
+                    q['type'] = 'mind'  # sequence question
+                elif len(responses) == 1:
+                    response = responses[0][1]
+                    if (type(response) == unicode
+                       and response.lower() in ['t', 'f', 'true', 'false']):
+                        q['type'] = 'true-false'
+                        q['answer'] = response.lower() in ['t', 'true']
+                    else:
+                        q['type'] = 'matching' if '.matching' in tags else 'mind'
+                        q['answer'] = response
+                else:
+                    q['responses'] = responses
+                    q['type'] = 'multiple-choice'
+                    if len(filter(None, map(lambda r: r[0], responses))) != 1:
+                        if '.ma' not in qtags:
+                            error('".ma" tag required if not one answer')
             q['tags'] = tag_filter(qtags)
             q['id'] = id_num
             id_num += 1
@@ -378,7 +394,7 @@ def main(args):
         line_num += len(elt.split('\n')) + 1
     if '.matching' in tags:
         end_matching()
-    deck.insert(0, {'sanskrit': sanskrit})
+    deck.insert(0, {'sanskrit': sanskrit, 'date': date.today().isoformat()})
     json.dump(deck, writer, indent=1, sort_keys=True, separators=(',', ': '))
 
 

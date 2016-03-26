@@ -3,6 +3,8 @@
 ;.sq,.d-t;श्रद्धावाँल्ल
 ;/.devanagari
 ;.iast,.t-d;om
+;.sq;seva =service
+;;embedded ``om`` in sanskrit
 ;.cs,2,b;case sensitive =Cs ?hint1 ?hint 2
 ;.ci,3,c;case insensitive =Ci
 ;.md,2;image ![Buddy](buddyShelter.jpg "Buddy at shelter") =Buddy at shelter

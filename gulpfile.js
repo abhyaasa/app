@@ -4,7 +4,8 @@
 
 var cmdAliases = {
     help: 'gulp cmd',
-    cd: 'cd data/cdecks/test; update.sh deck_2',
+    cd1: 'cd data/cdecks/test; update.sh deck1',
+    cd2: 'cd data/cdecks/test; update.sh deck_2',
     ct: 'cd scripts; cdeck.py -t -m "prefix"',
     si: 'gulp si -i',
     sa: 'gulp si -a',

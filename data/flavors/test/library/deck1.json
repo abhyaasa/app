@@ -1,97 +1,139 @@
 [
  {
+  "date": "2016-03-26",
+  "sanskrit": true
+ },
+ {
   "id": 0,
   "tags": [
    ".html"
   ],
-  "text": "<strong>bold html markup</strong>",
+  "text": [
+   "<strong>bold html markup</strong>"
+  ],
   "type": "mind"
  },
  {
-  "answer": "<p><strong>bold answer</strong></p>",
+  "answer": [
+   "<p><strong>bold answer</strong></p>"
+  ],
   "id": 1,
   "tags": [
    ".html"
   ],
-  "text": "<p>markdown <span class=\"em\">emphasis</span> <strong>bold</strong></p>",
+  "text": [
+   "<p>markdown <span class=\"em\">emphasis</span> <strong>bold</strong></p>"
+  ],
   "type": "mind"
  },
  {
-  "answer": "1",
+  "answer": [
+   "1"
+  ],
   "id": 2,
   "matchingBegin": 2,
   "matchingEnd": 7,
   "tags": [],
-  "text": "a",
+  "text": [
+   "a"
+  ],
   "type": "matching"
  },
  {
-  "answer": "2",
+  "answer": [
+   "2"
+  ],
   "id": 3,
   "matchingBegin": 2,
   "matchingEnd": 7,
   "tags": [],
-  "text": "b",
+  "text": [
+   "b"
+  ],
   "type": "matching"
  },
  {
-  "answer": "3",
+  "answer": [
+   "3"
+  ],
   "id": 4,
   "matchingBegin": 2,
   "matchingEnd": 7,
   "tags": [],
-  "text": "c",
+  "text": [
+   "c"
+  ],
   "type": "matching"
  },
  {
-  "answer": "4",
+  "answer": [
+   "4"
+  ],
   "id": 5,
   "matchingBegin": 2,
   "matchingEnd": 7,
   "tags": [],
-  "text": "d",
+  "text": [
+   "d"
+  ],
   "type": "matching"
  },
  {
-  "answer": "5",
+  "answer": [
+   "5"
+  ],
   "id": 6,
   "matchingBegin": 2,
   "matchingEnd": 7,
   "tags": [],
-  "text": "e",
+  "text": [
+   "e"
+  ],
   "type": "matching"
  },
  {
-  "answer": "6",
+  "answer": [
+   "6"
+  ],
   "id": 7,
   "matchingBegin": 2,
   "matchingEnd": 7,
   "tags": [],
-  "text": "f",
+  "text": [
+   "f"
+  ],
   "type": "matching"
  },
  {
   "id": 8,
   "tags": [],
-  "text": "Some text: not a question",
+  "text": [
+   "Some text: not a question"
+  ],
   "type": "text"
  },
  {
-  "answer": true,
+  "answer": [
+   "t"
+  ],
   "id": 9,
   "tags": [
    "foo",
    "bar"
   ],
-  "text": "true/false is true",
-  "type": "true-false"
+  "text": [
+   "true/false is true"
+  ],
+  "type": "mind"
  },
  {
   "id": 10,
   "tags": [
    "foo"
   ],
-  "text": "Some more text with two outcomes?",
+  "text": [
+   "Some more text with two outcomes?"
+  ],
   "type": "text"
  },
  {
@@ -99,17 +141,23 @@
   "responses": [
    [
     true,
-    "a"
+    [
+     "a"
+    ]
    ],
    [
     false,
-    "b"
+    [
+     "b"
+    ]
    ]
   ],
   "tags": [
    "foo"
   ],
-  "text": "qtext",
+  "text": [
+   "qtext"
+  ],
   "type": "multiple-choice"
  },
  {
@@ -117,49 +165,71 @@
   "responses": [
    [
     false,
-    "a"
+    [
+     "a"
+    ]
    ],
    [
     false,
-    "b"
+    [
+     "b"
+    ]
    ],
    [
     false,
-    "c"
+    [
+     "c"
+    ]
    ],
    [
     true,
-    "d"
+    [
+     "d"
+    ]
    ],
    [
     false,
-    "e"
+    [
+     "e"
+    ]
    ],
    [
     false,
-    "f"
+    [
+     "f"
+    ]
    ],
    [
     false,
-    "g"
+    [
+     "g"
+    ]
    ],
    [
     false,
-    "h"
+    [
+     "h"
+    ]
    ],
    [
     false,
-    "i"
+    [
+     "i"
+    ]
    ],
    [
     false,
-    "j"
+    [
+     "j"
+    ]
    ]
   ],
   "tags": [
    "foo"
   ],
-  "text": "some longer text for a multiple choice question with lots of answers to see if it confuses things a lot or not",
+  "text": [
+   "some longer text for a multiple choice question with lots of answers to see if it confuses things a lot or not"
+  ],
   "type": "multiple-choice"
  },
  {
@@ -167,22 +237,30 @@
   "responses": [
    [
     true,
-    "a"
+    [
+     "a"
+    ]
    ],
    [
     true,
-    "b"
+    [
+     "b"
+    ]
    ],
    [
     false,
-    "c"
+    [
+     "c"
+    ]
    ]
   ],
   "tags": [
    "foo",
    ".ma"
   ],
-  "text": "multiple answers on this one",
+  "text": [
+   "multiple answers on this one"
+  ],
   "type": "multiple-choice"
  },
  {
@@ -192,18 +270,24 @@
    "a",
    "foo"
   ],
-  "text": "qt",
+  "text": [
+   "qt"
+  ],
   "type": "mind"
  },
  {
   "hints": [
-   "hint ?questionmark"
+   [
+    "    hint ?questionmark"
+   ]
   ],
   "id": 15,
   "tags": [
    "foo"
   ],
-  "text": "q with",
+  "text": [
+   "q with"
+  ],
   "type": "mind"
  },
  {
@@ -211,15 +295,21 @@
   "responses": [
    [
     false,
-    "a"
+    [
+     "a"
+    ]
    ],
    [
     true,
-    "b"
+    [
+     "b"
+    ]
    ]
   ],
   "tags": [],
-  "text": "mq",
+  "text": [
+   "mq"
+  ],
   "type": "multiple-choice"
  },
  {
@@ -227,25 +317,41 @@
   "tags": [
    "c"
   ],
-  "text": "mcq",
+  "text": [
+   "mcq"
+  ],
   "type": "mind"
  },
  {
-  "answer": "answer a = b",
+  "answer": [
+   "answer a = b"
+  ],
   "id": 18,
   "tags": [],
-  "text": "mind",
+  "text": [
+   "mind"
+  ],
   "type": "mind"
  },
  {
   "id": 19,
   "tags": [],
-  "text": "one",
+  "text": [
+   ""
+  ],
+  "type": "mind"
+ },
+ {
+  "id": 20,
+  "tags": [],
+  "text": [
+   "one"
+  ],
   "type": "mind"
  },
  {
   "answer": "three",
-  "id": 20,
+  "id": 21,
   "tags": [],
   "text": "two",
   "type": ""

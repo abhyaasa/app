@@ -134,16 +134,19 @@ angular.module('app')
 })
 
 .filter('unsafe', function ($sce, _, settings, Deck) {
-    return function (value) {
-        var text = value;
-        if (_.isArray(value)) {
-            text = value[Deck.data.devanagari ? 1 : 0];
-            if (Deck.data.devanagari === 'both') {
-                text += value[0].length > 20 ? '\n' : ' ';
-                text += value[0];
+    return function (valArray) {
+        var strArray = _.map(valArray, function (value) {
+            var text = value;
+            if (_.isArray(value)) {
+                text = value[Deck.data.devanagari ? 1 : 0];
+                if (Deck.data.devanagari === 'both') {
+                    text += (valArray.length === 1 && value[0].length > 20) ? '\n' : ' ';
+                    text += value[0];
+                }
             }
-        }
-        return $sce.trustAsHtml(text);
+            return text;
+        });
+        return $sce.trustAsHtml(strArray.join(''));
     };
 })
 
@@ -201,12 +204,12 @@ angular.module('app')
                 _this.question.answer = Deck.questions[answerIndex].text;
             }
         } else if (_this.question.type === 'd-t') {
-            _this.answer = _this.text[0];
-            _this.text = _this.text[1];
+            _this.answer = _this.text[0][0];
+            _this.text = _this.text[0][1];
             _this.type = 'mind';
         } else if (_this.question.type === 't-d') {
-            _this.answer = _this.text[1];
-            _this.text = _this.text[0];
+            _this.answer = _this.text[0][1];
+            _this.text = _this.text[0][0];
             _this.type = 'mind';
         } else if (_this.question.type === 'matching') {
             // Rewrite matching as multiple-choice, including random order, this

@@ -318,12 +318,13 @@ def textft(text, from_, to):
 
 
 def test():
-    textft("om", 'iast', 'devanagari')
-    textft("श्रद", 'devanagari', 'iast')
-    textft("श्रद्धावाँल्ल", 'devanagari', 'iast')
-    textft("Atha yogānuśāsanam", 'iast', 'itrans')
-    textft("अथ योगानुशासनम्॥१॥", 'devanagari', 'iast')
-    textft("योगश्चित्तवृत्तिनिरोधः॥२॥", 'devanagari', 'iast')
+    textft("seva", 'itrans', 'iast') # FIXME iast sev, not seva
+    # textft("om", 'iast', 'devanagari')
+    # textft("श्रद", 'devanagari', 'iast')
+    # textft("श्रद्धावाँल्ल", 'devanagari', 'iast')
+    # textft("Atha yogānuśāsanam", 'iast', 'itrans')
+    # textft("अथ योगानुशासनम्॥१॥", 'devanagari', 'iast')
+    # textft("योगश्चित्तवृत्तिनिरोधः॥२॥", 'devanagari', 'iast')
     sys.exit()
 
 
