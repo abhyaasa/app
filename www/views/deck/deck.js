@@ -63,7 +63,7 @@ angular.module('app')
     };
 
     var defaultHeader = {
-        sanskrit: false
+        '.sanskrit': false
     };
 
     var countKeys = 'right wrong skipped removed hints remaining'.split(' ');

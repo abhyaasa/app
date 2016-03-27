@@ -41,7 +41,9 @@ Spaces are not significant in grammar rules. Sequences are non-empty.
 BOL, EOL, EOF, and WS represent beginning of line, end of line, end of file,
 and whitespace, respectively.
 
-INPUT -> { QUESTION | TAG_RANGE } +
+INPUT -> [ HEADER ] { QUESTION | TAG_RANGE } +
+
+HEADER -> json object text, less surrounding braces, ending with BOL ;
 
 QUESTION -> BOL ; [ TAG,.. ] ; TEXT
             { WS= ANSWER } | WS/ DISTRACTOR } *
@@ -150,8 +152,11 @@ HTML markups are interpreted in all text.
 
 The answer of a sequence question is automatically the text of the following question.
 
-Header object keys:
-    "sanskrit: true" if any sanskrit text pairs in deck
+Header object contains input HEADER contents plus the following keys:
+    ".sanskrit": true if any sanskrit text pairs in deck
+
+The names of header object keys with special semantics begin with a dot. "id" is not
+allowed as a header key.
 """
 
 # from https://wiki.python.org/moin/EscapingHtml
@@ -265,12 +270,22 @@ def main(args):
         _input = UTF8READER(sys.stdin).read()
     else:
         _input = codecs.open(str(args.infile), "r", "utf-8").read()
-    if not _input.startswith(';'):
-        error('input must start with semicolon, not: "' + _input[:5] + '"')
-    if '.md' in _input:
+    header_end = _input.find('\n;')
+    if header_end == -1:
+        header = {}
+        questions = _input
+    else:
+        try:
+            header = json.loads('{' + _input[: header_end] + '}')
+        except:
+            error('header does not parse as json object attribute definitions')
+        questions = _input[header_end + 1 :]
+    if not questions.startswith(';'):
+        error('questions must start with semicolon, not: "' + questions[:5] + '"')
+    if '.md' in questions:
         from markdown import markdown
 
-    for elt in _input[1:].split('\n;'):
+    for elt in questions[1:].split('\n;'):
         markdown_mode = False
         elt = elt.strip()
         if not elt:
@@ -394,7 +409,10 @@ def main(args):
         line_num += len(elt.split('\n')) + 1
     if '.matching' in tags:
         end_matching()
-    deck.insert(0, {'sanskrit': sanskrit, 'date': date.today().isoformat()})
+    header.update({'.sanskrit': sanskrit, 'date': date.today().isoformat()})
+    if id in header:
+        error('"id" not allowed as header key')
+    deck.insert(0, header)
     json.dump(deck, writer, indent=1, sort_keys=True, separators=(',', ': '))
 
 

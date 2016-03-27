@@ -16,10 +16,8 @@ Excluded from the `todo-show` scan (by the `ignoreThesePaths` configuration list
 - PRIORITY /
 
 - TODO
-  - sanskrit embedded in text `...`, with \` escape
+  - deck info http://codepen.io/ionic/pen/uJkCz, also for sanskrit and filtering
   - range slider right margin
-  - deck info http://codepen.io/ionic/pen/uJkCz also for sanskrit, filtering
-  - sanskrit -> .sanskrit
   - try apple archive run
   - Leitner learning algorithm https://en.wikipedia.org/wiki/Leitner_system
 

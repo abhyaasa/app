@@ -1,7 +1,8 @@
 [
  {
+  ".sanskrit": true,
   "date": "2016-03-26",
-  "sanskrit": true
+  "description": "deck header description"
  },
  {
   "answer": [
