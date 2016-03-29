@@ -1,0 +1,8 @@
+# extends https://github.com/brigade/scss-lint/blob/master/config/default.yml
+linters:
+  LeadingZero:
+    enabled: true
+    style: include_zero # 'exclude_zero' or 'include_zero'
+  FinalNewline:
+    enabled: false
+    present: true

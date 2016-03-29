@@ -9,6 +9,15 @@ angular.module('app')
     $scope.getCount = function (key) {
         return Deck.count && (key in Deck.count) ? Deck.count[key] : 0;
     };
+
+    // Adapted from http://codepen.io/ionic/pen/uJkCz?editors=1010 FIXME
+    /*
+     * if given group is the selected group, deselect it
+     * else, select the given group
+     */
+    $scope.toggleGroup = function (group) {
+        Deck.data.isGroupShown[group] = !Deck.data.isGroupShown[group];
+    };
 })
 
 .controller('DeckTagsController', function ($scope, $state, $stateParams, Deck, _) {
@@ -143,6 +152,10 @@ angular.module('app')
                 _.extendOwn(_this.header, _this.questions[0]);
                 _this.questions.splice(0, 1);
             }
+            _this.headerDisplayKeys = _.filter(_.keys(_this.header).sort(),
+                function (key) {
+                    return key[0] !== '.';
+                });
         });
     };
 
@@ -181,6 +194,11 @@ angular.module('app')
                         step: max - min === 1 ? 0.5 : 1,
                         precision: max - min === 1 ? 1 : 0
                     }
+                },
+                isGroupShown: {
+                    header: false,
+                    sanskrit: false,
+                    filter: false
                 },
                 showTags: false,
                 tags: _this.filterNormalTags(allTags),
