@@ -27,6 +27,7 @@
     "gulp-karma": "^0.0.5",
     "gulp-markdown": "^1.2.0",
     "gulp-ngdocs": "^0.2.13",
+    "gulp-plumber": "^1.1.0",
     "gulp-replace": "^0.5.4",
     "gulp-scss-lint": "^0.3.9",
     "gulp-tsc": "^1.1.4",

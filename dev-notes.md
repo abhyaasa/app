@@ -7,7 +7,7 @@ To open discussion of collaboration possibilities, please email <abhyaasa108@gma
 
 This project uses [semantic versioning](http://semver.org).
 
-Collaboration is facilitated by uniformity of coding practice reflected by this project's several linter configuration files. Contributed code should pass `gulp lint` without complaint.
+Collaboration is facilitated by the coding practice indicated by this project's several linter configuration files. Contributed code should pass `gulp lint` without complaint.
 
 
 ## Tasks
@@ -84,7 +84,11 @@ The following are used for automatic testing and installed with `npm`:
   $ brew nvm
   ```
 
-- `tidy`, the recommended html linter, is also updated with `brew install tidy-html5`.
+Linting:
+
+- `tidy`: html linter (update with `brew install tidy-html5`)
+- `flake8`: Python
+
 
 Recommended OSX development tools with standard app installers:
 

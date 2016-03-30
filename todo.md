@@ -19,6 +19,7 @@ Excluded from the `todo-show` scan (by the `ignoreThesePaths` configuration list
   - range slider right margin
   - try apple archive run
   - Leitner learning algorithm https://en.wikipedia.org/wiki/Leitner_system
+  - gulp flake8 lint, and all lint exit on report
 
 - IDEA /
 
@@ -45,7 +46,6 @@ Excluded from the `todo-show` scan (by the `ignoreThesePaths` configuration list
 
 - FUTURE
   - https://www.npmjs.com/package/gulp-ng-constant ?
-  - gulp jshint and jscs exit
   - ionic 2, angular 2, typescript coversion http://blog.ionic.io/ionic-and-typescript-part-2/
   - replace gulp with npm? http://blog.keithcirkel.co.uk/how-to-use-npm-as-a-build-tool/, https://www.tildedave.com/2015/01/07/i-find-gulp-extremely-frustrating.html
   - splash and icon http://learn.ionicframework.com/formulas/adding-an-icon/ and  http://blog.ionic.io/automating-icons-and-splash-screens/ 

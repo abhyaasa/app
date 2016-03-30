@@ -43,6 +43,17 @@ var fs = require('fs');
 var debug = require('gulp-debug');
 // var concat = require('gulp-concat'); # included in devDependencies, but not used
 var argv = require('minimist')(process.argv.slice(2));
+var plumber = require('gulp-plumber');
+
+// from https://www.timroes.de/2015/01/06/proper-error-handling-in-gulp-js/
+var gulp_src = gulp.src;
+gulp.src = function () {
+    return gulp_src.apply(gulp, arguments)
+        .pipe(plumber(function (error) {
+            gutil.log(gutil.colors.red('Error (' + error.plugin + '): ' + error.message));
+            this.emit('end'); // emit the end event, to properly end the task
+        }));
+};
 
 function logError(message) {
     console.log(gutil.colors.magenta(message));
@@ -153,7 +164,7 @@ gulp.task('bx', 'Build for ios and open xcode project', ['build'], function () {
 
 gulp.task('lint',
     'Run js, json, scss, and html/xml linters.', [
-        'jshint', 'jscs', 'jsonlint', 'scsslint', 'htmllint'
+        'jshint', 'jscs', 'jsonlint', 'scsslint', 'htmllint', 'pylint'
     ]
 );
 
@@ -194,6 +205,10 @@ gulp.task('jsonlint', 'Report json errors', function () {
 gulp.task('htmllint', 'Report html errors', function () {
     var files = 'config.xml index.html www/views/*.html www/views/*/*.html';
     sh.exec('scripts/tidylint.py ' + files);
+});
+
+gulp.task('pylint', 'Report python errors', function () {
+    sh.exec('flake8 --config=.flake8 scripts/*.py 1>&2');
 });
 
 gulp.task('publish-pre-build', 'Execute before publishing build', function () {
