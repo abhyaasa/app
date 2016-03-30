@@ -7,6 +7,8 @@ To open discussion of collaboration possibilities, please email <abhyaasa108@gma
 
 This project uses [semantic versioning](http://semver.org).
 
+Collaboration is facilitated by uniformity of coding practice reflected by this project's several linter configuration files. Contributed code should pass `gulp lint` without complaint.
+
 
 ## Tasks
 
@@ -101,6 +103,8 @@ For Android testing:
 - Android SDK Manager (`android` CLI command)
   - `brew install android-sdk`
   - also installs `adb` (android CLI debugger)
+  
+Recommended for python debugging: [Atpana Studio 3] (http://www.aptana.com/products/studio3.html), which on OSX requires a [specific java version](https://support.apple.com/kb/DL1572?viewlocale=en_US&locale=en_US).
 
 ### Atom editor
 

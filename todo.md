@@ -16,7 +16,6 @@ Excluded from the `todo-show` scan (by the `ignoreThesePaths` configuration list
 - PRIORITY /
 
 - TODO
-  - deck info http://codepen.io/ionic/pen/uJkCz, also for sanskrit and filtering
   - range slider right margin
   - try apple archive run
   - Leitner learning algorithm https://en.wikipedia.org/wiki/Leitner_system
