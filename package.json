@@ -18,6 +18,8 @@
     "dgeni-packages": "^0.10.19",
     "gulp-bump": "^1.0.0",
     "gulp-debug": "^2.1.2",
+    "gulp-eslint": "^2.0.0",
+    "gulp-exec": "^2.1.2",
     "gulp-help": "^1.6.1",
     "gulp-inject": "^1.5.0",
     "gulp-jscs": "^3.0.2",
@@ -44,6 +46,7 @@
     "scsslint": "^0.0.3",
     "semver": "^5.1.0",
     "shelljs": "^0.3.0",
+    "through2-spy": "^2.0.0",
     "underscore": "^1.8.3"
   },
   "cordovaPlugins": [

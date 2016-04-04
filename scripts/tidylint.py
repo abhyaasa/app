@@ -6,7 +6,7 @@ from subprocess import Popen, PIPE
 
 # paths to tidy-html5 executable and config file
 TIDY = '/usr/local/Cellar/tidy-html5/5.1.25/bin/tidy'
-CONFIG = sys.path[0] + '/../.tidyrc'
+CONFIG = sys.path[0] + '/../config/tidyrc'
 
 # tidy output lines containing the contents of any of the following lines are removed
 FILTER_LINES = '''

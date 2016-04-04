@@ -38,7 +38,7 @@ CLI commands are prefixed in these notes by the `$` prompt, and unless otherwise
 
 Next, install global dependencies:
 ```
-$ npm install -g cordova ionic ios-sim gulp bower
+$ npm install -g cordova ionic ios-sim gulp bower eslint
 ```
 
 The following command line completes a minimal app development installation. The voluminous output generated may overflow the terminal buffer, so output is saved in `temp/setup.txt` for inspection if something goes wrong.  
@@ -86,9 +86,9 @@ The following are used for automatic testing and installed with `npm`:
 
 Linting:
 
-- `tidy`: html linter (update with `brew install tidy-html5`)
-- `flake8`: Python
-
+- `tidy`: for html and xml (update with `brew install tidy-html5`)
+- `flake8`: for Python 2
+- `eslint`: for javascript
 
 Recommended OSX development tools with standard app installers:
 
@@ -278,7 +278,7 @@ or use `nvm` if that is in use.
 
 Update global dependencies.
 ```
-$ npm update -g cordova ionic ios-sim gulp bower
+$ npm update -g cordova ionic ios-sim gulp bower eslint
 ```
 
 Make sure that `package.json` is consistent with the installed local dependencies.

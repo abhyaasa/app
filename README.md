@@ -31,6 +31,4 @@ Developers, please see the [`dev-notes.md`](https://github.com/abhyaasa/app/blob
 
 ## License
 
-Code is under MIT Open Source license: see the `LICENSE` file.
-
-Question databases and other content in `datta-deepam` folders are copyright &copy; 2015+, SGS Datta Deepam Inc., all-rights-reserved.
+Code is under MIT Open Source license: see the `LICENSE` and `NOTICE` files.

@@ -16,22 +16,24 @@ Excluded from the `todo-show` scan (by the `ignoreThesePaths` configuration list
 - PRIORITY /
 
 - TODO
+  - eslint config fix and atom integration, then remove jshint (also jscs?)
   - range slider right margin
   - try apple archive run
   - Leitner learning algorithm https://en.wikipedia.org/wiki/Leitner_system
-  - gulp flake8 lint, and all lint exit on report
 
 - IDEA /
 
 - HACK /
 
 - REVIEW
+  - use eslint for html also?
   - which iOS versions supported? Document for android also
   - on-swipe-left="next()" does not work in ion-content
   - gulp error handling, wait for gulp4? http://artandlogic.com/2014/05/error-handling-in-gulp/, https://www.npmjs.com/package/gulp-exit
   - consider Coffee, jade, NOT stylus
   - Chrome developer > angularjs > hints
   - convert to Python 3
+  - consider ESLint http://www.sitepoint.com/comparison-javascript-linting-tools/
   
 - ANDROID
   - device testing
