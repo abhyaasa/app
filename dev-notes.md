@@ -118,7 +118,7 @@ Atom plugins are indicated by the following list
 ```
 $ /bin/ls ~/.atom/packages
 README.md		csslint			linter-flake8
-atom-beautify		docblockr		linter-jscs
+atom-beautify		docblockr		linter-eslint
 atom-html-preview	editor-settings		linter-scss-lint
 atom-htmltidy		emmet			linter-tidy
 atom-material-syntax	file-icons		linter-xmllint

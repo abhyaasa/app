@@ -16,7 +16,6 @@ Excluded from the `todo-show` scan (by the `ignoreThesePaths` configuration list
 - PRIORITY /
 
 - TODO
-  - eslint config fix and atom integration, then remove jshint (also jscs?)
   - range slider right margin
   - try apple archive run
   - Leitner learning algorithm https://en.wikipedia.org/wiki/Leitner_system
@@ -26,7 +25,6 @@ Excluded from the `todo-show` scan (by the `ignoreThesePaths` configuration list
 - HACK /
 
 - REVIEW
-  - use eslint for html also
   - use https://www.npmjs.com/package/gulp-beautify
   - which iOS versions supported? Document for android also
   - on-swipe-left="next()" does not work in ion-content

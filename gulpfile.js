@@ -64,8 +64,6 @@ var bump = require('gulp-bump');
 var semver = require('semver');
 var eslint = require('gulp-eslint');
 var scssLint = require('gulp-scss-lint');
-var jscs = require('gulp-jscs');
-var stylish = require('gulp-jscs-stylish');
 var jsonlint = require('gulp-json-lint');
 var karma = require('gulp-karma');
 
@@ -271,7 +269,7 @@ gulp.task('bump', '[-v VERSION | -t (major | minor | patch | (prerelease [-n NAM
 
 gulp.task('lint',
     'Run all js, json, scss, and html/xml file problem reporters.', [
-        'eslint', 'jscs', 'jsonlint', 'scsslint', 'xhtmllint', 'pylint'
+        'eslint', 'jsonlint', 'scsslint', 'xhtmllint', 'pylint'
     ]
 );
 
@@ -308,16 +306,6 @@ gulp.task('scsslint', 'Report scss file problems.', function (done) {
             config: cwd + '/config/scss-lint.yml'
         }))
         .pipe(linterErrorExit('scsslint'))
-        .on('finish', done);
-});
-
-gulp.task('jscs', 'Report js file style problems.', function (done) {
-    gulp.src(paths.projectJs)
-        .pipe(jscs({
-            configPath: 'config/jscsrc'
-        }))
-        .pipe(stylish())
-        .pipe(linterErrorExit('jscs'))
         .on('finish', done);
 });
 
