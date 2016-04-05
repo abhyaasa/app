@@ -3,7 +3,7 @@
 angular.module('app')
 
 .controller('CardController', function ($scope, $state, Log, $ionicGesture, _,
-    Deck, Card, settings) {
+    Deck, Card) {
 
     $scope.Card = Card;
     $scope.Deck = Deck;

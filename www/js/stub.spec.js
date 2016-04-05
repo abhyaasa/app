@@ -1,5 +1,8 @@
 'use strict';
 
+/* eslint-env node */
+/* eslint no-console: 0 */
+
 angular.module('stubs', ['ionic'])
 
 .constant('httpStubData', {
@@ -36,22 +39,18 @@ angular.module('stubs', ['ionic'])
 
 .provider('getStubData', function (httpStubData) {
     var injector = angular.injector(['ng']);
-    var $http = injector.get('$http');
-    var urlPrefix = ionic.Platform.isAndroid() ? '/android_asset/www/' : '';
     var $q = injector.get('$q');
     this.$get = function () {
-        return function (path, failure) {
+        return function (path) {
             // REVIEW create stub getData (normal one w/o $q) that includes
             // httpStubData and use constant load switch in app.js provider
-            if (httpStubData) {
-                var data = httpStubData[path];
-                var deferred = $q.defer();
-                deferred.resolve({
-                    data: data
-                });
-                console.log('STUB LOG: getStubData', path, deferred.promise.data);
-                return deferred.promise;
-            }
+            var data = httpStubData[path];
+            var deferred = $q.defer();
+            deferred.resolve({
+                data: data
+            });
+            console.log('STUB LOG: getStubData', path, deferred.promise.data);
+            return deferred.promise;
         };
     };
 });

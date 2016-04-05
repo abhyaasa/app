@@ -2,7 +2,7 @@
 
 angular.module('app')
 
-.controller('DeckController', function ($scope, $state, Deck, Log) {
+.controller('DeckController', function ($scope, $state, Deck) {
     $scope.Deck = Deck;
     $scope.$state = $state;
 
@@ -10,7 +10,7 @@ angular.module('app')
         return Deck.count && (key in Deck.count) ? Deck.count[key] : 0;
     };
 
-    // Adapted from http://codepen.io/ionic/pen/uJkCz?editors=1010 FIXME
+    // Adapted from http://codepen.io/ionic/pen/uJkCz?editors=1010
     /*
      * if given group is the selected group, deselect it
      * else, select the given group
@@ -160,7 +160,7 @@ angular.module('app')
     };
 
     var finishSetup = function () {
-        _this.data.range.options.onEnd = function (id, newMin, newMax) {
+        _this.data.range.options.onEnd = function () {
             _this.activeIndices();
         };
         _this.isDefined = true;
@@ -168,11 +168,6 @@ angular.module('app')
     };
 
     this.setupClosedDeck = function (deckName) {
-        var copy = function (obj) {
-            return _.mapObject(obj, function (val) {
-                return _.clone(val);
-            });
-        };
         Log.debug('Deck setup', JSON.stringify(deckName));
         setupQuestions(deckName.file).then(function () {
             var numbers = _.map(_this.questions, qNumber);

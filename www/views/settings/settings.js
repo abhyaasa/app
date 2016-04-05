@@ -2,7 +2,7 @@
 
 angular.module('app')
 
-.controller('SettingsController', function ($scope, settings, _) {
+.controller('SettingsController', function ($scope, settings) {
     $scope.settings = settings;
 
     // // from http://docs.ionic.io/v1.0/docs/deploy-install
@@ -32,7 +32,7 @@ angular.module('app')
 
 .value('settings', {})
 
-.service('saveSettings', function (Log, settings, LocalStorage, _) {
+.service('saveSettings', function (Log, settings, LocalStorage) {
     return function () {
         LocalStorage.setObject('*settings*', settings);
         Log.debug('SAVED SETTINGS');

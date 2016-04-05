@@ -1,5 +1,9 @@
 'use strict';
 
+/* eslint-env node */
+/* eslint prefer-reflect: ["error", { exceptions: ["apply"] }] */
+/* eslint no-sync: 0 */
+
 /* begin configuration variables */
 
 var cmdAliases = {
@@ -23,9 +27,8 @@ var paths = {
     appJs: ['./www/**/*.js', '!./www/lib/**'],
     py: ['scripts/*.py'],
     xhtml: ['config.xml', 'index.html', 'www/views/**/*.html'],
-    projectJson: ['./ionic.project', './.htmlhintrc', '.jsbeautifyrc', '.jshintrc',
-        '.xmlhintrc', './**/*.json', '!www/lib/**', '!./node_modules/**/*.json',
-        '!./plugins/**/*.json', '!./platforms/**/*.json'
+    projectJson: ['./ionic.project', './**/*.json', '!www/lib/**',
+        '!./node_modules/**/*.json', '!./plugins/**/*.json', '!./platforms/**/*.json'
     ]
 };
 paths.indexJs = paths.appJs.concat(['!./www/js/app.js', '!./www/**/*spec.js']);
@@ -46,19 +49,42 @@ var sh = require('shelljs');
 var _ = require('underscore');
 var replace = require('gulp-replace');
 var fs = require('fs');
-var debug = require('gulp-debug');
-// var concat = require('gulp-concat'); # in devDependencies, but not used
 var argv = require('minimist')(process.argv.slice(2));
 var plumber = require('gulp-plumber');
-var jshint = require('gulp-jshint');
 var spy = require('through2-spy');
-var debug = require('gulp-debug');
 var exec = require('gulp-exec');
+var sass = require('gulp-sass');
+var minifyCss = require('gulp-minify-css');
+var rename = require('gulp-rename');
+var inject = require('gulp-inject');
+var markdown = require('gulp-markdown');
+var Dgeni = require('dgeni');
+var dengiPackage = require('./docs/dgeni-package');
+var bump = require('gulp-bump');
+var semver = require('semver');
+var eslint = require('gulp-eslint');
+var scssLint = require('gulp-scss-lint');
+var jscs = require('gulp-jscs');
+var stylish = require('gulp-jscs-stylish');
+var jsonlint = require('gulp-json-lint');
+var karma = require('gulp-karma');
+
+/* May be handy, but not used
+var debug = require('gulp-debug'); // in dev-dependencies
+var concat = require('gulp-concat'); // in dev-dependencies
+
+// handly for stream debugging, e.g. .pipe(makeObjSpy('KEYS', _.keys))
+var makeObjSpy = function (name, fn) {
+    return spy.obj(function (obj) {
+        gutil.log('SPY', name, fn(obj));
+    });
+};
+*/
 
 // from https://www.timroes.de/2015/01/06/proper-error-handling-in-gulp-js/
-var gulp_src = gulp.src;
+var gulpSrc = gulp.src;
 gulp.src = function () {
-    return gulp_src.apply(gulp, arguments)
+    return gulpSrc.apply(gulp, arguments)
         .pipe(plumber(function (error) {
             gutil.log(gutil.colors.red('Error (' + error.plugin + '): ' + error.message));
             this.emit('end'); // emit the end event, to properly end the task
@@ -68,14 +94,7 @@ gulp.src = function () {
 var cwd = process.cwd();
 
 var logError = function () {
-    gutil.log(gutil.colors.magenta(Array.prototype.slice.call(arguments).join(' ')));
-};
-
-// handly for stream debugging, e.g. .pipe(makeObjSpy('KEYS', _.keys))
-var makeObjSpy = function (name, fn) {
-    return spy.obj(function (obj) {
-        gutil.log('SPY', name, fn(obj));
-    });
+    gutil.log(gutil.colors.magenta(Array.prototype.slice.apply(arguments).join(' ')));
 };
 
 gulp.task('default',
@@ -83,9 +102,6 @@ gulp.task('default',
 );
 
 gulp.task('sass', 'Ionic .scss to .css file transformation', function (done) {
-    var sass = require('gulp-sass');
-    var minifyCss = require('gulp-minify-css');
-    var rename = require('gulp-rename');
     gulp.src('./scss/ionic.app.scss')
         .pipe(sass())
         .on('error', sass.logError)
@@ -116,14 +132,13 @@ gulp.task('watch', 'Only watches scss files.', function () {
 
 gulp.task('index', 'Inject script elements into www/index.html',
     function () {
-        var inject = require('gulp-inject');
+        var srcOptions = {
+            read: false
+        };
         var injector = function (paths) {
-            return inject(gulp.src(paths, {
-                    read: false
-                }), // .pipe(debug())
-                {
-                    relative: true
-                });
+            return inject(gulp.src(paths, srcOptions), {
+                relative: true
+            });
         };
         sh.cp('-f', './index.html', './www/index.html');
         return gulp.src('./www/index.html')
@@ -150,7 +165,6 @@ gulp.task('flavor',
     });
 
 gulp.task('md', 'Process markdown files', function () {
-    var markdown = require('gulp-markdown');
     sh.exec('rm -rf ./www/data/md');
     return gulp.src('./data/md/*.md')
         .pipe(markdown())
@@ -194,13 +208,11 @@ gulp.task('dgeni', 'Generate jsdoc documentation.', function (done) {
     // from https://github.com/petebacondarwin/dgeni-example, for doc tags see
     // https://github.com/angular/angular.js/wiki/Writing-AngularJS-Documentation and
     // http://www.chirayuk.com/snippets/angularjs/ngdoc
-    var Dgeni = require('dgeni');
-    var dengiPackage = require('./docs/dgeni-package');
     try {
         var dgeni = new Dgeni([dengiPackage]);
-        return dgeni.generate();
+        dgeni.generate();
     } catch (x) {
-        gutil.log(x.stack);
+        logError(x.stack);
         throw x;
     }
     done();
@@ -224,9 +236,11 @@ gulp.task('bump', '[-v VERSION | -t (major | minor | patch | (prerelease [-n NAM
     'Change app version to VERSION or to result of bumping of given type (-t, default ' +
     'prerelease), and create annotated git tag.',
     function (done) {
-        var bump = require('gulp-bump');
-        var semver = require('semver');
         fs.readFile('./package.json', function (err, data) {
+            if (err) {
+                logError(err.stack);
+                throw err;
+            }
             var version = JSON.parse(data).version;
             var newVersion = argv.v;
             if (!argv.v) {
@@ -257,7 +271,7 @@ gulp.task('bump', '[-v VERSION | -t (major | minor | patch | (prerelease [-n NAM
 
 gulp.task('lint',
     'Run all js, json, scss, and html/xml file problem reporters.', [
-        'jshint', 'jscs', 'jsonlint', 'scsslint', 'xhtmllint', 'pylint'
+        'eslint', 'jscs', 'jsonlint', 'scsslint', 'xhtmllint', 'pylint'
     ]
 );
 
@@ -265,7 +279,7 @@ var linterErrorExit = function (linterKey) {
     return spy.obj(function (obj) {
         if (!obj[linterKey].success) {
             logError('LINTER ERROR EXIT:', linterKey);
-            process.exit(1);
+            throw new Error('linter');
         }
     });
 };
@@ -274,13 +288,12 @@ var execErrorExit = function (linterName) {
     return spy.obj(function (obj) {
         if (obj.exec.stderr) {
             logError('LINTER ERROR EXIT:', linterName);
-            process.exit(1);
+            throw new Error('exec');
         }
     });
 };
 
 gulp.task('eslint', 'Report js file problems.', function () {
-    var eslint = require('gulp-eslint');
     gulp.src(paths.projectJs)
         .pipe(eslint({
             configFile: 'config/eslintrc.yml'
@@ -289,16 +302,7 @@ gulp.task('eslint', 'Report js file problems.', function () {
         .pipe(eslint.failAfterError());
 });
 
-gulp.task('jshint', 'Report more serious js file problems.', function (done) {
-    gulp.src(paths.projectJs)
-        .pipe(jshint('.jshintrc'))
-        .pipe(jshint.reporter('jshint-stylish'))
-        .pipe(linterErrorExit('jshint'))
-        .on('finish', done);
-});
-
 gulp.task('scsslint', 'Report scss file problems.', function (done) {
-    var scssLint = require('gulp-scss-lint');
     gulp.src(paths.scss)
         .pipe(scssLint({
             config: cwd + '/config/scss-lint.yml'
@@ -308,8 +312,6 @@ gulp.task('scsslint', 'Report scss file problems.', function (done) {
 });
 
 gulp.task('jscs', 'Report js file style problems.', function (done) {
-    var jscs = require('gulp-jscs');
-    var stylish = require('gulp-jscs-stylish');
     gulp.src(paths.projectJs)
         .pipe(jscs({
             configPath: 'config/jscsrc'
@@ -320,7 +322,6 @@ gulp.task('jscs', 'Report js file style problems.', function (done) {
 });
 
 gulp.task('jsonlint', 'Report json file problems.', function () {
-    var jsonlint = require('gulp-json-lint');
     var isError = function (errorValue) {
         // avoid jsonlint bug: https://github.com/codenothing/jsonlint/issues/2
         return (errorValue !== undefined &&
@@ -335,11 +336,11 @@ gulp.task('jsonlint', 'Report json file problems.', function () {
         return spy.obj(function (obj) {
             if (isError(obj.jsonlint.error)) {
                 logError('LINTER ERROR EXIT:', 'jsonlint');
-                process.exit(1);
+                throw new Error('json lint');
             }
         });
     };
-    return gulp.src(paths.projectJson) // FIXME remove return when on 'finish' fixed
+    return gulp.src(paths.projectJson) // TODO remove return when on 'finish' fixed
         .pipe(jsonlint())
         .pipe(jsonlint.report(reporter))
         .pipe(jsonErrorExit())
@@ -377,7 +378,6 @@ gulp.task('utest',
     'Single unit test karma run; [-m PATTERN] argument limits ' +
     'tests to it functions with message string matching PATTERN.',
     function () {
-        var karma = require('gulp-karma');
         // Be sure to return the stream.
         // See http://stackoverflow.com/questions/8527786 Rimian post.
         return gulp.src([])
@@ -395,7 +395,6 @@ gulp.task('utest',
     });
 
 gulp.task('karma', 'Run karma in watch mode.', function () {
-    var karma = require('gulp-karma');
     return gulp.src([])
         .pipe(karma({
             configFile: 'karma.conf.js',

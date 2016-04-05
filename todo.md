@@ -26,7 +26,8 @@ Excluded from the `todo-show` scan (by the `ignoreThesePaths` configuration list
 - HACK /
 
 - REVIEW
-  - use eslint for html also?
+  - use eslint for html also
+  - use https://www.npmjs.com/package/gulp-beautify
   - which iOS versions supported? Document for android also
   - on-swipe-left="next()" does not work in ion-content
   - gulp error handling, wait for gulp4? http://artandlogic.com/2014/05/error-handling-in-gulp/, https://www.npmjs.com/package/gulp-exit

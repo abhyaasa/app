@@ -111,7 +111,7 @@ rules:
   no-multiple-empty-lines: 2
   no-native-reassign: 2
   no-negated-condition: 'off'
-  no-nested-ternary: 2
+  no-nested-ternary: 0
   no-new: 2
   no-new-func: 2
   no-new-object: 2
@@ -171,7 +171,7 @@ rules:
   prefer-arrow-callback: 'off'
   prefer-const: 2
   prefer-reflect: 2
-  prefer-rest-params: 2
+  prefer-rest-params: 0
   prefer-spread: 2
   prefer-template: 'off'
   quote-props: 'off'
@@ -210,3 +210,34 @@ rules:
   yoda:
     - error
     - never
+globals:
+  Ionic: false,
+  cordova: false,
+  StatusBar: false,
+  $: false,
+  angular: false,
+  browser: false,
+  repeater: false,
+  element: false,
+  inject: false,
+  afterEach: false,
+  beforeEach: false,
+  confirm: false,
+  context: false,
+  describe: false,
+  expect: false,
+  it: false,
+  jasmine: true,
+  JSHINT: false,
+  module: false,
+  mostRecentAjaxRequest: false,
+  qq: false,
+  runs: false,
+  spyOn: false,
+  spyOnEvent: false,
+  waitsFor: false,
+  ionic: false,
+  head: false,
+  xit: false,
+  xdescribe: false,
+  by: false

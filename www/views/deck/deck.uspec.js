@@ -1,14 +1,16 @@
-'use strict';
-
 // Jasmine unit tests
 
+'use strict';
+
+/* eslint-env node */
+
 describe('Deck', function () {
-    var deck;
+    // var deck = null;
     beforeEach(module('app'));
     beforeEach(function () {
-        inject(function (Deck) {
-            deck = Deck;
-        });
+        // inject(function (Deck) {
+        //     deck = Deck;
+        // }
     });
 
     // TODO complete rewrite of following borrowed from services.uspec.js

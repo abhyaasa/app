@@ -1,5 +1,10 @@
 'use strict';
 
+/* eslint no-console: 0 */
+/* eslint no-alert: 0 */
+/* eslint valid-jsdoc: 0 */
+/* eslint require-jsdoc: 0 */
+
 angular.module('services', ['ionic'])
 
 .constant('mode', 'debug') // 'debug', 'build', or 'normal'
@@ -35,7 +40,8 @@ angular.module('services', ['ionic'])
 
 .filter('capitalize', function () {
     return function (input) {
-        return !!input ? input.charAt(0).toUpperCase() +
+        var haveInput = Boolean(input);
+        return haveInput ? input.charAt(0).toUpperCase() +
             input.substr(1).toLowerCase() : '';
     };
 })
@@ -80,6 +86,7 @@ angular.module('services', ['ionic'])
                         return failure(error);
                     } else {
                         console.error('getData', JSON.stringify(error));
+                        return error;
                     }
                 });
         };
@@ -91,10 +98,12 @@ angular.module('services', ['ionic'])
  * based on http://learn.ionicframework.com/formulas/localstorage/
  */
 .service('LocalStorage', function ($window) {
+
     /**
-     * set value
-     * @param {string} key
-     * @param {object} value
+     * Set local storage value.
+     * @param {string} key identifies storage item
+     * @param {object} value object to store
+     * @returns {void}
      */
     this.set = function (key, value) {
         $window.localStorage[key] = value;
@@ -126,7 +135,7 @@ angular.module('services', ['ionic'])
 // org.apache.cordova.media => cordova.plugin.media
 // Also see mawarnes version in forum thread above.
 .factory('MediaSrv', function ($q, $ionicPlatform, $window, Log) {
-    function getErrorMessage(code) {
+    this.getErrorMessage = function (code) {
         if (code === 1) {
             return 'MediaError.MEDIA_ERR_ABORTED';
         } else if (code === 2) {
@@ -138,16 +147,16 @@ angular.module('services', ['ionic'])
         } else {
             return 'Unknown code <' + code + '>';
         }
-    }
+    };
 
-    function _logError(src, err) {
+    this._logError = function (src, err) {
         Log.error('media error', {
             code: err.code,
-            message: getErrorMessage(err.code)
+            message: this.getErrorMessage(err.code)
         });
-    }
+    };
 
-    function loadMedia(src, onError, onStatus, onStop) {
+    this.loadMedia = function (src, onError, onStatus, onStop) {
         var defer = $q.defer();
         $ionicPlatform.ready(function () {
             var mediaSuccess = function () {
@@ -156,7 +165,7 @@ angular.module('services', ['ionic'])
                 }
             };
             var mediaError = function (err) {
-                _logError(src, err);
+                this._logError(src, err);
                 if (onError) {
                     onError(err);
                 }
@@ -173,9 +182,9 @@ angular.module('services', ['ionic'])
             defer.resolve(new $window.Media(src, mediaSuccess, mediaError, mediaStatus));
         });
         return defer.promise;
-    }
+    };
 
-    function getStatusMessage(status) {
+    this.getStatusMessage = function (status) {
         if (status === 0) {
             return 'Media.MEDIA_NONE';
         } else if (status === 1) {
@@ -189,29 +198,23 @@ angular.module('services', ['ionic'])
         } else {
             return 'Unknown status <' + status + '>';
         }
-    }
+    };
 
-    function playSound(mp3File) {
-        loadMedia(mp3File).then(function (media) {
+    this.playSound = function (mp3File) {
+        this.loadMedia(mp3File).then(function (media) {
             // Don't want iOS default, which ignores mute button, see
             // https://www.npmjs.com/package/cordova-plugin-media
             media.play({
                 playAudioWhenScreenIsLocked: false
             });
         });
-    }
-
-    return {
-        loadMedia: loadMedia,
-        getStatusMessage: getStatusMessage,
-        getErrorMessage: getErrorMessage,
-        playSound: playSound
     };
-})
-;
+
+    return this;
+});
 
 // BUILD needed for browser testing, but ignored on device
-window.Media = function (src, mediaSuccess, mediaError, mediaStatus) {
+window.Media = function (src, mediaSuccess) {
     // Several media functions below are stubs.
     // src: A URI containing the audio content. (DOMString)
     // mediaSuccess: (Optional) The callback that executes after a Media object has
@@ -228,7 +231,7 @@ window.Media = function (src, mediaSuccess, mediaError, mediaStatus) {
     sound.load();
     return {
         // Returns the current position within an audio file (in seconds).
-        getCurrentPosition: function (mediaSuccess, mediaError) {
+        getCurrentPosition: function (mediaSuccess) {
             mediaSuccess(sound.currentTime);
         },
         // Returns the duration of an audio file (in seconds) or -1.
@@ -247,7 +250,7 @@ window.Media = function (src, mediaSuccess, mediaError, mediaStatus) {
         // Should be called on a ressource when it's no longer needed!
         release: function () {},
         // Moves the position within the audio file.
-        seekTo: function (milliseconds) {},
+        seekTo: function () {},
         // Set the volume for audio playback (between 0.0 and 1.0).
         setVolume: function (volume) {
             sound.volume = volume;

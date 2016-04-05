@@ -1,5 +1,7 @@
 'use strict';
 
+/* eslint no-console: 0 */
+
 angular.module('app', ['ionic', 'services', 'rzModule'])
 
 .run(function (Log, $ionicPlatform, $rootScope, $state, restoreSettings, settings,
