@@ -89,6 +89,7 @@ Linting:
 - `tidy`: for html and xml (update with `brew install tidy-html5`)
 - `flake8`: for Python 2
 - `eslint`: for javascript
+- `scss-lint`: for scss (sass) files
 
 Recommended OSX development tools with standard app installers:
 

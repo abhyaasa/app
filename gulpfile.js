@@ -27,7 +27,7 @@ var paths = {
     appJs: ['./www/**/*.js', '!./www/lib/**'],
     py: ['scripts/*.py'],
     xhtml: ['config.xml', 'index.html', 'www/views/**/*.html'],
-    projectJson: ['./ionic.project', './**/*.json', '!www/lib/**',
+    projectJson: ['./ionic.project', './**/*.json', '!www/lib/**', '.jsbeautifyrc',
         '!./node_modules/**/*.json', '!./plugins/**/*.json', '!./platforms/**/*.json'
     ]
 };
