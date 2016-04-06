@@ -1,5 +1,7 @@
 'use strict';
 
+/* eslint-env node */
+
 module.exports = function (config) {
     config.set({
 
@@ -15,8 +17,7 @@ module.exports = function (config) {
             {
                 pattern: 'lib/ionic/js/ionic.bundle.js',
                 watched: false
-            },
-            {
+            }, {
                 pattern: 'lib/angular-mocks/angular-mocks.js',
                 watched: false
             },
@@ -55,12 +56,11 @@ module.exports = function (config) {
         browsers: ['chromeSmall'],
 
         customLaunchers: {
-          chromeSmall: {
-            base: 'ChromeCanary',
-            flags: [
-                '--window-size=350,350',
-                '--window-position=0,0'
-            ] } },
+            chromeSmall: {
+                base: 'ChromeCanary',
+                flags: ['--window-size=350,350', '--window-position=0,0']
+            }
+        },
 
         // Continuous Integration mode
         // if true, Karma captures browsers, runs the tests and exits

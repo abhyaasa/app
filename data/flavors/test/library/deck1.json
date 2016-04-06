@@ -1,253 +1,359 @@
 [
  {
-  "id": 0, 
+  "date": "2016-03-26",
+  "sanskrit": true
+ },
+ {
+  "id": 0,
   "tags": [
    ".html"
-  ], 
-  "text": "<strong>bold html markup</strong>", 
+  ],
+  "text": [
+   "<strong>bold html markup</strong>"
+  ],
   "type": "mind"
- }, 
+ },
  {
-  "answer": "<p><strong>bold answer</strong></p>", 
-  "id": 1, 
+  "answer": [
+   "<p><strong>bold answer</strong></p>"
+  ],
+  "id": 1,
   "tags": [
    ".html"
-  ], 
-  "text": "<p>markdown <span class=\"em\">emphasis</span> <strong>bold</strong></p>", 
+  ],
+  "text": [
+   "<p>markdown <span class=\"em\">emphasis</span> <strong>bold</strong></p>"
+  ],
   "type": "mind"
- }, 
+ },
  {
-  "answer": "1", 
-  "id": 2, 
-  "matchingBegin": 2, 
-  "matchingEnd": 7, 
-  "tags": [], 
-  "text": "a", 
+  "answer": [
+   "1"
+  ],
+  "id": 2,
+  "matchingBegin": 2,
+  "matchingEnd": 7,
+  "tags": [],
+  "text": [
+   "a"
+  ],
   "type": "matching"
- }, 
+ },
  {
-  "answer": "2", 
-  "id": 3, 
-  "matchingBegin": 2, 
-  "matchingEnd": 7, 
-  "tags": [], 
-  "text": "b", 
+  "answer": [
+   "2"
+  ],
+  "id": 3,
+  "matchingBegin": 2,
+  "matchingEnd": 7,
+  "tags": [],
+  "text": [
+   "b"
+  ],
   "type": "matching"
- }, 
+ },
  {
-  "answer": "3", 
-  "id": 4, 
-  "matchingBegin": 2, 
-  "matchingEnd": 7, 
-  "tags": [], 
-  "text": "c", 
+  "answer": [
+   "3"
+  ],
+  "id": 4,
+  "matchingBegin": 2,
+  "matchingEnd": 7,
+  "tags": [],
+  "text": [
+   "c"
+  ],
   "type": "matching"
- }, 
+ },
  {
-  "answer": "4", 
-  "id": 5, 
-  "matchingBegin": 2, 
-  "matchingEnd": 7, 
-  "tags": [], 
-  "text": "d", 
+  "answer": [
+   "4"
+  ],
+  "id": 5,
+  "matchingBegin": 2,
+  "matchingEnd": 7,
+  "tags": [],
+  "text": [
+   "d"
+  ],
   "type": "matching"
- }, 
+ },
  {
-  "answer": "5", 
-  "id": 6, 
-  "matchingBegin": 2, 
-  "matchingEnd": 7, 
-  "tags": [], 
-  "text": "e", 
+  "answer": [
+   "5"
+  ],
+  "id": 6,
+  "matchingBegin": 2,
+  "matchingEnd": 7,
+  "tags": [],
+  "text": [
+   "e"
+  ],
   "type": "matching"
- }, 
+ },
  {
-  "answer": "6", 
-  "id": 7, 
-  "matchingBegin": 2, 
-  "matchingEnd": 7, 
-  "tags": [], 
-  "text": "f", 
+  "answer": [
+   "6"
+  ],
+  "id": 7,
+  "matchingBegin": 2,
+  "matchingEnd": 7,
+  "tags": [],
+  "text": [
+   "f"
+  ],
   "type": "matching"
- }, 
+ },
  {
-  "id": 8, 
-  "tags": [], 
-  "text": "Some text: not a question", 
+  "id": 8,
+  "tags": [],
+  "text": [
+   "Some text: not a question"
+  ],
   "type": "text"
- }, 
+ },
  {
-  "answer": true, 
-  "id": 9, 
+  "answer": [
+   "t"
+  ],
+  "id": 9,
   "tags": [
-   "foo", 
+   "foo",
    "bar"
-  ], 
-  "text": "true/false is true", 
-  "type": "true-false"
- }, 
- {
-  "id": 10, 
-  "tags": [
-   "foo"
-  ], 
-  "text": "Some more text with two outcomes?", 
-  "type": "text"
- }, 
- {
-  "id": 11, 
-  "responses": [
-   [
-    true, 
-    "a"
-   ], 
-   [
-    false, 
-    "b"
-   ]
-  ], 
-  "tags": [
-   "foo"
-  ], 
-  "text": "qtext", 
-  "type": "multiple-choice"
- }, 
- {
-  "id": 12, 
-  "responses": [
-   [
-    false, 
-    "a"
-   ], 
-   [
-    false, 
-    "b"
-   ], 
-   [
-    false, 
-    "c"
-   ], 
-   [
-    true, 
-    "d"
-   ], 
-   [
-    false, 
-    "e"
-   ], 
-   [
-    false, 
-    "f"
-   ], 
-   [
-    false, 
-    "g"
-   ], 
-   [
-    false, 
-    "h"
-   ], 
-   [
-    false, 
-    "i"
-   ], 
-   [
-    false, 
-    "j"
-   ]
-  ], 
-  "tags": [
-   "foo"
-  ], 
-  "text": "some longer text for a multiple choice question with lots of answers to see if it confuses things a lot or not", 
-  "type": "multiple-choice"
- }, 
- {
-  "id": 13, 
-  "responses": [
-   [
-    true, 
-    "a"
-   ], 
-   [
-    true, 
-    "b"
-   ], 
-   [
-    false, 
-    "c"
-   ]
-  ], 
-  "tags": [
-   "foo", 
-   ".ma"
-  ], 
-  "text": "multiple answers on this one", 
-  "type": "multiple-choice"
- }, 
- {
-  "id": 14, 
-  "number": 1.0, 
-  "tags": [
-   "a", 
-   "foo"
-  ], 
-  "text": "qt", 
+  ],
+  "text": [
+   "true/false is true"
+  ],
   "type": "mind"
- }, 
+ },
+ {
+  "id": 10,
+  "tags": [
+   "foo"
+  ],
+  "text": [
+   "Some more text with two outcomes?"
+  ],
+  "type": "text"
+ },
+ {
+  "id": 11,
+  "responses": [
+   [
+    true,
+    [
+     "a"
+    ]
+   ],
+   [
+    false,
+    [
+     "b"
+    ]
+   ]
+  ],
+  "tags": [
+   "foo"
+  ],
+  "text": [
+   "qtext"
+  ],
+  "type": "multiple-choice"
+ },
+ {
+  "id": 12,
+  "responses": [
+   [
+    false,
+    [
+     "a"
+    ]
+   ],
+   [
+    false,
+    [
+     "b"
+    ]
+   ],
+   [
+    false,
+    [
+     "c"
+    ]
+   ],
+   [
+    true,
+    [
+     "d"
+    ]
+   ],
+   [
+    false,
+    [
+     "e"
+    ]
+   ],
+   [
+    false,
+    [
+     "f"
+    ]
+   ],
+   [
+    false,
+    [
+     "g"
+    ]
+   ],
+   [
+    false,
+    [
+     "h"
+    ]
+   ],
+   [
+    false,
+    [
+     "i"
+    ]
+   ],
+   [
+    false,
+    [
+     "j"
+    ]
+   ]
+  ],
+  "tags": [
+   "foo"
+  ],
+  "text": [
+   "some longer text for a multiple choice question with lots of answers to see if it confuses things a lot or not"
+  ],
+  "type": "multiple-choice"
+ },
+ {
+  "id": 13,
+  "responses": [
+   [
+    true,
+    [
+     "a"
+    ]
+   ],
+   [
+    true,
+    [
+     "b"
+    ]
+   ],
+   [
+    false,
+    [
+     "c"
+    ]
+   ]
+  ],
+  "tags": [
+   "foo",
+   ".ma"
+  ],
+  "text": [
+   "multiple answers on this one"
+  ],
+  "type": "multiple-choice"
+ },
+ {
+  "id": 14,
+  "number": 1,
+  "tags": [
+   "a",
+   "foo"
+  ],
+  "text": [
+   "qt"
+  ],
+  "type": "mind"
+ },
  {
   "hints": [
-   "hint ?questionmark"
-  ], 
-  "id": 15, 
+   [
+    "    hint ?questionmark"
+   ]
+  ],
+  "id": 15,
   "tags": [
    "foo"
-  ], 
-  "text": "q with", 
+  ],
+  "text": [
+   "q with"
+  ],
   "type": "mind"
- }, 
+ },
  {
-  "id": 16, 
+  "id": 16,
   "responses": [
    [
-    false, 
-    "a"
-   ], 
+    false,
+    [
+     "a"
+    ]
+   ],
    [
-    true, 
-    "b"
+    true,
+    [
+     "b"
+    ]
    ]
-  ], 
-  "tags": [], 
-  "text": "mq", 
+  ],
+  "tags": [],
+  "text": [
+   "mq"
+  ],
   "type": "multiple-choice"
- }, 
+ },
  {
-  "id": 17, 
+  "id": 17,
   "tags": [
    "c"
-  ], 
-  "text": "mcq", 
+  ],
+  "text": [
+   "mcq"
+  ],
   "type": "mind"
- }, 
+ },
  {
-  "answer": "answer a = b", 
-  "id": 18, 
-  "tags": [], 
-  "text": "mind", 
+  "answer": [
+   "answer a = b"
+  ],
+  "id": 18,
+  "tags": [],
+  "text": [
+   "mind"
+  ],
   "type": "mind"
- }, 
+ },
  {
-  "id": 19, 
-  "tags": [], 
-  "text": "one", 
+  "id": 19,
+  "tags": [],
+  "text": [
+   ""
+  ],
   "type": "mind"
- }, 
+ },
  {
-  "answer": "three", 
-  "id": 20, 
-  "tags": [], 
-  "text": "two", 
+  "id": 20,
+  "tags": [],
+  "text": [
+   "one"
+  ],
+  "type": "mind"
+ },
+ {
+  "answer": "three",
+  "id": 21,
+  "tags": [],
+  "text": "two",
   "type": ""
  }
 ]

@@ -5,8 +5,8 @@
   <meta name="viewport" content="initial-scale=1, maximum-scale=1,
         user-scalable=no, width=device-width">
 
-  <!-- Android needs: from https://github.com/apache/cordova-plugin-whitelist#content-security-policy, with eval() exception removed -->
-  <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'">
+  <!-- Android needs: from https://github.com/apache/cordova-plugin-whitelist#content-security-policy, without 'unsafe-eval' and with added localhost:* for livereload -->
+  <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' localhost:*">
 
   <title>{{ config.name }}</title>
   <link href="lib/ionic/css/ionic.css" rel="stylesheet">
@@ -36,7 +36,6 @@
   <!-- Cordova is bootstrapped by ionic-platform-web-client, comment out above or following line -->
   <script src="cordova.js"></script>
 
-  <!-- REVIEW generate lib includes automatically? -->
   <script src="lib/underscore/underscore-min.js"></script>
   <script src="lib/angularjs-slider/dist/rzslider.min.js"></script>
 

@@ -8,11 +8,11 @@ angular.module('app')
     $scope.Card = Card;
     $scope.Deck = Deck;
     $scope.$on('$ionicView.enter', function () {
-        if (!Deck.data) { // Deck.data undefined by source auto-reload
-            Card.question = undefined;
+        if (!Deck.isDefined) { // Deck.data undefined by source auto-reload
+            Card.isDefined = false;
         } else if (!Deck.data.activeCardIndex) {
             Card.setup(0);
-        } else if (!Card.question) {
+        } else if (!Card.isDefined) {
             Card.setup(Deck.data.activeCardIndex);
         }
     });
@@ -47,13 +47,11 @@ angular.module('app')
     };
     gestureSetup();
 
-    // FUTURE swipedown to review card stack
-
     $scope.hint = function () {
-        // TODO add mc and auto mind hints using settings.hintPercent
-        Card.hint = Card.question.hints[Card.hintIndex];
+        Deck.count.hints++;
+        Card.hint = Card.hints[Card.hintIndex];
         Card.hintIndex++;
-        Card.haveHint = Card.hintIndex < Card.question.hints.length;
+        Card.haveHint = Card.hintIndex < Card.hints.length;
     };
 
     $scope.setOutcome = function (outcome) {
@@ -135,22 +133,28 @@ angular.module('app')
     };
 })
 
-.filter('unsafe', function ($sce, _, settings) {
-    return function (value) {
-        var text = value;
-        if (_.isArray(value)) {
-            text = value[settings.devanagari ? 1 : 0];
-            if (settings.devanagari === 'both') {
-                text += value[0].length > 20 ? '\n' : ' ';
-                text += value[0];
+.filter('unsafe', function ($sce, _, settings, Deck) {
+    return function (valArray) {
+        var strArray = _.map(valArray, function (value) {
+            var text = value;
+            if (_.isArray(value)) {
+                text = value[Deck.data.devanagari ? 1 : 0];
+                if (Deck.data.devanagari === 'both') {
+                    text += (valArray.length === 1 && value[0].length > 20) ? '\n' : ' ';
+                    text += value[0];
+                }
             }
-        }
-        return $sce.trustAsHtml(text);
+            return text;
+        });
+        return $sce.trustAsHtml(strArray.join(''));
     };
 })
 
 .service('Card', function ($sce, Log, $state, Deck, Library, settings, MediaSrv, _) {
     var _this = this;
+
+    this.isDefined = false;
+
     this.submittedAnswer = undefined;
 
     this.setup = function (activeCardIndex) {
@@ -174,9 +178,6 @@ angular.module('app')
         _this.text = _this.question.text;
         _this.type = _this.question.type;
         _this.responses = _this.question.responses;
-        _this.hintIndex = _this.question.hints ? 0 : undefined;
-        _this.haveHint = _this.question.hints !== undefined;
-        _this.hint = null;
         _this.answer = _this.question.answer;
         var number = _this.question.number;
         var numString = number === undefined ? '' : number.toString();
@@ -202,9 +203,13 @@ angular.module('app')
             } else {
                 _this.question.answer = Deck.questions[answerIndex].text;
             }
-        } else if (_this.question.type === 'transliteration') {
-            _this.answer = _this.text[0];
-            _this.text = _this.text[1];
+        } else if (_this.question.type === 'd-t') {
+            _this.answer = _this.text[0][0];
+            _this.text = _this.text[0][1];
+            _this.type = 'mind';
+        } else if (_this.question.type === 't-d') {
+            _this.answer = _this.text[0][1];
+            _this.text = _this.text[0][0];
             _this.type = 'mind';
         } else if (_this.question.type === 'matching') {
             // Rewrite matching as multiple-choice, including random order, this
@@ -253,6 +258,11 @@ angular.module('app')
                 }
             }
         }
+        _this.hints = _this.question.hints;
+        _this.haveHint = _this.hints !== undefined;
+        _this.hintIndex = _this.haveHint ? 0 : undefined;
+        _this.hint = null;
+        _this.isDefined = true;
         Log.debug('Card setup _this', JSON.stringify(_this));
     };
 
@@ -289,7 +299,7 @@ angular.module('app')
     };
 
     this.reset = function () {
-        _this.question = undefined;
+        _this.isDefined = false;
         Deck.reset();
     };
 

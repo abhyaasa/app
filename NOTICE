@@ -4,9 +4,7 @@ another licensor of code in a directory or file is indicated by a different
 directory LICENSE file or another licensor's copyright notice at the
 beginning of a file.
 
-This project's databases, in data subdirectories, are licensed separately
-as indicated by license statements at the head of a database file or LICENSE
-files in a data directory.
+The content of any database directories containing LICENSE files are subject to that license, not the general project license.
 
 Development started with the Ionic framework, v1.0.0-beta.14, with fragments
 taken from its start apps, Copyright 2014 Drifty Co., http://drifty.com/.

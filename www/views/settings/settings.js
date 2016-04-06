@@ -2,7 +2,7 @@
 
 angular.module('app')
 
-.controller('SettingsController', function ($scope, settings, MediaSrv) {
+.controller('SettingsController', function ($scope, settings) {
     $scope.settings = settings;
 
     // // from http://docs.ionic.io/v1.0/docs/deploy-install
@@ -32,21 +32,18 @@ angular.module('app')
 
 .value('settings', {})
 
-.service('saveSettings', function (Log, settings, LocalStorage, _) {
+.service('saveSettings', function (Log, settings, LocalStorage) {
     return function () {
         LocalStorage.setObject('*settings*', settings);
         Log.debug('SAVED SETTINGS');
     };
 })
 
-// TODO create a provider version of this for app.js promise for settings controller
 .service('restoreSettings', function (Log, settings, LocalStorage, _) {
     var defaultSettings = {
         intro: true,
         randomQuestions: false,
-        randomResponses: false,
-        devanagari: false,
-        hintPercent: 10
+        randomResponses: false
     };
     return function (reset) {
         _.extendOwn(settings, defaultSettings);

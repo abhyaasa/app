@@ -1,12 +1,14 @@
-'use strict';
-
 // Jasmine unit tests
+
 // REVIEW use Google Chrome Canary instead of chrome in progractor.conf.js
 
 // TODO need to create mock for $hhtp.
 // See http://stackoverflow.com/questions/26612156
 // and https://www.airpair.com/angularjs/posts/unit-testing-angularjs-applications
 // and http://gonehybrid.com/how-to-write-automated-tests-for-your-ionic-app-part-2/
+
+'use strict';
+
 xdescribe('getData', function () {
     var scope;
     beforeEach(module('services'));

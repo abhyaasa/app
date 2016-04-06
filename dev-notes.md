@@ -7,6 +7,8 @@ To open discussion of collaboration possibilities, please email <abhyaasa108@gma
 
 This project uses [semantic versioning](http://semver.org).
 
+Collaboration is facilitated by the coding practice indicated by this project's several linter configuration files. Contributed code should pass `gulp lint` without complaint.
+
 
 ## Tasks
 
@@ -36,7 +38,7 @@ CLI commands are prefixed in these notes by the `$` prompt, and unless otherwise
 
 Next, install global dependencies:
 ```
-$ npm install -g cordova ionic ios-sim gulp bower
+$ npm install -g cordova ionic ios-sim gulp bower eslint
 ```
 
 The following command line completes a minimal app development installation. The voluminous output generated may overflow the terminal buffer, so output is saved in `temp/setup.txt` for inspection if something goes wrong.  
@@ -82,7 +84,12 @@ The following are used for automatic testing and installed with `npm`:
   $ brew nvm
   ```
 
-- `tidy`, the recommended html linter, is also updated with `brew install tidy-html5`.
+Linting:
+
+- `tidy`: for html and xml (update with `brew install tidy-html5`)
+- `flake8`: for Python 2
+- `eslint`: for javascript
+- `scss-lint`: for scss (sass) files
 
 Recommended OSX development tools with standard app installers:
 
@@ -96,10 +103,13 @@ For Android testing:
 
 - `genymotion` simulator (actually a fast and fairly accurate emulator)
   - requires `VirtualBox` platform emulator
+  - on Windows, AMIDuOS might be preferable. See  http://www.laptopmag.com/articles/run-android-apps-on-pc.
 - `adb` Chrome extension for debugging
 - Android SDK Manager (`android` CLI command)
   - `brew install android-sdk`
   - also installs `adb` (android CLI debugger)
+  
+Recommended for python debugging: [Atpana Studio 3] (http://www.aptana.com/products/studio3.html), which on OSX requires a [specific java version](https://support.apple.com/kb/DL1572?viewlocale=en_US&locale=en_US).
 
 ### Atom editor
 
@@ -109,7 +119,7 @@ Atom plugins are indicated by the following list
 ```
 $ /bin/ls ~/.atom/packages
 README.md		csslint			linter-flake8
-atom-beautify		docblockr		linter-jscs
+atom-beautify		docblockr		linter-eslint
 atom-html-preview	editor-settings		linter-scss-lint
 atom-htmltidy		emmet			linter-tidy
 atom-material-syntax	file-icons		linter-xmllint
@@ -206,11 +216,13 @@ Correct `.py` script initial `#!` script lines as needed if `/usr/bin/env python
 
 Use `-h` argument for script usage information.
 
+Python scripts should pass `flake8` linter, with maximum line length 90 and ignoring the following error codes: E203, E202, E261.
+
 ### jsdoc documentation
 
 `gulp dengi` generates jsdoc documentation in the `doc/build/` directory.
 
-REVIEW flesh out this documentation
+REVIEW flesh out jsdoc documentation
 
 
 ## `$rootScope` variables
@@ -267,7 +279,7 @@ or use `nvm` if that is in use.
 
 Update global dependencies.
 ```
-$ npm update -g cordova ionic ios-sim gulp bower
+$ npm update -g cordova ionic ios-sim gulp bower eslint
 ```
 
 Make sure that `package.json` is consistent with the installed local dependencies.

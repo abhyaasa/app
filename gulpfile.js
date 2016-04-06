@@ -1,31 +1,37 @@
 'use strict';
 
+/* eslint-env node */
+/* eslint prefer-reflect: ["error", { exceptions: ["apply"] }] */
+/* eslint no-sync: 0 */
+
 /* begin configuration variables */
 
 var cmdAliases = {
     help: 'gulp cmd',
-    cd: 'cd data/cdecks/test; update.sh deck_2',
+    cd1: 'cd data/cdecks/test; update.sh deck1',
+    cd2: 'cd data/cdecks/test; update.sh deck_2',
     ct: 'cd scripts; cdeck.py -t -m "prefix"',
     si: 'gulp si -i',
     sa: 'gulp si -a',
     sl: 'gulp si -l',
     bi: 'gulp build',
     ba: 'gulp build -a',
-    ei: 'gulp default; ionic emulate ios -lcs',
-    ri: 'gulp default; ionic run ios -lcs',
-    ra: 'gulp default; ionic run android -cs',
+    ei: 'ionic emulate ios -lcs',
+    ra: 'ionic run android -cs',
     bx: 'gulp bx'
 };
 
 var paths = {
     scss: ['./scss/**/*.scss'],
     appJs: ['./www/**/*.js', '!./www/lib/**'],
-    projectJson: ['./ionic.project', './**/*.json',
+    py: ['scripts/*.py'],
+    xhtml: ['config.xml', 'index.html', 'www/views/**/*.html'],
+    projectJson: ['./ionic.project', './**/*.json', '!www/lib/**', '.jsbeautifyrc',
         '!./node_modules/**/*.json', '!./plugins/**/*.json', '!./platforms/**/*.json'
     ]
 };
 paths.indexJs = paths.appJs.concat(['!./www/js/app.js', '!./www/**/*spec.js']);
-paths.projectJs = paths.appJs.concat(['./*.js', './doc/*.js']);
+paths.projectJs = paths.appJs.concat(['./*.js', './config/*.js', './doc/*.js']);
 
 var configJsonFile = 'www/data/config.json';
 
@@ -33,28 +39,68 @@ var devBrowser = ' --browser /Applications/Google\\ Chrome\\ Canary.app';
 
 /* end configuration variables */
 
+// NOTE: All synchronous tasks (to be completed before their dependents run) use 'done'
+// callback and do not return their stream.
+
 var gulp = require('gulp-help')(require('gulp'));
 var gutil = require('gulp-util');
 var sh = require('shelljs');
 var _ = require('underscore');
 var replace = require('gulp-replace');
 var fs = require('fs');
-var debug = require('gulp-debug');
-// var concat = require('gulp-concat'); # included in devDependencies, but not used
 var argv = require('minimist')(process.argv.slice(2));
+var plumber = require('gulp-plumber');
+var spy = require('through2-spy');
+var exec = require('gulp-exec');
+var sass = require('gulp-sass');
+var minifyCss = require('gulp-minify-css');
+var rename = require('gulp-rename');
+var inject = require('gulp-inject');
+var markdown = require('gulp-markdown');
+var Dgeni = require('dgeni');
+var dengiPackage = require('./docs/dgeni-package');
+var bump = require('gulp-bump');
+var semver = require('semver');
+var eslint = require('gulp-eslint');
+var scssLint = require('gulp-scss-lint');
+var jsonlint = require('gulp-json-lint');
+var karma = require('gulp-karma');
 
-function logError(message) {
-    console.log(gutil.colors.magenta(message));
-}
+/* May be handy, but not used
+var debug = require('gulp-debug'); // in dev-dependencies
+var concat = require('gulp-concat'); // in dev-dependencies
+
+// handly for stream debugging, e.g. .pipe(makeObjSpy('KEYS', _.keys))
+var makeObjSpy = function (name, fn) {
+    return spy.obj(function (obj) {
+        gutil.log('SPY', name, fn(obj));
+    });
+};
+*/
+
+// from https://www.timroes.de/2015/01/06/proper-error-handling-in-gulp-js/
+var gulpSrc = gulp.src;
+gulp.src = function () {
+    return gulpSrc.apply(gulp, arguments)
+        .pipe(plumber(function (error) {
+            gutil.log(gutil.colors.red('Error (' + error.plugin + '): ' + error.message));
+            this.emit('end'); // emit the end event, to properly end the task
+        }));
+};
+
+var cwd = process.cwd();
+
+var exit = process.exit;
+
+var logError = function () {
+    gutil.log(gutil.colors.magenta(Array.prototype.slice.apply(arguments).join(' ')));
+};
 
 gulp.task('default',
     'Run by ionic app build and serve commands', ['sass', 'index', 'md', 'lint']
 );
 
 gulp.task('sass', 'Ionic .scss to .css file transformation', function (done) {
-    var sass = require('gulp-sass');
-    var minifyCss = require('gulp-minify-css');
-    var rename = require('gulp-rename');
     gulp.src('./scss/ionic.app.scss')
         .pipe(sass())
         .on('error', sass.logError)
@@ -70,7 +116,7 @@ gulp.task('sass', 'Ionic .scss to .css file transformation', function (done) {
 });
 
 gulp.task('watch', 'Only watches scss files.', function () {
-    gulp.watch(paths.sass, ['sass']);
+    return gulp.watch(paths.sass, ['sass']);
 });
 
 // For Ionic >= 1.2 http://www.typescriptlang.org
@@ -85,26 +131,24 @@ gulp.task('watch', 'Only watches scss files.', function () {
 
 gulp.task('index', 'Inject script elements into www/index.html',
     function () {
-        var inject = require('gulp-inject');
+        var pathsOnly = {
+            read: false
+        };
         var injector = function (paths) {
-            return inject(gulp.src(paths, {
-                    read: false
-                }), // .pipe(debug())
-                {
-                    relative: true
-                });
+            return inject(gulp.src(paths, pathsOnly), {
+                relative: true
+            });
         };
         sh.cp('-f', './index.html', './www/index.html');
         return gulp.src('./www/index.html')
             .pipe(injector(paths.indexJs))
-            // .pipe(debug())
             .pipe(gulp.dest('./www'));
     });
 
 gulp.task('flavor',
     '--name FLAVOR : inject FLAVOR into ' + configJsonFile +
     ' and link ./resources to data/flavors/FLAVOR/resources',
-    function () {
+    function (done) {
         if (!argv.name) {
             logError('Usage: gulp flavor --name NAME');
         } else {
@@ -115,12 +159,12 @@ gulp.task('flavor',
             sh.exec('ln -sf `pwd`/data/flavors/' + argv.name + ' www/data/flavor');
             sh.exec('ln -sf data/flavors/' + argv.name + '/resources .');
         }
+        done();
     });
 
 gulp.task('md', 'Process markdown files', function () {
-    var markdown = require('gulp-markdown');
     sh.exec('rm -rf ./www/data/md');
-    gulp.src('./data/md/*.md')
+    return gulp.src('./data/md/*.md')
         .pipe(markdown())
         .pipe(gulp.dest('./www/data/md'));
 });
@@ -136,7 +180,7 @@ gulp.task('si',
         sh.exec(command);
     });
 
-gulp.task('build', '[-a] for Android, default iOS', ['default'], function () {
+gulp.task('build', '[-a] for Android, default iOS', ['default'], function (done) {
     sh.exec('ionic build ' + (argv.a ? 'android' : 'ios'));
     if (!argv.a) {
         gulp.src(['./platforms/ios/*/config.xml'])
@@ -144,75 +188,32 @@ gulp.task('build', '[-a] for Android, default iOS', ['default'], function () {
             .pipe(gulp.dest('./platforms/ios'));
     }
     logError('If build did not end with "** BUILD SUCCEEDED **", run it again!');
+    done();
 });
 
-gulp.task('bx', 'Build for ios and open xcode project', ['build'], function () {
+gulp.task('bx', 'Build for ios and open xcode project', ['build'], function (done) {
     sh.exec('open platforms/ios/*.xcodeproj');
+    done();
 });
 
-gulp.task('lint',
-    'Run js, json, scss, and html/xml linters.', [
-        'jshint', 'jscs', 'jsonlint', 'scsslint', 'htmllint'
-    ]
-);
 
-gulp.task('scsslint', 'scss file linter', function () {
-    var scssLint = require('gulp-scss-lint');
-    return gulp.src(paths.scss)
-        .pipe(scssLint());
-});
-
-gulp.task('jshint', function () {
-    var jshint = require('gulp-jshint');
-    gulp.src(paths.projectJs)
-        .pipe(jshint('.jshintrc'))
-        .pipe(jshint.reporter('jshint-stylish'));
-});
-
-gulp.task('jscs', 'Run jscs on all (non-lib) .js files', function () {
-    var jscs = require('gulp-jscs');
-    var stylish = require('gulp-jscs-stylish');
-    gulp.src(paths.projectJs)
-        .pipe(jscs())
-        .pipe(stylish());
-});
-
-gulp.task('jsonlint', 'Report json errors', function () {
-    var jsonlint = require('gulp-json-lint');
-    var reporter = function (lint, file) {
-        // HACK avoid jsonlint bug: https://github.com/codenothing/jsonlint/issues/2
-        if (lint.error !== 'Invalid Reverse Solidus \'\\\' declaration.') {
-            console.log(file.path + ': ' + lint.error);
-        }
-    };
-    gulp.src(paths.projectJson)
-        .pipe(jsonlint())
-        .pipe(jsonlint.report(reporter));
-});
-
-gulp.task('htmllint', 'Report html errors', function () {
-    var files = 'config.xml index.html www/views/*.html www/views/*/*.html';
-    sh.exec('scripts/tidylint.py ' + files);
-});
-
-gulp.task('publish-pre-build', 'Execute before publishing build', function () {
+gulp.task('publish-pre-build', 'Execute before publishing build.', function () {
     // PUBLISH pref-building tasks: see https://github.com/leob/ionic-quickstarter
     // use https://github.com/scniro/gulp-clean-css
 });
 
-gulp.task('dgeni', 'Generate jsdoc documentation.', function () {
+gulp.task('dgeni', 'Generate jsdoc documentation.', function (done) {
     // from https://github.com/petebacondarwin/dgeni-example, for doc tags see
     // https://github.com/angular/angular.js/wiki/Writing-AngularJS-Documentation and
     // http://www.chirayuk.com/snippets/angularjs/ngdoc
-    var Dgeni = require('dgeni');
-    var dengiPackage = require('./docs/dgeni-package');
     try {
         var dgeni = new Dgeni([dengiPackage]);
-        return dgeni.generate();
+        dgeni.generate();
     } catch (x) {
-        console.log(x.stack);
+        logError(x.stack);
         throw x;
     }
+    done();
 });
 
 gulp.task('cmd', '[-a ALIAS] : Execute shell command named ALIAS in aliases dictionary' +
@@ -220,45 +221,144 @@ gulp.task('cmd', '[-a ALIAS] : Execute shell command named ALIAS in aliases dict
     function () {
         if (!argv.a) {
             _.forEach(cmdAliases, function (value, key) {
-                console.log(key, ':', value);
+                gutil.log(key, ':', value);
             });
         } else {
             var cmd = cmdAliases[argv.a];
-            console.log('exec command:', cmd);
+            gutil.log('exec command:', cmd);
             sh.exec(cmd);
         }
     });
 
-gulp.task('bump', '[-v VERSION | -t (major|minor|patch|prerelease)] : Change app ' +
-    'version to VERSION or to result of bumping of given type (-t, default patch), ' +
-    'and create annotated git tag.',
-    function () {
-        var bump = require('gulp-bump');
-        var semver = require('semver');
+gulp.task('bump', '[-v VERSION | -t (major | minor | patch | (prerelease [-n NAME])] : ' +
+    'Change app version to VERSION or to result of bumping of given type (-t, default ' +
+    'prerelease), and create annotated git tag.',
+    function (done) {
         fs.readFile('./package.json', function (err, data) {
+            if (err) {
+                logError(err.stack);
+                throw err;
+            }
             var version = JSON.parse(data).version;
             var newVersion = argv.v;
             if (!argv.v) {
                 if (!argv.t) {
-                    argv.t = 'patch';
+                    argv.t = 'prerelease';
                 }
-                newVersion = semver.inc(version, argv.t);
+                newVersion = semver.inc(version, argv.t, argv.n);
             }
-            console.log('Bumping version ' + version + ' to ' + newVersion);
-            gulp.src(['./www/data/config.json', './package.json'])
-                // see https://www.npmjs.com/package/gulp-bump
-                .pipe(bump({
-                    version: newVersion
-                }))
+            gutil.log('Bumping version ' + version + ' to ' + newVersion);
+            var versionObj = {
+                version: newVersion
+            };
+            gulp.src(['./package.json'])
+                .pipe(bump(versionObj))
                 .pipe(gulp.dest('./'));
+            gulp.src(['./www/data/config.json'])
+                .pipe(bump(versionObj))
+                .pipe(gulp.dest('./www/data'));
             gulp.src(['./config.xml'])
                 .pipe(replace(/(<widget.*version=")[^"]*/, '$1' + newVersion))
                 .pipe(gulp.dest('./'));
             sh.exec('git tag -a v' + newVersion + ' -m "version ' + newVersion + '"');
         });
+        done();
     });
 
-// ------------------ Testing tasks follow -------------------------------------
+// ------------------ Linting tasks ----------------------------------------
+
+gulp.task('lint',
+    'Run all js, json, scss, and html/xml file problem reporters.', [
+        'eslint', 'jsonlint', 'scsslint', 'xhtmllint', 'pylint'
+    ]
+);
+
+var linterErrorExit = function (linterKey) {
+    return spy.obj(function (obj) {
+        if (!obj[linterKey].success) {
+            logError('LINTER ERROR EXIT:', linterKey);
+            exit(1);
+        }
+    });
+};
+
+var execErrorExit = function (linterName) {
+    return spy.obj(function (obj) {
+        if (obj.exec.stderr) {
+            logError('LINTER ERROR EXIT:', linterName);
+            throw new Error('exec');
+        }
+    });
+};
+
+gulp.task('eslint', 'Report js file problems.', function () {
+    gulp.src(paths.projectJs)
+        .pipe(eslint({
+            configFile: 'config/eslintrc.yml'
+        }))
+        .pipe(eslint.format())
+        .pipe(eslint.failAfterError());
+});
+
+gulp.task('scsslint', 'Report scss file problems.', function (done) {
+    gulp.src(paths.scss)
+        .pipe(scssLint({
+            config: cwd + '/config/scss-lint.yml'
+        }))
+        .pipe(linterErrorExit('scsslint'))
+        .on('finish', done);
+});
+
+gulp.task('jsonlint', 'Report json file problems.', function (done) {
+    var isError = function (errorValue) {
+        // avoid jsonlint bug: https://github.com/codenothing/jsonlint/issues/2
+        return (errorValue !== undefined &&
+            errorValue !== 'Invalid Reverse Solidus \'\\\' declaration.');
+    };
+    var reporter = function (jsonLintObj, file) {
+        if (isError(jsonLintObj.error)) {
+            gutil.log(file.path + ': ' + jsonLintObj.error);
+        }
+    };
+    var jsonErrorExit = function () {
+        return spy.obj(function (obj) {
+            if (isError(obj.jsonlint.error)) {
+                logError('LINTER ERROR EXIT:', 'jsonlint');
+                exit(1);
+            }
+        });
+    };
+    gulp.src(paths.projectJson)
+        .pipe(jsonlint())
+        .pipe(jsonlint.report(reporter))
+        .pipe(jsonErrorExit())
+        .on('finish', done)
+    ;
+});
+
+gulp.task('xhtmllint', 'Report html file problems.', function (done) {
+    gulp.src(paths.xhtml)
+        .pipe(exec('scripts/tidylint.py <%= file.path %>'))
+        .pipe(exec.reporter())
+        .pipe(execErrorExit('xhtmllint'))
+        .on('finish', done);
+});
+
+gulp.task('pylint', 'Report python file problems.', function (done) {
+    gulp.src(paths.py)
+        .pipe(exec('flake8 --config=config/flake8 --exit-zero <%= file.path %> 1>&2'))
+        .pipe(exec.reporter())
+        .pipe(execErrorExit('pylint'))
+        .on('finish', done);
+});
+
+gulp.task('test', 'Run some gulp development test.', ['jsonlint'],
+    function () {
+        gutil.log('TESTING');
+    });
+
+// ------------------ Testing tasks -------------------------------------
+
 // utest and karma tasks adapted from https://www.npmjs.com/package/gulp-karma,
 // but can't find angular if files provided in gulp.src instead of karma.conf.
 
@@ -266,7 +366,6 @@ gulp.task('utest',
     'Single unit test karma run; [-m PATTERN] argument limits ' +
     'tests to it functions with message string matching PATTERN.',
     function () {
-        var karma = require('gulp-karma');
         // Be sure to return the stream.
         // See http://stackoverflow.com/questions/8527786 Rimian post.
         return gulp.src([])
@@ -284,17 +383,15 @@ gulp.task('utest',
     });
 
 gulp.task('karma', 'Run karma in watch mode.', function () {
-    var karma = require('gulp-karma');
-    gulp.src([])
+    return gulp.src([])
         .pipe(karma({
             configFile: 'karma.conf.js',
             action: 'watch'
         }));
 });
 
-gulp.task('itest', 'Integration (e-e) tests', function () {
+gulp.task('itest', 'Integration (e-e) tests', function (done) {
     // FUTURE itest not working
-    var cwd = process.cwd();
     var mkCmd = function (cmd) {
         return 'scripts/term.sh "cd ' + cwd + ';' + cmd + '"';
     };
@@ -303,4 +400,5 @@ gulp.task('itest', 'Integration (e-e) tests', function () {
     sh.exec(mkCmd('webdriver-manager start'));
     sh.exec('sleep 3');
     sh.exec(mkCmd('protractor protractor.conf.js'));
+    done();
 });

@@ -5,7 +5,7 @@ There are lots of things to do. Some are recorded as Atom todo-show (ctrl-shift-
 
 Order within groups sometimes reflects decreasing priority. Items are only listed here if they do not have a more meaningful location in other files. 
 
-Excluded from the `todo-show` scan (by the `ignoreThesePaths` configuration list) are library, auto-generated, and archive files, and for the time being `**spec.js` files.
+Excluded from the `todo-show` scan are library, auto-generated, and archive files, and for the time being `**spec.js` files. (See the `ignoreTheseTodos` and `ignoreThesePaths` properties of the `todo-show` configuration.)
 
 - XXX /
 
@@ -13,56 +13,40 @@ Excluded from the `todo-show` scan (by the `ignoreThesePaths` configuration list
 
 - CHANGED /
 
-- PRIORITY /
-
 - TODO
-  - sort between text heading cards
+  - android device testing
+  - card load spinner instead of select deck message
+  - range slider right margin
   - try apple archive run
-  - xcode debugger breakpoints
-
-- IDEA /
-
-- HACK /
+  - Leitner learning algorithm https://en.wikipedia.org/wiki/Leitner_system
 
 - REVIEW
-  - which iOS versions supported? Document for android also.
+  - use https://www.npmjs.com/package/gulp-beautify
+  - which iOS versions supported? Document for android also
+  - on-swipe-left="next()" does not work in ion-content
   - gulp error handling, wait for gulp4? http://artandlogic.com/2014/05/error-handling-in-gulp/, https://www.npmjs.com/package/gulp-exit
-  - sanskrit embedded in text
-  - typescript http://blog.ionic.io/ionic-and-typescript-part-2/
-  - Coffee, jade, NOT stylus
+  - consider Coffee, jade, NOT stylus
   - Chrome developer > angularjs > hints
-  - check for unused variables: .jshintrc "unused": true
+  - convert to Python 3
+  - consider ESLint http://www.sitepoint.com/comparison-javascript-linting-tools/
 
 - PUBLISH
+  - check for unused variables: .jshintrc "unused": true
   - make injected functions minifiable, e.g. function (a, b){} => ['a', 'b', function (a, b){}, use ng-strict-di: AngularJS Web Application Development Cookbook p 281
   - remove Log.debug calls
   - check xcode compile warnings, such as first Images.xcassets
   - iTunes publication
-
-- ANDROID
-  - emulator testing
-  - emulation on Windows: genymotion or AMIDuOS? See  http://www.laptopmag.com/articles/run-android-apps-on-pc
-  - device testing
+  - android publication
 
 - FUTURE
-  - cdeck and library file headers, include sanskrit
-  - sanskrit settings only if in deck
-  - gulp jshint and jscs exit
-  - convert to Python 3
-  - ionic 2, angular 2, typescript coversion
+  - https://www.npmjs.com/package/gulp-ng-constant ?
+  - ionic 2, angular 2, typescript coversion http://blog.ionic.io/ionic-and-typescript-part-2/
   - replace gulp with npm? http://blog.keithcirkel.co.uk/how-to-use-npm-as-a-build-tool/, https://www.tildedave.com/2015/01/07/i-find-gulp-extremely-frustrating.html
-  - splash and icon http://learn.ionicframework.com/formulas/adding-an-icon/ and  http://blog.ionic.io/automating-icons-and-splash-screens/  - Leitner learning algorithm https://en.wikipedia.org/wiki/Leitner_system
-  - devanagari q, transliteration a
+  - splash and icon http://learn.ionicframework.com/formulas/adding-an-icon/ and  http://blog.ionic.io/automating-icons-and-splash-screens/ 
   - deck state copy, rename, reorder, etc
-  - add python and xml linting
   - document code, e.g. https://www.npmjs.com/package/gulp-ngdocs
   - flesh out jsdoc documentation and improve dgeni formatting
   - consider adding other features, as in notes/features.txt
-  - ionic 1.2 issues
-    - `<label -> <ion-label`
-  - add sound directive
-  - show scrollbar when full text not visible
-  - deck filtering to subtab
   - unit and integration tests
     - remove .atom/config.cson>"todo-show">ignoreThesePaths>...spec.js
     - https://github.com/CaryLandholt/ng-classify

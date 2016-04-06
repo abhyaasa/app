@@ -1,5 +1,7 @@
 'use strict';
 
+/* eslint no-console: 0 */
+
 angular.module('app', ['ionic', 'services', 'rzModule'])
 
 .run(function (Log, $ionicPlatform, $rootScope, $state, restoreSettings, settings,
@@ -22,7 +24,7 @@ angular.module('app', ['ionic', 'services', 'rzModule'])
         }
     });
 
-    LocalStorage.clear();  // TODO enable local storage
+    LocalStorage.clear();  // PUBLISH enable local storage
 
     restoreSettings();
     $rootScope.settings = settings;
@@ -51,7 +53,6 @@ angular.module('app', ['ionic', 'services', 'rzModule'])
             templateUrl: 'views/tabs.html',
             resolve: {
                 configPromise: function () {
-                    // REVIEW why is config.json fetched multipel times?
                     return getDataProvider.$get()('config.json');
                 }
             },

@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8
-# Code Copyright (c) Christopher T. Haynes under the MIT License.
-
 """cdeck preprocessor: compact deck text to json."""
 
 import sys
@@ -9,6 +7,7 @@ import json
 import argparse
 import codecs
 import re
+from datetime import date
 
 from trans import translate
 
@@ -36,14 +35,18 @@ A grammar expression may contain the following notation.
 {...} grouping, [...] optional, | or, +/* one/zero or more of the preceding form.
 ,.. non-empty comma-separated sequence of preceding form.
 Spaces are not significant in grammar rules. Sequences are non-empty.
-BOL/EOL beginning/end of line. EOF end of file.
 
-INPUT -> { QUESTION | TAG_RANGE } +
+BOL, EOL, EOF, and WS represent beginning of line, end of line, end of file,
+and whitespace, respectively.
+
+INPUT -> [ HEADER ] { QUESTION | TAG_RANGE } +
+
+HEADER -> json object text, less surrounding braces, ending with BOL ;
 
 QUESTION -> BOL ; [ TAG,.. ] ; TEXT
-            { <ws>= ANSWER } | <ws>/ DISTRACTOR } *
-            { <ws>? HINT } *
-where TEXT, ANSWER, DISTRACTOR, and HINT are strings in which the <ws> prefixed
+            { WS= ANSWER } | WS/ DISTRACTOR } *
+            { WS? HINT } *
+where TEXT, ANSWER, DISTRACTOR, and HINT are strings in which the WS prefixed
 sequences above may not appear. This may be avoided by using \?, \=, or \/,
 with the backslash escape characters removed after parsing.
 
@@ -76,18 +79,23 @@ Tags interpreted by this program and removed from output:
            At least two lines required, no responses or hints allowed,
            and all questions in a sequence share the same tags.
 .text : question of "text" type, for preferatory text (not a question)
+        Only special and range tags may be associated with this type. If questions are
+        randomized, they are randomized in groups separated by this type of question,
+        so tags associated with preferatory text should apply to all and only following
+        questions up to the next one of text type.
 .md : question, response, and hints text is in ascii markdown format
       (requires markdown module and associated python version, implies .html tag)
 .sa : sanskrit answer/distractor text
 .sh : sanskrit hints
 .sq : sanskrit question text
-.st : transliteration question, with sanskrit question text and no answer/distractor
 .iast : IAST source for sanskrit
 .itrans : ITRANS source for sanskrit (default)
 .harvard-kyoto : Harvard-Kyoto source for sanskrit
 .slp1 : SLP1 source for sanskrit
 .velthuis : Velthuis source for sanskrit
 .devanagari : Devanagari source for sanskrit
+.t-d : transliteration text question with implied devanagari answer
+.d-t : devanagari text question with implied transliteration answer
 .matching : only meaningful as a range tag, indicating questions in the range
     belong to a matching group.  Questions in a matching group must each have
     a single answer and no distractors. User preferences may indicate options for
@@ -109,8 +117,8 @@ by a # character.
 Text characters <, >, &, ', and " are automatically escaped unless the .html tag
 is active for html interpretation.
 
-A question with no answer or .st tag is assumed to be a sequence question, whose answer is
-the following question.
+A question with no answer or, .d-t or .t-d tag, is assumed to be a sequence question,
+whose answer is the following question.
 
 .cs and .ci tags are mutually exclusive. An input field is presented if either is present.
 
@@ -119,27 +127,34 @@ Use --test_input argument to display input demonstrating the above options.
 
 JSON FORMAT
 
-Quiz questions json format is list of question dictionaries with keys:
-id: question order number (0-based)
-type: string = text, true-false, multiiple-choice, matching, transliteration, or mind
-text: text of question
-mp3: mp3 file base name, without path or .mp3
-responses (absent in text, t/f, sequence and mind question types):
-          list of [is_answer, response_text] pairs, where is_answer is boolean
-answer (t/f, matching or mind type): boolean (t/f) or text (mind)
-tags (optional): list of tag strings
-hints (optional): list of hint strings
-number (optional): difficulty number (default 0)
-matchingBegin (only if .matching in tags): id of first question in matching range
-matchingEnd (only if .matching in tags): id of last question in matching range
+Deck json format is json list containing optional header object followed by question
+objects with keys:
+    id: question order number (0-based)
+    type: string = text, true-false, multiiple-choice, matching, d-t, t-d, or mind
+    text: text of question
+    mp3: mp3 file base name, without path or .mp3
+    responses (absent in text, t/f, sequence and mind question types):
+              list of [is_answer, response_text] pairs, where is_answer is boolean
+    answer (t/f, matching or mind type): boolean (t/f) or text (mind)
+    tags (optional): list of tag strings
+    hints (optional): list of hint text
+    number (optional): difficulty number (default 0)
+    matchingBegin (only if .matching in tags): id of first question in matching range
+    matchingEnd (only if .matching in tags): id of last question in matching range
 
-The "text" of a question, response, answer, or hint may be a unicode string or a
-[trans_to-text, devanagari] pair of unicode strings, where the trans_to program
-argument indicates the transliteration scheme of the first element.
+The "text" of a question, response, answer, or hint is list of values that may be unicode
+strings or pairs of unicode strings of the form [trans_to-text, devanagari], where the
+trans_to program argument indicates the transliteration scheme of the first element.
 
 HTML markups are interpreted in all text.
 
 The answer of a sequence question is automatically the text of the following question.
+
+Header object contains input HEADER contents plus the following keys:
+    ".sanskrit": true if any sanskrit text pairs in deck
+
+The names of header object keys with special semantics begin with a dot. "id" is not
+allowed as a header key.
 """
 
 # from https://wiki.python.org/moin/EscapingHtml
@@ -150,6 +165,7 @@ def html_escape(text):
     """Produce entities within text."""
     return "".join(html_escape_table.get(c, c) for c in text)
 
+sanskrit_quote = '``' # '' if none
 number_cre = re.compile(r'\d+')
 media_prefix_cre = re.compile(r'<img [^>]*src="')
 isnumber = number_cre.match
@@ -181,12 +197,13 @@ def process_html(html, media_prefix):
 
 def main(args):
     """Command line invocation with argparse args."""
-    global debug_mode
+    global debug_mode, sanskrit
+    sanskrit = False # set True if any devanagari text in deck
     tags = set()
     line_num = 1
     id_num = 0
     matching_start = None
-    quiz = []
+    deck = []
 
     def error(msg):
         sys.stderr.write('ERROR at line ' + str(line_num) + ': ' + msg + '\n')
@@ -196,24 +213,40 @@ def main(args):
             exit()
 
     def unescape(text):  # strip text, and remove \ from \= and \/ sequences
-        return re.sub(r'\\([=/]?)', r'\1', text.strip())
+        return re.sub(r'\\([=/]?)', r'\1', text)
+
+    def do_trans(text):
+        return [translate(text, trans_from, args.trans_to),
+                translate(text, trans_from, 'devanagari')]
 
     def do_text(text, translit=False):
+        global sanskrit
         text = unescape(text)
+        if sanskrit_quote and not translit:
+            sanskrit = True
+            tlist = []
+            split = text.split(sanskrit_quote)
+            if len(split) > 1:
+                for i in range(0, len(split), 2):
+                    if split[i]:
+                        tlist.append(do_text(split[i])[0])
+                    if i + 1 < len(split):
+                        tlist.append(do_trans(split[i + 1]))
+                return tlist
         if markdown_mode:
             text = markdown(text)
         if translit:
-            return (translate(text, trans_from, args.trans_to),
-                    translate(text, trans_from, 'devanagari'))
+            sanskrit = True
+            return [do_trans(text)]
         elif qtags.intersection(['.html', '.md']):
-            return str(process_html(text, args.media))
+            return [str(process_html(text, args.media))]
         else:
-            return html_escape(text)
+            return [html_escape(text)]
 
     def end_matching():
-        for i in range(matching_start, len(quiz)):
-            quiz[i]['matchingBegin'] = matching_start
-            quiz[i]['matchingEnd'] = len(quiz) - 1
+        for i in range(matching_start, len(deck)):
+            deck[i]['matchingBegin'] = matching_start
+            deck[i]['matchingEnd'] = len(deck) - 1
 
     if args.format_help:
         print FORMAT_HELP
@@ -235,12 +268,22 @@ def main(args):
         _input = UTF8READER(sys.stdin).read()
     else:
         _input = codecs.open(str(args.infile), "r", "utf-8").read()
-    if not _input.startswith(';'):
-        error('input must start with semicolon, not: "' + _input[:5] + '"')
-    if '.md' in _input:
+    header_end = _input.find('\n;')
+    if header_end == -1:
+        header = {}
+        questions = _input
+    else:
+        try:
+            header = json.loads('{' + _input[: header_end] + '}')
+        except:
+            error('header does not parse as json object attribute definitions')
+        questions = _input[header_end + 1 :]
+    if not questions.startswith(';'):
+        error('questions must start with semicolon, not: "' + questions[:5] + '"')
+    if '.md' in questions:
         from markdown import markdown
 
-    for elt in _input[1:].split('\n;'):
+    for elt in questions[1:].split('\n;'):
         markdown_mode = False
         elt = elt.strip()
         if not elt:
@@ -267,7 +310,7 @@ def main(args):
             tags_str, question = elt.split(';', 1)
 
             # tag processing
-            qtaglst = filter(None, map(unescape, tags_str.split(',')))
+            qtaglst = filter(None, map(unicode.strip, map(unescape, tags_str.split(','))))
             if filter(None, [not istag(tag) for tag in qtaglst]):
                 error('bad tag')
             qtags = set(qtaglst)
@@ -306,62 +349,69 @@ def main(args):
             if hints:
                 q['hints'] = hints
             trlst = re.split(r'\s(?==)|\s(?=/)', qlst[0])
-            q['text'] = do_text(trlst[0], '.sq' in qtags or '.st' in qtags)
-            responses = [(r[0] == '=', do_text(r[1:], '.sa' in qtags))
-                         for r in trlst[1:]]
-            if '.text' in qtags:
-                if responses or hints:
-                    error('no hints or responses in text mode')
-                q['type'] = 'text'
-            elif '.st' in qtags:
-                if responses:
-                    error('no answers or responses for transliteration question')
-                q['type'] = 'transliteration'
-            elif '.lineseq' in qtags:
-                if responses or hints:
-                    error('no responses or hints in .lineseq mode')
-                lines = [do_text(line, '.sq' in qtags)
-                         for line in q['text'].split('\n')]
+            if '.lineseq' in qtags:
+                if '.d-t' in qtags or '.t-d' in qtags:
+                    error('.d-t and .t-d tags not allowed with .lineseq')
+                lines = trlst[0].split('\n')
                 if len(lines) < 2:
                     error('at least two lines in .lineseq mode')
                 for line in lines[:-2]:
                     aq = {'id': id_num,
-                          'text': line,
+                          'text': do_text(line, '.sq' in qtags),
                           'tags': tag_filter(qtags),
                           'type': 'mind'
                           }
                     if 'number' in q:
                         aq['number'] = q['number']
-                    quiz.append(aq)
+                    deck.append(aq)
                     id_num += 1
                 q['type'] = ''
                 q['text'] = lines[-2]
                 q['answer'] = lines[-1]
-            elif not responses:
-                q['type'] = 'mind'  # sequence question
-            elif len(responses) == 1:
-                response = responses[0][1]
-                if (type(response) == unicode
-                   and response.lower() in ['t', 'f', 'true', 'false']):
-                    q['type'] = 'true-false'
-                    q['answer'] = response.lower() in ['t', 'true']
-                else:
-                    q['type'] = 'matching' if '.matching' in tags else 'mind'
-                    q['answer'] = response
             else:
-                q['responses'] = responses
-                q['type'] = 'multiple-choice'
-                if len(filter(None, map(lambda r: r[0], responses))) != 1:
-                    if '.ma' not in qtags:
-                        error('".ma" tag required if not one answer')
+                q['text'] = do_text(trlst[0],
+                                    '.sq' in qtags or '.d-t' in qtags or '.t-d' in qtags)
+                responses = [(r[0] == '=', do_text(r[1:], '.sa' in qtags))
+                             for r in trlst[1:]]
+                if '.text' in qtags:
+                    if responses or hints:
+                        error('no hints or responses in text mode')
+                    if any([isnumber(t) or isapptime(t) for t in qtaglst]):
+                        error('filterable question-specific tags allowed in text mode')
+                    q['type'] = 'text'
+                elif '.d-t' in qtags or '.t-d' in qtags:
+                    if responses:
+                        error('no answers or responses for transliteration question')
+                    q['type'] = 'd-t' if '.d-t' in qtags else 't-d'
+                elif not responses:
+                    q['type'] = 'mind'  # sequence question
+                elif len(responses) == 1:
+                    response = responses[0][1]
+                    if (type(response) == unicode
+                       and response.lower() in ['t', 'f', 'true', 'false']):
+                        q['type'] = 'true-false'
+                        q['answer'] = response.lower() in ['t', 'true']
+                    else:
+                        q['type'] = 'matching' if '.matching' in tags else 'mind'
+                        q['answer'] = response
+                else:
+                    q['responses'] = responses
+                    q['type'] = 'multiple-choice'
+                    if len(filter(None, map(lambda r: r[0], responses))) != 1:
+                        if '.ma' not in qtags:
+                            error('".ma" tag required if not one answer')
             q['tags'] = tag_filter(qtags)
             q['id'] = id_num
             id_num += 1
-            quiz.append(q)
+            deck.append(q)
         line_num += len(elt.split('\n')) + 1
     if '.matching' in tags:
         end_matching()
-    json.dump(quiz, writer, indent=1, sort_keys=True, separators=(',', ': '))
+    header.update({'.sanskrit': sanskrit, 'date': date.today().isoformat()})
+    if id in header:
+        error('"id" not allowed as header key')
+    deck.insert(0, header)
+    json.dump(deck, writer, indent=1, sort_keys=True, separators=(',', ': '))
 
 
 def get_args():
@@ -376,7 +426,7 @@ def get_args():
                    type=argparse.FileType('w'),
                    help='json format file, default stdout')
     p.add_argument('--trans_to', type=str, default='iast',
-                   help='transliteration translation output form (default itrans)')
+                   help='transliteration output form (default iast)')
     p.add_argument('-m', '--media', type=str, default='',
                    help='prefix added to html img src, default none')
     p.add_argument('-t', '--test', action='store_true',

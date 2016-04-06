@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8
-# Code Copyright (c) Christopher T. Haynes under the MIT License.
 
 """Sanskrit transliteration conversion."""
 
@@ -142,14 +141,13 @@ table_json = """
         ["\u092f", "y", "y", "y", "y", "y"],
         ["\u0930", "r", "r", "r", "r", "r"],
         ["\u0932", "l", "l", "l", "l", "l"],
-        ["\u0935", "v", "v", "va/w", "v", "v"],
+        ["\u0935", "v", "v", "v/w", "v", "v"],
         ["\u0936", "\u015b", "z", "sh", "\\"s", "S"],
         ["\u0937", "\u1e63", "S", "Sh", ".s", "z"],
         ["\u0938", "s", "s", "s", "s", "s"],
         ["\u0939", "h", "h", "h", "h", "h"]
     ]
 """
-# " to fix emacs quote coloring
 
 table = None
 
@@ -158,7 +156,7 @@ def make_trans_dict(trans):
     """Returns transliteration dictionary for transliteration type trans.
     The dictionary maps single_letter of trans alphabet to a
     list of (letter_string, transliteration_table_row) pairs,
-    where each letter string is a suffix of the single letter that
+    where each letter_string is a suffix of the single letter that
     together make an associated letter string in trans.
     An empty suffix, if any, is always last.
     """
@@ -297,11 +295,12 @@ def make_table():
 
 def textft(text, from_, to):
     utext = unicode(text, 'utf-8')
-    print from_, 'to', to, ':', utext
+    print from_ + ':', utext
     ttext = translate(utext, from_, to)
-    print '>', ttext
+    print to + ':', ttext
     ftext = translate(ttext, to, from_)
-    print '<', ftext
+    print from_ + ':', ftext
+    print
     if from_ in ['iast', 'velthius']:
         utext = utext.lower()
     if utext != ftext:
@@ -318,32 +317,40 @@ def textft(text, from_, to):
 
 
 def test():
+    textft("seva", 'itrans', 'iast')
+    textft("seva", 'itrans', 'devanagari')
+    textft("seva", 'iast', 'devanagari')
     textft("om", 'iast', 'devanagari')
     textft("श्रद", 'devanagari', 'iast')
     textft("श्रद्धावाँल्ल", 'devanagari', 'iast')
     textft("Atha yogānuśāsanam", 'iast', 'itrans')
     textft("अथ योगानुशासनम्॥१॥", 'devanagari', 'iast')
     textft("योगश्चित्तवृत्तिनिरोधः॥२॥", 'devanagari', 'iast')
-    sys.exit()
 
 
 def main(args):
     """Command line invocation with argparse args."""
     if args.test:
         test()
-    args.from_ = args.__dict__['from'].lower()
-    args.to = args.to.lower()
-    if args.from_ not in table[0]:
-        raise Exception('from transliteration name not in table')
-    if args.to not in table[0]:
-        raise Exception('to transliteration name not in table')
-    text = unicode(args.infile.read(), 'utf-8')
-    result = translate(text, args.from_, args.to)
-    if args.outfile:
-        writer = UTF8Writer(args.outfile)
+    elif args.table:
+        header = map(lambda s: s[:10], table[0])
+        print (u'{:<11}' * len(header)).format(*header)
+        for line in table[1:]:
+            print (u'{:<11}' * len(line)).format(*line)
     else:
-        writer = sys.stdout
-    print >> writer, result
+        args.from_ = args.__dict__['from'].lower()
+        args.to = args.to.lower()
+        if args.from_ not in table[0]:
+            raise Exception('from transliteration name not in table')
+        if args.to not in table[0]:
+            raise Exception('to transliteration name not in table')
+        text = unicode(args.infile.read(), 'utf-8')
+        result = translate(text, args.from_, args.to)
+        if args.outfile:
+            writer = UTF8Writer(args.outfile)
+        else:
+            writer = sys.stdout
+        print >> writer, result
 
 
 sys.stdout = UTF8Writer(sys.stdout)
@@ -364,6 +371,8 @@ if __name__ == "__main__":
     p.add_argument('-o', '--outfile', nargs='?', type=argparse.FileType('w'),
                    default=None, help='default stdout')
     p.add_argument('-t', '--test', action='store_true',
-                   help='run trans.test() first')
+                   help='run trans.test() and exit')
+    p.add_argument('--table', action='store_true',
+                   help='print translation table and exit')
     args = p.parse_args()
     main(args)

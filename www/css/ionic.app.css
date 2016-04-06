@@ -9749,7 +9749,7 @@ a.button {
   color: #f00; }
 
 .deck-table {
-  margin: auto;
+  margin: auto auto 1em;
   width: 90%; }
 
 .em {
@@ -9761,3 +9761,21 @@ td {
 
 tr td:nth-child(odd) {
   font-weight: bold; }
+
+.v-space {
+  margin-bottom: 1em; }
+
+.deck-header .deck-options .deck-filter {
+  margin-bottom: 1em; }
+
+.list .item.item-accordion {
+  line-height: 38px;
+  padding-bottom: 0;
+  padding-top: 0;
+  transition: 0.09s all linear; }
+  .list .item.item-accordion.ng-hide {
+    line-height: 0; }
+
+.list .item.item-accordion.ng-hide-add,
+.list .item.item-accordion.ng-hide-remove {
+  display: block; }

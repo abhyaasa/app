@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# Code Copyright (c) Christopher T. Haynes under the MIT License.
 
 """Write JSON index for a directory."""
 
