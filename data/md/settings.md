@@ -4,7 +4,7 @@
 
 **About this app:** Assistance, version, copyright and other information. The **Back** button at top left returns to the settings tab.
 
-**Randomize responses:** The order of multiple-choise responses is randomized when selected.
+**Randomize responses:** The order of multiple-choice responses is randomized when selected.
 
 **Randomize questions:** The order in which cards in the deck are presented is randomized.
 

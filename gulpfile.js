@@ -17,7 +17,8 @@ var cmdAliases = {
     bi: 'gulp build',
     ba: 'gulp build -a',
     ei: 'ionic emulate ios -lcs',
-    ra: 'ionic run android -cs',
+    ea: 'ionic run android -cs',
+    ra: 'ionic run android -cs --device',
     bx: 'gulp bx'
 };
 

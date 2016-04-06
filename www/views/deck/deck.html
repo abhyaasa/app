@@ -32,7 +32,7 @@
             <i class="icon" ng-class="Deck.data.isGroupShown['header'] ? 'ion-minus' : 'ion-plus'"></i>            Header information
           </ion-item>
           <ion-item class="item-accordion" ng-repeat="key in Deck.headerDisplayKeys" ng-show="Deck.data.isGroupShown['header']">
-            <b>{{ key }}:</b> {{ Deck.header[key] }}
+            <strong>{{ key }}:</strong> {{ Deck.header[key] }}
           </ion-item>
         </ion-list>
       </div>

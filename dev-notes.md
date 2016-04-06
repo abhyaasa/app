@@ -34,7 +34,7 @@ Clone the app repository, creating an `app` directory in the current directory:
 $ git clone https://github.com/abhyaasa/app
 $ cd app
 ```
-CLI commands are prefixed in these notes by the `$` prompt, and unless otherwise indicated they are to be run in the project (`app`) directory.
+CLI commands are indicated in these notes with the prefix prompt `$`, or instruction that they be "run". Unless otherwise indicated, CLI commands they are to be run in the project (`app`) directory.
 
 Next, install global dependencies:
 ```
@@ -48,7 +48,7 @@ $ ./scripts/setup.sh | tee temp/setup.txt
 
 Install [Chrome Canary](https://www.google.com/chrome/browser/canary.html) for server app testing in the preferred development browser. Try it out with the shortcut `$ g si`.
 
-Test the app in the iOS emulator with `$ g ei`. An Apple developer membership is required for testing on a usb-connected device, as with `$ g ri`.
+Test the app in the iOS emulator with `g ei`. An Apple developer membership is required for testing on a usb-connected device, as with `g ri`.
 
 You now have exercised a minimal development setup.
 
@@ -71,7 +71,7 @@ This section lists the development tools required or recommended for this projec
 - `css` and `scss`: HTML style manager, and syntactically-superior development-time variant
 - `markdown`: preprocessor for simplified html markup *
 - `npm`: development package manager
-- `xcode`: iOS app deployment and setup for device testing (only on OSX)
+- `xcode`: iOS app deployment and setup for emulator and device testing (only on OSX)
 
 The following are used for automatic testing and installed with `npm`:
 
@@ -142,11 +142,11 @@ The atom config files, including those of the plugins, indicates preferred codin
 
 ### gulp
 
-`$ gulp help` provides an annotated list of gulp project management tasks.
+Running `gulp help` provides an annotated list of gulp project management tasks.
 
-`$ gulp index` generates `./www/index.html` from `./index.html`, so edit only the latter. This avoids superfluous version control changes, as script injection order is unpredictable.
+`gulp index` generates `./www/index.html` from `./index.html`, so edit only the latter. This avoids superfluous version control changes, as script injection order is unpredictable.
 
-The `g` script runs shortcuts in the gulp `cmdAliases` configuration variable. For example, `$ g si` initiates the most common debugging run. This runs `$ gulp cmd si | tee temp/cmd.txt`, which runs `$ gulp si -i`, which runs the default gulp test build tasks and then `$ ionic serve -c -t ios --browser /Applications/Google\ Chrome\ Canary.app`, with output appearing on the console and saved in `temp/cmd.txt`. `$ g help` lists the aliases.
+The `g` script runs shortcuts in the gulp `cmdAliases` configuration variable. For example, `$ g si` initiates the most common debugging run. This runs `gulp cmd si | tee temp/cmd.txt`, which runs `gulp si -i`, which runs the default gulp test build tasks and then `$ ionic serve -c -t ios --browser /Applications/Google\ Chrome\ Canary.app`, with output appearing on the console and saved in `temp/cmd.txt`. `$ g help` lists the aliases.
 
 
 ## Config
@@ -156,7 +156,7 @@ The `www/data/config.json` file object has the keys `name`, `email`, `href`, `ve
 Early in app initialization, the config object is stored stored as `$rootScope.config`.
 
 
-## Debugging and building
+## Testing, debugging and building
 
 The `mode` constant in `services.js` may be set to `'debug'`, `'build'`, or `'normal'`.
 
@@ -169,22 +169,28 @@ In build mode:
 
 - the angular compiler is told not to include debug information, such as dom state links
 
+### iOS testing
+
+`ionic run ios` does not work: use `xcode` instead.
+
+`g ei` provides emulation with live reload. `xcode` also runs the emulator, with reporting of some types of errors missing using the ionic emulator (`ios-sim`).
+
 ### Android testing
 
-After Android testing installations in the above Tools section, run `$ g ba`. If it fails with a request to load specific android packages, run `$ android` command and do so, installing among other packages SDK Platforms for each major version from 4.4 up.
+After Android testing installations in the above Tools section, run `g ba`. If it fails with a request to load specific android packages, run `android` command and do so, installing among other packages SDK Platforms for each major version from 4.4 up.
 
-Run `$ genymotion` and install desired virtual devices with Android 4.4 (API 19) or more recent, and compatible with the genymotion version (emulated device runs without version complaint, presenting unlocked screen). 
+Run `genymotion` and install desired virtual devices with Android 4.4 (API 19) or more recent, and compatible with the genymotion version (emulated device runs without version complaint, presenting unlocked screen). 
 
 In every Android device used for debugging (real or virtual), select `Settings > Developer options > USB debugging`. If `Developer options` is not in the to-level settings list, click `Settings > About phone > Build number` 7 times and it appears there.
 
-After this setup, and a current ionic build (`g ba`), with a device or emulator USB-attached run `g ra` for ionic build and run, which should end with successful build and launch messages. The app should then be uploaded and open in the device or simulator. 
+Before an emulation or device run, perform build (`g ba`), which should end with success message. For emulation, use `genymotion` Start to launch selected emulator, and then `g ea` to upload and run app. Or use `g ra` with USB-attached device to upload and run app.
 
 In Chrome, click the ADB plugin icon dropdown `View Inspection Targets`. Check `Discover USB devices` and click `Inspect` under the attached WebView device. This opens an inspector window, including Console tab to view errors messages.
 
 
 ## Flavors and data directory structure
 
-You test and build with the current **flavor** of your choice. Change the flavor with `gulp flavor --name NAME`, which must be run after system download. The distribution comes with support for the `test` flavor, but that may not be the current flavor of distribution branches.
+You test and build with the current **flavor** of your choice. To change the flavor, run `gulp flavor --name NAME`. This must be run after system download. The distribution comes with support for the `test` flavor, but that may not be the current flavor of distribution branches.
 
 For each `FLAVOR` there is a `data/flavors/FLAVOR` directory with `library`, `media`, and `resources` subdirectories. If the flavor uses cdecks, there is also a `data/cdecks/FLAVOR` directory . If a deck contains media file references, those files are in a subdirectory of the `media` directory named after the deck.
 
@@ -220,7 +226,7 @@ Python scripts should pass `flake8` linter, with maximum line length 90 and igno
 
 ### jsdoc documentation
 
-`gulp dengi` generates jsdoc documentation in the `doc/build/` directory.
+Running `gulp dengi` generates jsdoc documentation in the `doc/build/` directory.
 
 REVIEW flesh out jsdoc documentation
 
