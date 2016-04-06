@@ -16,9 +16,8 @@ var cmdAliases = {
     sl: 'gulp si -l',
     bi: 'gulp build',
     ba: 'gulp build -a',
-    ei: 'gulp default; ionic emulate ios -lcs',
-    ri: 'gulp default; ionic run ios -lcs',
-    ra: 'gulp default; ionic run android -cs',
+    ei: 'ionic emulate ios -lcs',
+    ra: 'ionic run android -cs',
     bx: 'gulp bx'
 };
 
@@ -91,6 +90,8 @@ gulp.src = function () {
 
 var cwd = process.cwd();
 
+var exit = process.exit;
+
 var logError = function () {
     gutil.log(gutil.colors.magenta(Array.prototype.slice.apply(arguments).join(' ')));
 };
@@ -130,18 +131,17 @@ gulp.task('watch', 'Only watches scss files.', function () {
 
 gulp.task('index', 'Inject script elements into www/index.html',
     function () {
-        var srcOptions = {
+        var pathsOnly = {
             read: false
         };
         var injector = function (paths) {
-            return inject(gulp.src(paths, srcOptions), {
+            return inject(gulp.src(paths, pathsOnly), {
                 relative: true
             });
         };
         sh.cp('-f', './index.html', './www/index.html');
         return gulp.src('./www/index.html')
             .pipe(injector(paths.indexJs))
-            // .pipe(debug())
             .pipe(gulp.dest('./www'));
     });
 
@@ -277,7 +277,7 @@ var linterErrorExit = function (linterKey) {
     return spy.obj(function (obj) {
         if (!obj[linterKey].success) {
             logError('LINTER ERROR EXIT:', linterKey);
-            throw new Error('linter');
+            exit(1);
         }
     });
 };
@@ -309,7 +309,7 @@ gulp.task('scsslint', 'Report scss file problems.', function (done) {
         .on('finish', done);
 });
 
-gulp.task('jsonlint', 'Report json file problems.', function () {
+gulp.task('jsonlint', 'Report json file problems.', function (done) {
     var isError = function (errorValue) {
         // avoid jsonlint bug: https://github.com/codenothing/jsonlint/issues/2
         return (errorValue !== undefined &&
@@ -324,15 +324,15 @@ gulp.task('jsonlint', 'Report json file problems.', function () {
         return spy.obj(function (obj) {
             if (isError(obj.jsonlint.error)) {
                 logError('LINTER ERROR EXIT:', 'jsonlint');
-                throw new Error('json lint');
+                exit(1);
             }
         });
     };
-    return gulp.src(paths.projectJson) // TODO remove return when on 'finish' fixed
+    gulp.src(paths.projectJson)
         .pipe(jsonlint())
         .pipe(jsonlint.report(reporter))
         .pipe(jsonErrorExit())
-        // .on('finish', done) // done not invoked
+        .on('finish', done)
     ;
 });
 
@@ -352,7 +352,7 @@ gulp.task('pylint', 'Report python file problems.', function (done) {
         .on('finish', done);
 });
 
-gulp.task('test', 'Run some gulp development test.', ['eslint'],
+gulp.task('test', 'Run some gulp development test.', ['jsonlint'],
     function () {
         gutil.log('TESTING');
     });

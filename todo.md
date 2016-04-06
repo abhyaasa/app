@@ -5,7 +5,7 @@ There are lots of things to do. Some are recorded as Atom todo-show (ctrl-shift-
 
 Order within groups sometimes reflects decreasing priority. Items are only listed here if they do not have a more meaningful location in other files. 
 
-Excluded from the `todo-show` scan (by the `ignoreThesePaths` configuration list) are library, auto-generated, and archive files, and for the time being `**spec.js` files.
+Excluded from the `todo-show` scan are library, auto-generated, and archive files, and for the time being `**spec.js` files. (See the `ignoreTheseTodos` and `ignoreThesePaths` properties of the `todo-show` configuration.)
 
 - XXX /
 
@@ -13,16 +13,12 @@ Excluded from the `todo-show` scan (by the `ignoreThesePaths` configuration list
 
 - CHANGED /
 
-- PRIORITY /
-
 - TODO
+  - android device testing
+  - card load spinner instead of select deck message
   - range slider right margin
   - try apple archive run
   - Leitner learning algorithm https://en.wikipedia.org/wiki/Leitner_system
-
-- IDEA /
-
-- HACK /
 
 - REVIEW
   - use https://www.npmjs.com/package/gulp-beautify
@@ -33,9 +29,6 @@ Excluded from the `todo-show` scan (by the `ignoreThesePaths` configuration list
   - Chrome developer > angularjs > hints
   - convert to Python 3
   - consider ESLint http://www.sitepoint.com/comparison-javascript-linting-tools/
-  
-- ANDROID
-  - device testing
 
 - PUBLISH
   - check for unused variables: .jshintrc "unused": true
