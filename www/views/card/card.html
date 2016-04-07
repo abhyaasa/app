@@ -1,6 +1,9 @@
 <ion-view>
   <ion-content id="content" padding="true" class="has-header">
-    <div ng-hide="Card.isDefined">
+    <div class="card-loading">
+      <ion-spinner ng-hide="Card.isDefined || !Deck.settingUp"></ion-spinner>
+    </div>
+    <div ng-hide="Card.isDefined || Deck.settingUp">
       Please select a deck in the library.
     </div>
     <div ng-show="Card.isDefined">
@@ -16,7 +19,7 @@
             </ion-item>
           </ion-list>
           <button ng-hide="Card.done" class="button button-stable button-block" ng-if="Card.isMA"
-          ng-click="maDone()">
+              ng-click="maDone()">
             Done
           </button>
         </div>
@@ -58,7 +61,7 @@
         Give me a hint
       </button>
       <div ng-show="Deck.data.showTags" class="showTags">
-          Tags: {{ Card.tagList }}
+        Tags: {{ Card.tagList }}
       </div>
     </div>
   </ion-content>

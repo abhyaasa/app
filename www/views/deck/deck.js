@@ -145,6 +145,7 @@ angular.module('app')
     };
 
     var setupQuestions = function (fileName) {
+        _this.settingUp = true;
         return getData('flavor/library/' + fileName).then(function (promise) {
             _this.questions = promise.data;
             _this.header = _.clone(defaultHeader);
@@ -164,6 +165,7 @@ angular.module('app')
             _this.activeIndices();
         };
         _this.isDefined = true;
+        _this.settingUp = false;
         $state.go('tabs.card');
     };
 

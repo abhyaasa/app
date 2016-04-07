@@ -14,10 +14,15 @@ Excluded from the `todo-show` scan are library, auto-generated, and archive file
 - TODO
   - android device testing
   - android ionic view
-  - card load spinner instead of select deck message <ion-spinner></ion-spinner>
+  - card load spinner center
+  - sass watch not working
+    - g si (and ionic serve -c) starts gulp watch, but it ends right away
+    - http://learn.ionicframework.com/formulas/working-with-sass/
   - range slider right margin
   - try apple archive run
-  - Leitner learning algorithm [https://en.wikipedia.org/wiki/Leitner_system](https://en.wikipedia.org/wiki/Leitner_system)
+  - Spaced repetion algorithm
+    - [SM-2](https://www.supermemo.com/english/ol/sm2.htm)
+    - or simpler Leitner learning algorithm [https://en.wikipedia.org/wiki/Leitner_system](https://en.wikipedia.org/wiki/Leitner_system)
 
 - REVIEW
   - use [https://www.npmjs.com/package/gulp-beautify](https://www.npmjs.com/package/gulp-beautify)

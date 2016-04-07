@@ -2,12 +2,11 @@
   "name": "abhyaasa",
   "app_id": "7e0bb8d2",
   "gulpStartupTasks": [
-    "watch"
+    "sass", "watch"
   ],
   "watchPatterns": [
     "www/**/*",
-    "!www/lib/**/*",
-    "!www/css/ionic.app.min.css"
+    "!www/lib/**/*"
   ],
   "browsers": [
     {
