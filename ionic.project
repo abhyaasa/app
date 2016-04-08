@@ -2,7 +2,8 @@
   "name": "abhyaasa",
   "app_id": "7e0bb8d2",
   "gulpStartupTasks": [
-    "sass", "watch"
+    "sass",
+    "watch"
   ],
   "watchPatterns": [
     "www/**/*",

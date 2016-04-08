@@ -15,9 +15,6 @@ Excluded from the `todo-show` scan are library, auto-generated, and archive file
   - android device testing
   - android ionic view
   - card load spinner center
-  - sass watch not working
-    - g si (and ionic serve -c) starts gulp watch, but it ends right away
-    - http://learn.ionicframework.com/formulas/working-with-sass/
   - range slider right margin
   - try apple archive run
   - Spaced repetion algorithm

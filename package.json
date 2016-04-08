@@ -48,11 +48,12 @@
   "cordovaPlugins": [
     "cordova-plugin-console",
     "cordova-plugin-device",
-    "cordova-plugin-splashscreen",
-    "ionic-plugin-keyboard",
     "cordova-plugin-statusbar",
     "cordova-plugin-whitelist",
+    "cordova-plugin-splashscreen",
     "cordova-plugin-media",
+    "cordova-plugin-file",
+    "ionic-plugin-keyboard",
     "cordova-plugin-crosswalk-webview"
   ],
   "cordovaPlatforms": [
@@ -62,6 +63,11 @@
       "version": "",
       "locator": "ios"
     },
-    "android"
+    "android",
+    {
+      "platform": "android",
+      "version": "",
+      "locator": "android"
+    }
   ]
 }

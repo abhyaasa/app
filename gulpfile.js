@@ -116,19 +116,9 @@ gulp.task('sass', 'Ionic .scss to .css file transformation', function (done) {
         .on('end', done);
 });
 
-gulp.task('watch', 'Only watches scss files.', function () {
-    return gulp.watch(paths.sass, ['sass']);
+gulp.task('watch', 'Watch scss files.', function () {
+    return gulp.watch(paths.scss, ['sass']);
 });
-
-// For Ionic >= 1.2 http://www.typescriptlang.org
-// add to paths something like src: ['./src/*.ts'], // for typescript compilation
-// gulp.task('compile', 'Typescript compilation', function () {
-//     gulp.src(paths.src)
-//         .pipe(typescript({
-//             emitError: false
-//         }))
-//         .pipe(gulp.dest('www/js/'));
-// });
 
 gulp.task('index', 'Inject script elements into www/index.html',
     function () {
@@ -333,8 +323,7 @@ gulp.task('jsonlint', 'Report json file problems.', function (done) {
         .pipe(jsonlint())
         .pipe(jsonlint.report(reporter))
         .pipe(jsonErrorExit())
-        .on('finish', done)
-    ;
+        .on('finish', done);
 });
 
 gulp.task('xhtmllint', 'Report html file problems.', function (done) {
