@@ -76,8 +76,12 @@ tr td:nth-child(odd) {
   margin: 0 auto;
   vertical-align: middle;
 }
-// adapted from http://codepen.io/ionic/pen/uJkCz
 
+.range-slider {
+  width: 95%; // hack for slider load bug
+}
+
+// adapted from http://codepen.io/ionic/pen/uJkCz
 .list .item.item-accordion {
   line-height: 38px;
   padding-bottom: 0;

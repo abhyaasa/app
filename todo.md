@@ -1,4 +1,5 @@
 # Things To Do
+
 There are lots of things to do. Some are recorded as Atom todo-show (ctrl-shift-T) tagged entries (mostly in comments). The `todo-show` tag list in `~/.atom/config.cson` is mirrored by the top-level items below, in roughly decreasing order of priority. Tags below with trailing `/` are place holders. 
 
 Order within groups sometimes reflects decreasing priority. Items are only listed here if they do not have a more meaningful location in other files. 
@@ -15,7 +16,6 @@ Excluded from the `todo-show` scan are library, auto-generated, and archive file
   - android device testing
   - android ionic view
   - card load spinner center
-  - range slider right margin
   - try apple archive run
   - Spaced repetion algorithm
     - [SM-2](https://www.supermemo.com/english/ol/sm2.htm)

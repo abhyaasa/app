@@ -24,6 +24,7 @@ var cmdAliases = {
 
 var paths = {
     scss: ['./scss/**/*.scss'],
+    css: ['./www/css/*.css'],
     appJs: ['./www/**/*.js', '!./www/lib/**'],
     py: ['scripts/*.py'],
     xhtml: ['config.xml', 'index.html', 'www/views/**/*.html'],
@@ -98,20 +99,13 @@ var logError = function () {
 };
 
 gulp.task('default',
-    'Run by ionic app build and serve commands', ['sass', 'index', 'md', 'lint']
+    'Run by ionic app build and serve commands', ['sass', 'index', 'md']
 );
 
 gulp.task('sass', 'Ionic .scss to .css file transformation', function (done) {
     gulp.src('./scss/ionic.app.scss')
         .pipe(sass())
         .on('error', sass.logError)
-        .pipe(gulp.dest('./www/css/'))
-        .pipe(minifyCss({
-            keepSpecialComments: 0
-        }))
-        .pipe(rename({
-            extname: '.min.css'
-        }))
         .pipe(gulp.dest('./www/css/'))
         .on('end', done);
 });
@@ -171,16 +165,29 @@ gulp.task('si',
         sh.exec(command);
     });
 
-gulp.task('build', '[-a] for Android, default iOS', ['default'], function (done) {
-    sh.exec('ionic build ' + (argv.a ? 'android' : 'ios'));
-    if (!argv.a) {
-        gulp.src(['./platforms/ios/*/config.xml'])
-            .pipe(replace(/<allow-navigation.*\/>/, ''))
-            .pipe(gulp.dest('./platforms/ios'));
-    }
-    logError('If build did not end with "** BUILD SUCCEEDED **", run it again!');
-    done();
+gulp.task('mincss', 'Minify css', function (done) {
+    gulp.src(paths.css)
+        .pipe(minifyCss({
+            keepSpecialComments: 0
+        }))
+        .pipe(rename({
+            extname: '.min.css'
+        }))
+        .pipe(gulp.dest('./www/css/'))
+        .on('end', done);
 });
+
+gulp.task('build', '[-a] for Android, default iOS', ['default', 'mincss', 'lint'],
+    function (done) {
+        sh.exec('ionic build ' + (argv.a ? 'android' : 'ios'));
+        if (!argv.a) {
+            gulp.src(['./platforms/ios/*/config.xml'])
+                .pipe(replace(/<allow-navigation.*\/>/, ''))
+                .pipe(gulp.dest('./platforms/ios'));
+        }
+        logError('If build did not end with "** BUILD SUCCEEDED **", run it again!');
+        done();
+    });
 
 gulp.task('bx', 'Build for ios and open xcode project', ['build'], function (done) {
     sh.exec('open platforms/ios/*.xcodeproj');

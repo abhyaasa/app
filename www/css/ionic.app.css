@@ -9772,6 +9772,9 @@ tr td:nth-child(odd) {
   margin: 0 auto;
   vertical-align: middle; }
 
+.range-slider {
+  width: 95%; }
+
 .list .item.item-accordion {
   line-height: 38px;
   padding-bottom: 0;

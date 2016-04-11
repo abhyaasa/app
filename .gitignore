@@ -11,8 +11,8 @@ plugins/
 # created by 'bower install'
 www/lib/
 
-# created by 'gulp scss'
-# www/css/  # but leave in git for so setup.sh doesn't need gulp
+# created by 'gulp mincss'
+www/css/*.min.css
 
 # created from ./index.html by 'gulp index'
 www/index.html
@@ -38,3 +38,7 @@ resources/ios/
 
 # proprietary content of Datta Deepam flavor
 **/datta-deepam/
+
+www/css/ionic.app.min.css
+
+www/css/ionic.app.min.css

@@ -63,7 +63,7 @@
           <ion-list ng-show="Deck.data.activeCardIndex !== undefined">
             <!-- see https://github.com/angular-slider/angularjs-slider -->
             <ion-item>
-              <rzslider ng-show="Deck.data.range" rz-slider-model="Deck.data.range.min" rz-slider-high="Deck.data.range.max"
+              <rzslider ng-show="Deck.data.range" class="range-slider" rz-slider-model="Deck.data.range.min" rz-slider-high="Deck.data.range.max"
                 rz-slider-options="Deck.data.range.options">
               </rzslider>
             </ion-item>
