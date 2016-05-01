@@ -189,7 +189,7 @@ gulp.task('build', '[-a] for Android, default iOS', ['default', 'mincss', 'lint'
         done();
     });
 
-gulp.task('bx', 'Build for ios and open xcode project', ['build'], function (done) {
+gulp.task('bx', 'Build iOS and open xcode project', ['build'], function (done) {
     sh.exec('open platforms/ios/*.xcodeproj');
     done();
 });
@@ -198,6 +198,7 @@ gulp.task('bx', 'Build for ios and open xcode project', ['build'], function (don
 gulp.task('publish-pre-build', 'Execute before publishing build.', function () {
     // PUBLISH pref-building tasks: see https://github.com/leob/ionic-quickstarter
     // use https://github.com/scniro/gulp-clean-css
+    paths.indexJs = paths.indexJs.concat(['!./www/**/*stub.js']);
 });
 
 gulp.task('dgeni', 'Generate jsdoc documentation.', function (done) {

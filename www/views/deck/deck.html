@@ -42,7 +42,7 @@
           <ion-toggle toggle-class="toggle-positive" ng-model="Deck.data.reverseQandA">
             Reverse Q &amp; A
           </ion-toggle>
-          <ion-toggle ng-show="Deck.data.range || Deck.data.tags.length > 0" toggle-class="toggle-positive"
+          <ion-toggle ng-show="Deck.data.haveRange || Deck.data.tags.length > 0" toggle-class="toggle-positive"
             ng-model="Deck.data.showTags">
             Show tags in card
           </ion-toggle>
@@ -55,7 +55,7 @@
         </ion-list>
       </div>
       <div class="v-space"></div>
-      <div class="deck-filter" ng-show="Deck.data.tags.length > 0 || Deck.data.range">
+      <div class="deck-filter" ng-show="Deck.data.tags.length > 0 || Deck.data.haveRange">
         <ion-item class="item-stable" ng-click="toggleGroup('filter')" ng-class="{active: Deck.data.isGroupShown['filter']}">
           <i class="icon" ng-class="Deck.data.isGroupShown['filter'] ? 'ion-minus' : 'ion-plus'"></i>          Filter cards
         </ion-item>

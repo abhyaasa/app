@@ -161,9 +161,13 @@ angular.module('app')
     };
 
     var finishSetup = function () {
-        _this.data.range.options.onEnd = function () {
+        if (_this.data.haveRange) {
+            _this.data.range.options.onEnd = function () {
+                _this.activeIndices();
+            };
+        } else {
             _this.activeIndices();
-        };
+        }
         _this.isDefined = true;
         _this.settingUp = false;
         $state.go('tabs.card');
@@ -181,7 +185,8 @@ angular.module('app')
                 history: _.map(_this.questions, function () {
                     return [];
                 }),
-                range: min === max ? false : {
+                haveRange: min !== max,
+                range: {
                     min: min,
                     max: max,
                     options: {
