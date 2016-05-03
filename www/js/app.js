@@ -2,7 +2,7 @@
 
 /* eslint no-console: 0 */
 
-angular.module('app', ['ionic', 'services', 'dataStub', 'rzModule'])
+angular.module('app', ['ionic', 'services', 'data', 'rzModule'])
 
 .run(function (Log, $ionicPlatform, $rootScope, $state, restoreSettings, settings,
     mode, LocalStorage) {
