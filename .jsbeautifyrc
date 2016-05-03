@@ -50,7 +50,8 @@
         "eol": "\n",
         "end_with_newline": true,
         "selector_separator_newline": true,
-        "newline_between_rules": true
+        "newline_between_rules": true,
+        "preserve_newlines": true
     },
     "html": {
         "indent_size": 2,

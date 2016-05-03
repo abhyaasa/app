@@ -32,7 +32,7 @@
             <i class="icon" ng-class="Deck.data.isGroupShown['header'] ? 'ion-minus' : 'ion-plus'"></i>            Header information
           </ion-item>
           <ion-item class="item-accordion" ng-repeat="key in Deck.headerDisplayKeys" ng-show="Deck.data.isGroupShown['header']">
-            <b>{{ key }}:</b> {{ Deck.header[key] }}
+            <strong>{{ key }}:</strong> {{ Deck.header[key] }}
           </ion-item>
         </ion-list>
       </div>
@@ -42,7 +42,7 @@
           <ion-toggle toggle-class="toggle-positive" ng-model="Deck.data.reverseQandA">
             Reverse Q &amp; A
           </ion-toggle>
-          <ion-toggle ng-show="Deck.data.range || Deck.data.tags.length > 0" toggle-class="toggle-positive"
+          <ion-toggle ng-show="Deck.data.haveRange || Deck.data.tags.length > 0" toggle-class="toggle-positive"
             ng-model="Deck.data.showTags">
             Show tags in card
           </ion-toggle>
@@ -55,7 +55,7 @@
         </ion-list>
       </div>
       <div class="v-space"></div>
-      <div class="deck-filter" ng-show="Deck.data.tags.length > 0 || Deck.data.range">
+      <div class="deck-filter" ng-show="Deck.data.tags.length > 0 || Deck.data.haveRange">
         <ion-item class="item-stable" ng-click="toggleGroup('filter')" ng-class="{active: Deck.data.isGroupShown['filter']}">
           <i class="icon" ng-class="Deck.data.isGroupShown['filter'] ? 'ion-minus' : 'ion-plus'"></i>          Filter cards
         </ion-item>
@@ -63,7 +63,7 @@
           <ion-list ng-show="Deck.data.activeCardIndex !== undefined">
             <!-- see https://github.com/angular-slider/angularjs-slider -->
             <ion-item>
-              <rzslider ng-show="Deck.data.range" rz-slider-model="Deck.data.range.min" rz-slider-high="Deck.data.range.max"
+              <rzslider ng-show="Deck.data.range" class="range-slider" rz-slider-model="Deck.data.range.min" rz-slider-high="Deck.data.range.max"
                 rz-slider-options="Deck.data.range.options">
               </rzslider>
             </ion-item>

@@ -2,8 +2,9 @@
 
 /* eslint-env node */
 /* eslint no-console: 0 */
+/* eslint no-undef: 0 */ // for appGlobals
 
-angular.module('stubs', ['ionic'])
+angular.module('dataStub', ['ionic'])
 
 .constant('httpStubData', {
     'config.json': {
@@ -14,30 +15,25 @@ angular.module('stubs', ['ionic'])
         version: '0.0.2'
     },
     'flavor/library/index.json': [
-        'deck.json',
-        'deck_2.json'
+        'deck.json'
     ],
     'flavor/library/deck.json': [{
-        answer: 'Ci',
-        id: 0,
-        tags: [
-            '.ci'
-        ],
-        text: 'case insensitive',
-        type: 'mind'
+        'date': '2016-03-26',
+        'sanskrit': true
     }, {
-        answer: '<p>Buddy at shelter</p>',
-        id: 1,
-        tags: [
+        'id': 0,
+        'tags': [
             '.html'
         ],
-        text: '<p>image <img alt="Buddy"src="data/flavor/media/deck_2/buddyShelter.jpg"' +
-            ' title="Buddy at shelter" /></p>',
-        type: 'mind'
+        'text': [
+            '<strong>bold html markup</strong>'
+        ],
+        'type': 'mind',
+        'answer': ['some answer']
     }]
 })
 
-.provider('getStubData', function (httpStubData) {
+.provider('getData', function (httpStubData) {
     var injector = angular.injector(['ng']);
     var $q = injector.get('$q');
     this.$get = function () {
@@ -49,7 +45,7 @@ angular.module('stubs', ['ionic'])
             deferred.resolve({
                 data: data
             });
-            console.log('STUB LOG: getStubData', path, deferred.promise.data);
+            console.log('STUB LOG: getData', path, deferred.promise.data);
             return deferred.promise;
         };
     };

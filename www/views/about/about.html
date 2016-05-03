@@ -1,6 +1,11 @@
 <ion-view>
-    <ion-content padding="true" class="has-header major-text">
-        <div ng-include="'data/md/about.html'">
-        </div>
-    </ion-content>
+  <ion-content padding="true" class="has-header major-text">
+    <div ng-include="'data/md/about.html'"></div>
+    <div ng-if="debugInfo">
+      <h3>Debugging info</h3>
+      <p ng-repeat="(key, value) in debugInfo">
+        <b>{{ key }}:</b> {{ debugInfo[key] }}
+      </p>
+    </div>
+  </ion-content>
 </ion-view>

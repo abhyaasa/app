@@ -5,6 +5,8 @@
 /* eslint valid-jsdoc: 0 */
 /* eslint require-jsdoc: 0 */
 
+/* eslint no-undef: 0 */ // for appGlobals
+
 angular.module('services', ['ionic'])
 
 .constant('mode', 'debug') // 'debug', 'build', or 'normal'
@@ -65,31 +67,6 @@ angular.module('services', ['ionic'])
         var args = _.toArray(arguments);
         window.alert('ERROR: ' + JSON.stringify(args));
         logger('ERROR', args);
-    };
-})
-
-/**
- * @name getData
- * @param {string} path to file, relative to www/data
- * @param {function} optional callback accepts error object
- * @returns {object} promise yielding json file contents
- */
-.provider('getData', function () {
-    var injector = angular.injector(['ng']);
-    var $http = injector.get('$http');
-    var urlPrefix = ionic.Platform.isAndroid() ? '/android_asset/www/' : '';
-    this.$get = function () {
-        return function (path, failure) {
-            return $http.get(urlPrefix + 'data/' + path)
-                .catch(function (error) {
-                    if (failure) {
-                        return failure(error);
-                    } else {
-                        console.error('getData', JSON.stringify(error));
-                        return error;
-                    }
-                });
-        };
     };
 })
 
@@ -176,9 +153,7 @@ angular.module('services', ['ionic'])
                 }
             };
 
-            if ($ionicPlatform.is('android')) {
-                src = '/android_asset/www/' + src;
-            }
+            src = appGlobals.urlPrefix + src;
             defer.resolve(new $window.Media(src, mediaSuccess, mediaError, mediaStatus));
         });
         return defer.promise;

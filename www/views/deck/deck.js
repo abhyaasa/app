@@ -145,6 +145,7 @@ angular.module('app')
     };
 
     var setupQuestions = function (fileName) {
+        _this.settingUp = true;
         return getData('flavor/library/' + fileName).then(function (promise) {
             _this.questions = promise.data;
             _this.header = _.clone(defaultHeader);
@@ -160,10 +161,15 @@ angular.module('app')
     };
 
     var finishSetup = function () {
-        _this.data.range.options.onEnd = function () {
+        if (_this.data.haveRange) {
+            _this.data.range.options.onEnd = function () {
+                _this.activeIndices();
+            };
+        } else {
             _this.activeIndices();
-        };
+        }
         _this.isDefined = true;
+        _this.settingUp = false;
         $state.go('tabs.card');
     };
 
@@ -179,7 +185,8 @@ angular.module('app')
                 history: _.map(_this.questions, function () {
                     return [];
                 }),
-                range: min === max ? false : {
+                haveRange: min !== max,
+                range: {
                     min: min,
                     max: max,
                     options: {

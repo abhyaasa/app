@@ -26,7 +26,7 @@ angular.module('app')
     }
 })
 
-.service('Library', function (Log, $state, getData, LocalStorage, _) {
+.service('Library', function (Log, $state, LocalStorage, _) {
     var _this = this;
     var openDecks;
     var fileDecks;

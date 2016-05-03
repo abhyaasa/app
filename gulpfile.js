@@ -17,12 +17,14 @@ var cmdAliases = {
     bi: 'gulp build',
     ba: 'gulp build -a',
     ei: 'ionic emulate ios -lcs',
-    ra: 'ionic run android -cs',
+    ea: 'ionic run android -cs',
+    ra: 'ionic run android -cs --device',
     bx: 'gulp bx'
 };
 
 var paths = {
     scss: ['./scss/**/*.scss'],
+    css: ['./www/css/*.css'],
     appJs: ['./www/**/*.js', '!./www/lib/**'],
     py: ['scripts/*.py'],
     xhtml: ['config.xml', 'index.html', 'www/views/**/*.html'],
@@ -97,7 +99,7 @@ var logError = function () {
 };
 
 gulp.task('default',
-    'Run by ionic app build and serve commands', ['sass', 'index', 'md', 'lint']
+    'Run by ionic app build and serve commands', ['sass', 'index', 'md']
 );
 
 gulp.task('sass', 'Ionic .scss to .css file transformation', function (done) {
@@ -105,29 +107,12 @@ gulp.task('sass', 'Ionic .scss to .css file transformation', function (done) {
         .pipe(sass())
         .on('error', sass.logError)
         .pipe(gulp.dest('./www/css/'))
-        .pipe(minifyCss({
-            keepSpecialComments: 0
-        }))
-        .pipe(rename({
-            extname: '.min.css'
-        }))
-        .pipe(gulp.dest('./www/css/'))
         .on('end', done);
 });
 
-gulp.task('watch', 'Only watches scss files.', function () {
-    return gulp.watch(paths.sass, ['sass']);
+gulp.task('watch', 'Watch scss files.', function () {
+    return gulp.watch(paths.scss, ['sass']);
 });
-
-// For Ionic >= 1.2 http://www.typescriptlang.org
-// add to paths something like src: ['./src/*.ts'], // for typescript compilation
-// gulp.task('compile', 'Typescript compilation', function () {
-//     gulp.src(paths.src)
-//         .pipe(typescript({
-//             emitError: false
-//         }))
-//         .pipe(gulp.dest('www/js/'));
-// });
 
 gulp.task('index', 'Inject script elements into www/index.html',
     function () {
@@ -180,18 +165,31 @@ gulp.task('si',
         sh.exec(command);
     });
 
-gulp.task('build', '[-a] for Android, default iOS', ['default'], function (done) {
-    sh.exec('ionic build ' + (argv.a ? 'android' : 'ios'));
-    if (!argv.a) {
-        gulp.src(['./platforms/ios/*/config.xml'])
-            .pipe(replace(/<allow-navigation.*\/>/, ''))
-            .pipe(gulp.dest('./platforms/ios'));
-    }
-    logError('If build did not end with "** BUILD SUCCEEDED **", run it again!');
-    done();
+gulp.task('mincss', 'Minify css', function (done) {
+    gulp.src(paths.css)
+        .pipe(minifyCss({
+            keepSpecialComments: 0
+        }))
+        .pipe(rename({
+            extname: '.min.css'
+        }))
+        .pipe(gulp.dest('./www/css/'))
+        .on('end', done);
 });
 
-gulp.task('bx', 'Build for ios and open xcode project', ['build'], function (done) {
+gulp.task('build', '[-a] for Android, default iOS', ['default', 'mincss', 'lint'],
+    function (done) {
+        sh.exec('ionic build ' + (argv.a ? 'android' : 'ios'));
+        if (!argv.a) {
+            gulp.src(['./platforms/ios/*/config.xml'])
+                .pipe(replace(/<allow-navigation.*\/>/, ''))
+                .pipe(gulp.dest('./platforms/ios'));
+        }
+        logError('If build did not end with "** BUILD SUCCEEDED **", run it again!');
+        done();
+    });
+
+gulp.task('bx', 'Build iOS and open xcode project', ['build'], function (done) {
     sh.exec('open platforms/ios/*.xcodeproj');
     done();
 });
@@ -200,6 +198,7 @@ gulp.task('bx', 'Build for ios and open xcode project', ['build'], function (don
 gulp.task('publish-pre-build', 'Execute before publishing build.', function () {
     // PUBLISH pref-building tasks: see https://github.com/leob/ionic-quickstarter
     // use https://github.com/scniro/gulp-clean-css
+    paths.indexJs = paths.indexJs.concat(['!./www/**/*stub.js']);
 });
 
 gulp.task('dgeni', 'Generate jsdoc documentation.', function (done) {
@@ -332,8 +331,7 @@ gulp.task('jsonlint', 'Report json file problems.', function (done) {
         .pipe(jsonlint())
         .pipe(jsonlint.report(reporter))
         .pipe(jsonErrorExit())
-        .on('finish', done)
-    ;
+        .on('finish', done);
 });
 
 gulp.task('xhtmllint', 'Report html file problems.', function (done) {

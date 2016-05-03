@@ -19,7 +19,7 @@ new-inline-tags: ion-nav-bar, ion-toggle, ion-item, ion-list, ion-content, ion-v
   ion-nav-title, ion-nav-back-button, ion-nav-buttons, ion-nav-view, x, ion-radio,
   ion-slide, ion-slide-box, ion-checkbox, rzslider, ion-tab, ion-tabs, ion-content,
   content, author, access, description, name, preference, allow-navigation, widget,
-  feature, platform, icon, splash
+  feature, platform, icon, splash ion-spinner
 new-blocklevel-tags:
 new-empty-tags:
 write-back: no
