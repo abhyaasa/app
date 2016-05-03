@@ -185,7 +185,7 @@ In every Android device used for debugging (real or virtual), select `Settings >
 
 Before an emulation or device run, perform build (`g ba`), which should end with success message. For emulation, use `genymotion` Start to launch selected emulator, and then `g ea` to upload and run app. Or use `g ra` with USB-attached device to upload and run app.
 
-In Chrome, click the ADB plugin icon dropdown `View Inspection Targets`. Check `Discover USB devices` and click `Inspect` under the attached WebView device. This opens an inspector window, including Console tab to view errors messages.
+In Chrome, click the ADB plugin icon dropdown `View Inspection Targets`. Check `Discover USB devices` and click `Inspect` under the attached WebView device. This opens an inspector window, including Console tab to view errors messages. `Inspect` may not show up until after app has encountered and error.
 
 
 ## Flavors and data directory structure

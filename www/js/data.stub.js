@@ -2,6 +2,7 @@
 
 /* eslint-env node */
 /* eslint no-console: 0 */
+/* eslint no-undef: 0 */ // for appGlobals
 
 angular.module('dataStub', ['ionic'])
 
@@ -35,6 +36,19 @@ angular.module('dataStub', ['ionic'])
 .provider('getData', function (httpStubData) {
     var injector = angular.injector(['ng']);
     var $q = injector.get('$q');
+
+    // REVIEW Android Ionic View app does not use Android prefix
+    // var urlPrefix = '';
+    // if (ionic.Platform.isAndroid()) {
+    //     var href = window.location.href;
+    //     if (href.indexOf('viewapp') === -1) {
+    //         urlPrefix = '/android_asset/www/';
+    //     } else { // Ionic View
+    //         urlPrefix = href.substr(0, href.indexof('index.html'));
+    //     }
+    // }
+    // debugValues.urlPrefix = urlPrefix;
+
     this.$get = function () {
         return function (path) {
             // REVIEW create stub getData (normal one w/o $q) that includes

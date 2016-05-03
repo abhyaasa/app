@@ -3,6 +3,8 @@
 /* eslint-env node */
 /* eslint no-console: 0 */
 
+var appGlobals = {}; // REVIEW global appGlobals
+
 angular.module('data', ['ionic'])
 
 /**
@@ -14,7 +16,18 @@ angular.module('data', ['ionic'])
 .provider('getData', function () {
     var injector = angular.injector(['ng']);
     var $http = injector.get('$http');
-    var urlPrefix = ionic.Platform.isAndroid() ? '/android_asset/www/' : '';
+    var urlPrefix = '';
+    // Android Ionic View app does not use Android prefix
+    if (ionic.Platform.isAndroid()) {
+        var href = window.location.href;
+        if (href.indexOf('viewapp') === -1) {
+            urlPrefix = '/android_asset/www/';
+        } else { // Ionic View
+            urlPrefix = href.substr(0, href.indexof('index.html'));
+        }
+    }
+    appGlobals.urlPrefix = urlPrefix;
+    // ANDROID in Ionic View empty prefix does not work
     this.$get = function () {
         return function (path, failure) {
             return $http.get(urlPrefix + 'data/' + path)
@@ -22,7 +35,7 @@ angular.module('data', ['ionic'])
                     if (failure) {
                         return failure(error);
                     } else {
-                        console.error('getData', JSON.stringify(error));
+                        console.error('getData', JSON.stringify(error), urlPrefix);
                         return error;
                     }
                 });

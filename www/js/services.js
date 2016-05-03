@@ -5,6 +5,8 @@
 /* eslint valid-jsdoc: 0 */
 /* eslint require-jsdoc: 0 */
 
+/* eslint no-undef: 0 */ // for appGlobals
+
 angular.module('services', ['ionic'])
 
 .constant('mode', 'debug') // 'debug', 'build', or 'normal'
@@ -151,9 +153,7 @@ angular.module('services', ['ionic'])
                 }
             };
 
-            if ($ionicPlatform.is('android')) {
-                src = '/android_asset/www/' + src;
-            }
+            src = appGlobals.urlPrefix + src;
             defer.resolve(new $window.Media(src, mediaSuccess, mediaError, mediaStatus));
         });
         return defer.promise;

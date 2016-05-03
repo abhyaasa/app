@@ -268,13 +268,15 @@ def main(args):
         _input = UTF8READER(sys.stdin).read()
     else:
         _input = codecs.open(str(args.infile), "r", "utf-8").read()
+    header = {}
+    if args.copyright:
+        header['copyright'] = args.copyright
     header_end = _input.find('\n;')
     if header_end == -1:
-        header = {}
         questions = _input
     else:
         try:
-            header = json.loads('{' + _input[: header_end] + '}')
+            header.update(json.loads('{' + _input[: header_end] + '}'))
         except:
             error('header does not parse as json object attribute definitions')
         questions = _input[header_end + 1 :]
@@ -429,6 +431,8 @@ def get_args():
                    help='transliteration output form (default iast)')
     p.add_argument('-m', '--media', type=str, default='',
                    help='prefix added to html img src, default none')
+    p.add_argument('-c', '--copyright', type=str,
+                   help='copyright text added to deck header')
     p.add_argument('-t', '--test', action='store_true',
                    help='run with test variable value as input')
     p.add_argument('--test_input', action='store_true',
