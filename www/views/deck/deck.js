@@ -2,9 +2,10 @@
 
 angular.module('app')
 
-.controller('DeckController', function ($scope, $state, Deck) {
+.controller('DeckController', function ($scope, $state, Deck, settings) {
     $scope.Deck = Deck;
     $scope.$state = $state;
+    $scope.settings = settings;
 
     $scope.getCount = function (key) {
         return Deck.count && (key in Deck.count) ? Deck.count[key] : 0;
@@ -21,6 +22,14 @@ angular.module('app')
 })
 
 .controller('DeckTagsController', function ($scope, $state, $stateParams, Deck, _) {
+    // Primes to over a year
+    // var primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67,
+    //     71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151,
+    //     157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239,
+    //     241, 251, 257, 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 317, 331, 337,
+    //     347, 349, 353, 359, 367
+    // ];
+
     var filterKey = $stateParams.filterKey;
     var tags = Deck.data.tags;
     var filterTags = Deck.data.filterTags;

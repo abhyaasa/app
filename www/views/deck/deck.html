@@ -13,16 +13,16 @@
             <td>{{ Deck.count.right }}</td>
             <td>Wrong</td>
             <td>{{ Deck.count.wrong }}</td>
-            <td>Skipped</td>
-            <td>{{ Deck.count.skipped }}</td>
+            <td>Remaining</td>
+            <td>{{ Deck.count.remaining }}</td>
           </tr>
           <tr>
             <td>Removed</td>
             <td>{{ Deck.count.removed }}</td>
-            <td>Hints</td>
-            <td>{{ Deck.count.hints }}</td>
-            <td>Remaining</td>
-            <td>{{ Deck.count.remaining }}</td>
+            <td>Skipped</td>
+            <td>{{ Deck.count.skipped }}</td>
+            <td ng-show="settings.enableHints">Hints</td>
+            <td ng-show="settings.enableHints">{{ Deck.count.hints }}</td>
           </tr>
         </table>
       </div>

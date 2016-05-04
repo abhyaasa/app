@@ -43,7 +43,8 @@ angular.module('app')
     var defaultSettings = {
         intro: true,
         randomQuestions: false,
-        randomResponses: false
+        randomResponses: false,
+        enableHints: true
     };
     return function (reset) {
         _.extendOwn(settings, defaultSettings);
