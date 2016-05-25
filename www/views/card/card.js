@@ -19,7 +19,7 @@ angular.module('app')
         Deck.data.activeCardIndex = activeCardIndex;
         Deck.save();
         _this.done = false;
-        _this.question = Deck.questions[Deck.data.active[activeCardIndex]];
+        _this.question = Deck.questions[Deck.cardObj().index];
         _this.isMA = _.contains(_this.question.tags, '.ma');
         _this.answerClass = 'answer';
         _this.isInput = _.contains(_this.question.tags, '.cs' ||
@@ -132,7 +132,7 @@ angular.module('app')
             $state.go('tabs.deck');
         } else {
             _this.setup(Deck.data.activeCardIndex + 1);
-            if (Deck.data.outcomes[Deck.data.activeCardIndex] === 'removed') {
+            if (Deck.cardObj().group === 'removed') {
                 this.nextCard();
             }
             Deck.save();

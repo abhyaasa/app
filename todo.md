@@ -13,6 +13,12 @@ Excluded from the `todo-show` scan are library, auto-generated, and archive file
 - CHANGED /
 
 - TODO
+  - session responses not acted upon until session concludes
+    - spaced rep reset level 0
+    - card info has group
+  - at session end with spaced rep if there are wrong answers the questions move to end of session which continues
+  - filter change apply / cancel, filter subpage, include spaced-rep?
+  - with spaced rep, multiple wrong outcomes for same question, so keep wrong count
   - spaced repetition algorithm [Leitner](https://en.wikipedia.org/wiki/Leitner_system)
     - Enable (toggle)
       - default disabled with all active cards start in 0 group
@@ -33,9 +39,10 @@ Excluded from the `todo-show` scan are library, auto-generated, and archive file
        - if randomize questions mode, do so for each group before beginning it
     - Session ends when group 0 is reached and empty.
        - then display congratulations in card tab, with message to disable spaced repetition 
-    - Card tab when at session end: display “Disable
-    - try apple archive run
-    - card load spinner center
+    - Card tab when at session end: display “Disable??"
+  - script instead of Sanskrit in cdeck.py and script header info
+  - try apple archive run
+  - card load spinner center
 
 - REVIEW
   - use [https://www.npmjs.com/package/gulp-beautify](https://www.npmjs.com/package/gulp-beautify)

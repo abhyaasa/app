@@ -2,74 +2,6 @@
 
 angular.module('app')
 
-.controller('DeckController', function ($scope, $state, Deck, settings) {
-    $scope.Deck = Deck;
-    $scope.$state = $state;
-    $scope.settings = settings;
-
-    $scope.getCount = function (key) {
-        return Deck.count && (key in Deck.count) ? Deck.count[key] : 0;
-    };
-
-    // Adapted from http://codepen.io/ionic/pen/uJkCz?editors=1010
-    /*
-     * if given group is the selected group, deselect it
-     * else, select the given group
-     */
-    $scope.toggleGroup = function (group) {
-        Deck.data.isGroupShown[group] = !Deck.data.isGroupShown[group];
-    };
-})
-
-.controller('DeckTagsController', function ($scope, $state, $stateParams, Deck, _) {
-    // Primes to over a year
-    // var primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67,
-    //     71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151,
-    //     157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239,
-    //     241, 251, 257, 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 317, 331, 337,
-    //     347, 349, 353, 359, 367
-    // ];
-
-    var filterKey = $stateParams.filterKey;
-    var tags = Deck.data.tags;
-    var filterTags = Deck.data.filterTags;
-    $scope.filterKey = filterKey;
-    $scope.noCards = false;
-
-    var setup = function () {
-        $scope.tagObjects = _.map(tags, function (tag) {
-            var tagObj = {
-                tag: tag,
-                value: undefined,
-                disabled: false
-            };
-            _.mapObject(filterTags, function (tags, key) {
-                var hasTag = _.contains(tags, tag);
-                if (key === filterKey) {
-                    tagObj.value = hasTag;
-                } else {
-                    tagObj.disabled = tagObj.disabled || hasTag;
-                }
-            });
-            return tagObj;
-        });
-    };
-    setup();
-
-    $scope.save = function () {
-        var selected = _.filter($scope.tagObjects, _.property('value'));
-        var savedTags = filterTags[filterKey];
-        filterTags[filterKey] = _.pluck(selected, 'tag');
-        if (Deck.activeIndices()) {
-            $state.go('tabs.deck');
-        } else {
-            filterTags[filterKey] = savedTags;
-            $scope.noCards = true;
-            setup();
-        }
-    };
-})
-
 .service('Deck', function (Log, $state, $rootScope, settings, getData, Library, _,
     LocalStorage, $filter) {
     var _this = this;
@@ -94,63 +26,10 @@ angular.module('app')
 
     this.tagFilterText = _.mapObject(filterTagsProto, _.constant(''));
 
-    this.updateFilterText = function () {
-        _.mapObject(_this.data.filterTags, function (tags, key) {
-            _this.tagFilterText[key] = (tags.length === 0 ?
-                'Edit to ' + key + ' only cards with selected tags' :
-                $filter('capitalize')(key) + ' tags: ' + tags.join(', '));
-        });
-    };
-
     this.filterNormalTags = function (tags) {
         return _.filter(tags, function (tag) {
             return tag.charAt(0) !== '.';
         });
-    };
-
-    var qNumber = function (q) {
-        return q.number === undefined ? 0 : q.number;
-    };
-
-    // Randomize within each group of indices separated by text-type question indices.
-    var randomizeIndices = function (questions) {
-        var indices = [];
-        var group = [];
-        for (var q in questions) {
-            if (q.type === 'text') {
-                indices = indices.concat(_.sample(group, group.length));
-                group = [];
-                indices.push(q.id);
-            } else {
-                group.push(q.id);
-            }
-        }
-        return indices.concat(_.sample(group, group.length));
-    };
-
-    this.activeIndices = function () {
-        var filterTags = _this.data.filterTags;
-        var questions = _.filter(_this.questions, function (q) {
-            return ((filterTags.include.length === 0 ||
-                    _.intersection(filterTags.include, q.tags).length > 0) &&
-                _.intersection(filterTags.exclude, q.tags).length === 0 &&
-                _.difference(filterTags.require, q.tags).length === 0 &&
-                _this.data.range.max >= qNumber(q) &&
-                _this.data.range.min <= qNumber(q));
-        });
-        var indices = _.pluck(questions, 'id');
-        if (settings.randomQuestions) {
-            indices = randomizeIndices(questions);
-        }
-        _this.updateFilterText();
-        if (indices.length === 0) {
-            return false;
-        } else {
-            _this.data.active = indices;
-            Log.debug('indices', indices);
-            _this.restart(true);
-            return true;
-        }
     };
 
     var setupQuestions = function (fileName) {
@@ -169,16 +48,65 @@ angular.module('app')
         });
     };
 
+    var qNumber = function (q) {
+        return q.number === undefined ? 0 : q.number;
+    };
+
+    var filterQuestions = function () {
+        var sessionIntervals = _.filter(_this.data.repIntervals, function (i) {
+            return i === 0 || _this.data.repSession % i === 0;
+        });
+        var filterTags = _this.data.filterTags;
+        var questions = _.filter(_this.questions, function (q) {
+            return ((filterTags.include.length === 0 ||
+                    _.intersection(filterTags.include, q.tags).length > 0) &&
+                _.intersection(filterTags.exclude, q.tags).length === 0 &&
+                _.difference(filterTags.require, q.tags).length === 0 &&
+                _this.data.range.max >= qNumber(q) &&
+                _this.data.range.min <= qNumber(q));
+        });
+        var indices = _.pluck(questions, 'id');
+        _.each(_this.data.qData, function (qd) {
+            qd.active = (_.contains(indices, qd.id) &&
+                (!_this.data.spacedRepEnabled ||
+                    _.contains(sessionIntervals, qd.group)
+                ));
+        });
+        Log.debug('indices', indices);
+        return indices.length !== 0;
+    };
+
+    this.startSession = function () {
+        _.each(_this.data.qData, function (qd) {
+            _.extendOwn(qd, {
+                active: false,
+                outcome: undefined, // right, wrong, undefined (skipped), removed
+                hintCount: 0,
+                wrongCount: 0
+            });
+        });
+        filterQuestions();
+    };
+
+    var updateFilterText = function () {
+        _.mapObject(_this.data.filterTags, function (tags, key) {
+            _this.tagFilterText[key] = (tags.length === 0 ?
+                'Edit to ' + key + ' only cards with selected tags' :
+                $filter('capitalize')(key) + ' tags: ' + tags.join(', '));
+        });
+    };
+
     var finishSetup = function () {
+        updateFilterText();
         if (_this.data.haveRange) {
             _this.data.range.options.onEnd = function () {
-                _this.activeIndices();
+                filterQuestions();
             };
-        } else {
-            _this.activeIndices();
         }
+        _this.startSession();
         _this.isDefined = true;
         _this.settingUp = false;
+        _this.save();
         $state.go('tabs.card');
     };
 
@@ -189,12 +117,8 @@ angular.module('app')
             var min = _.min(numbers);
             var max = _.max(numbers);
             var allTags = _.uniq(_.flatten(_.pluck(_this.questions, 'tags'))).sort();
-            _this.data = {
+            _this.data = { // saved state of open deck
                 name: deckName,
-                history: _.map(_this.questions, function () {
-                    return [];
-                }),
-                haveRange: min !== max,
                 range: {
                     min: min,
                     max: max,
@@ -206,22 +130,32 @@ angular.module('app')
                         precision: max - min === 1 ? 1 : 0
                     }
                 },
-                isGroupShown: {
+                haveRange: min !== max,
+                isUIgroupShown: {
                     header: false,
-                    sanskrit: false,
+                    transliteration: false,
                     filter: false
                 },
                 showTags: false,
                 tags: _this.filterNormalTags(allTags),
                 filterTags: _.clone(filterTagsProto),
                 reverseQandA: false,
-                activeCardIndex: undefined, // initially assigned by Card.setup()
                 devanagari: false,
-                active: undefined, // assigned by _this.activeIndices()
-                outcomes: undefined // assigned by _this.restart()
+                qData: _.map(_this.questions, function (question) {
+                    return { // question data carried across sessions
+                        id: question.id,
+                        history: [],
+                        removed: false,
+                        group: 0 // spaced repetition number
+                    }; // other fields added by startSession
+                }),
+                sessionDone: false,
+                qDataIndex: undefined, // initially assigned by Card.setup()
+                // intervals same as FlashcardDB, ref. leitnerportal.com/LearnMore.aspx
+                repIntervals: [0, 1, 3, 7, 15],
+                spacedRepEnabled: false,
+                repSession: 0
             };
-            _this.activeIndices();
-            _this.save();
             finishSetup();
         });
     };
@@ -243,18 +177,43 @@ angular.module('app')
     };
 
     this.outcome = function (qid, outcome) {
-        _this.data.outcomes[_this.data.activeCardIndex] = outcome;
+        _this.cardObj().outcome = outcome;
         _this.data.history[qid].push(outcome);
         _this.save();
     };
 
+    this.cardObj = function () {
+        return _this.data.active[_this.data.activeCardIndex];
+    };
+
+    // Randomize within each sequence of indices separated by text-type question indices.
+    var randomizeGroup = function () {
+        var group = [];
+        var seq = [];
+        for (var qObj in _this.data.group) {
+            if (_this.questions[qObj.index].type === 'text') {
+                group = group.concat(_.sample(seq, seq.length));
+                seq = [];
+                group.push(qObj);
+            } else {
+                seq.push(qObj);
+            }
+        }
+        _this.data.group = group.concat(_.sample(seq, seq.length));
+    };
+
     this.restart = function (restoreRemoved) {
-        if (restoreRemoved) {
-            _this.data.outcomes = new Array(_this.data.active.length);
-        } else {
-            _this.data.outcomes = _.map(_this.data.outcomes, function (outcome) {
-                return outcome === 'removed' ? 'removed' : undefined;
-            });
+        _.each(_this.data.active, function (qObject) {
+            qObject.outcome = undefined;
+            if (restoreRemoved && qObject.group === 'removed') {
+                qObject.group = 0;
+            }
+        });
+        _this.data.repIntervalsIndex = 0;
+        // XXX forward/reverse and skipped cards with spaced rep.
+        // XXX _this.data.group =
+        if (settings.randomQuestions) {
+            randomizeGroup();
         }
         _this.data.activeCardIndex = 0;
         _this.save();
@@ -262,6 +221,11 @@ angular.module('app')
         if (!restoreRemoved) {
             $state.go('tabs.card');
         }
+    };
+
+    var getActiveProps = function (property) {
+        var active = _.filter(_this.data.qData, _.property('active'));
+        return _.map(active, _.property(property));
     };
 
     this.enterTab = function () {
@@ -278,13 +242,13 @@ angular.module('app')
             });
             return ms;
         };
-        var isUndefined = function (value) {
-            return value === undefined;
-        };
         if (_this.data) {
-            _.extendOwn(_this.count, multiset(_this.data.outcomes));
-            _this.count.remaining = _.filter(_this.data.outcomes, isUndefined).length;
-            _this.updateFilterText();
+            _.extendOwn(_this.count, multiset(getActiveProps('outcome')));
+            _this.count.remaining = _.filter(_this.data.active, function (qObj) {
+                return qObj.outcome === undefined && qObj.group !== 'removed';
+            }).length;
+            updateFilterText();
         }
     };
-});
+})
+;
