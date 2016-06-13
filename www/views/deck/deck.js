@@ -37,7 +37,7 @@ angular.module('app')
         return getData('flavor/library/' + fileName).then(function (promise) {
             _this.questions = promise.data;
             _this.header = _.clone(defaultHeader);
-            if (!('id' in _this.questions[0])) {
+            if ('date' in _this.questions[0]) {
                 _.extendOwn(_this.header, _this.questions[0]);
                 _this.questions.splice(0, 1);
             }
@@ -45,47 +45,14 @@ angular.module('app')
                 function (key) {
                     return key[0] !== '.';
                 });
+            _.each(_this.questions, function (q, index) {
+                q.index = index;
+            });
         });
     };
 
     var qNumber = function (q) {
         return q.number === undefined ? 0 : q.number;
-    };
-
-    var filterQuestions = function () {
-        var sessionIntervals = _.filter(_this.data.repIntervals, function (i) {
-            return i === 0 || _this.data.repSession % i === 0;
-        });
-        var filterTags = _this.data.filterTags;
-        var questions = _.filter(_this.questions, function (q) {
-            return ((filterTags.include.length === 0 ||
-                    _.intersection(filterTags.include, q.tags).length > 0) &&
-                _.intersection(filterTags.exclude, q.tags).length === 0 &&
-                _.difference(filterTags.require, q.tags).length === 0 &&
-                _this.data.range.max >= qNumber(q) &&
-                _this.data.range.min <= qNumber(q));
-        });
-        var indices = _.pluck(questions, 'id');
-        _.each(_this.data.qData, function (qd) {
-            qd.active = (_.contains(indices, qd.id) &&
-                (!_this.data.spacedRepEnabled ||
-                    _.contains(sessionIntervals, qd.group)
-                ));
-        });
-        Log.debug('indices', indices);
-        return indices.length !== 0;
-    };
-
-    this.startSession = function () {
-        _.each(_this.data.qData, function (qd) {
-            _.extendOwn(qd, {
-                active: false,
-                outcome: undefined, // right, wrong, undefined (skipped), removed
-                hintCount: 0,
-                wrongCount: 0
-            });
-        });
-        filterQuestions();
     };
 
     var updateFilterText = function () {
@@ -96,14 +63,116 @@ angular.module('app')
         });
     };
 
-    var finishSetup = function () {
+    var spacedRepetition = function () {
+        var sessionIntervals = _.filter(_this.data.repIntervals, function (i) {
+            return i === 0 || _this.data.sessionNumber % i === 0;
+        });
+        _.each(_this.data.qData, function (qd) {
+            qd.active = qd.active && _.contains(sessionIntervals, qd.repInterval);
+        });
+    };
+
+    this.filterQuestions = function () {
+        var filterTags = _this.data.filterTags;
+        var questions = _.filter(_this.questions, function (q) {
+            return ((filterTags.include.length === 0 ||
+                    _.intersection(filterTags.include, q.tags).length > 0) &&
+                _.intersection(filterTags.exclude, q.tags).length === 0 &&
+                _.difference(filterTags.require, q.tags).length === 0 &&
+                _this.data.range.max >= qNumber(q) &&
+                _this.data.range.min <= qNumber(q));
+        });
+        var indices = _.pluck(questions, 'index');
+        Log.debug('indices', indices);
+        _.each(_this.data.qData, function (qd) {
+            qd.active = _.contains(indices, qd.id);
+        });
         updateFilterText();
+        if (_this.data.spacedRepEnabled) {
+            spacedRepetition();
+        }
+        return indices.length !== 0;
+    };
+
+    // Randomize within each group of questions, separated by text-type questions.
+    var randomizeQData = function () {
+        var qData = [];
+        var group = [];
+        for (var qd in _this.data.qData) {
+            if (_this.questions[qd.index].type === 'text') {
+                qData = qData.concat(_.sample(group, group.length));
+                group = [];
+                qData.push(qd);
+            } else {
+                group.push(qd);
+            }
+        }
+        _this.data.qData = qData.concat(_.sample(group, group.length));
+    };
+
+    this.restoreRemoved = function () {
+        _.each(_this.data.qData, function (qd) {
+            qd.removed = false;
+        });
+    };
+
+    this.beginSession = function () {
+        _.each(_this.data.qData, function (qd) {
+            _.extendOwn(qd, {
+                active: false,
+                outcome: undefined, // right, wrong, undefined (skipped), removed
+                hints: 0,
+                wrong: 0
+            });
+        });
+        _this.filterQuestions();
+        _this.data.cardIndex = 0;
+        if (settings.randomQuestions) {
+            randomizeQData();
+        }
+        _this.data.sessionDone = false;
+        _this.data.sessionNumber += 1;
+        _this.save();
+        _this.enterTab();
+        $state.go('tabs.card');
+    };
+
+    this.endSession = function () {
+        var nextInterval = function (interval) {
+            var dri = _this.data.repIntervals;
+            for (var i = 0; i < dri.length; i++) {
+                if (dri[i] > interval) {
+                    return dri[i - 1];
+                }
+            }
+            return dri[dri.length - 1];
+        };
+        _.each(_this.data.qData, function (qd) {
+            for (var i = 0; i < qd.wrong; i++) {
+                qd.history.push('wrong');
+            }
+            if (qd.outcome === 'removed') {
+                qd.removed = true;
+            } else if (qd.outcome !== undefined) {
+                qd.history.push(qd.outocme);
+            }
+            if (_this.data.spacedRepEnabled) {
+                if (qd.outcome === 'right') {
+                    qd.repInterval = nextInterval(qd.repInterval);
+                } else if (qd.outcome === 'wrong') {
+                    qd.repInterval = 0;
+                }
+            }
+        });
+    };
+
+    var finishSetup = function () {
         if (_this.data.haveRange) {
             _this.data.range.options.onEnd = function () {
-                filterQuestions();
+                _this.filterQuestions();
             };
         }
-        _this.startSession();
+        _this.beginSession();
         _this.isDefined = true;
         _this.settingUp = false;
         _this.save();
@@ -141,20 +210,21 @@ angular.module('app')
                 filterTags: _.clone(filterTagsProto),
                 reverseQandA: false,
                 devanagari: false,
-                qData: _.map(_this.questions, function (question) {
+                qData: _.map(_this.questions, function (q) {
                     return { // question data carried across sessions
-                        id: question.id,
+                        index: q.index,
                         history: [],
                         removed: false,
-                        group: 0 // spaced repetition number
-                    }; // other fields added by startSession
+                        repInterval: 0 // spaced repetition number
+                    }; // other fields added by beginSession
                 }),
                 sessionDone: false,
-                qDataIndex: undefined, // initially assigned by Card.setup()
+                // indexes qData, initially assigned by Card.setup()
+                cardIndex: undefined,
                 // intervals same as FlashcardDB, ref. leitnerportal.com/LearnMore.aspx
                 repIntervals: [0, 1, 3, 7, 15],
                 spacedRepEnabled: false,
-                repSession: 0
+                sessionNumber: 0
             };
             finishSetup();
         });
@@ -176,56 +246,60 @@ angular.module('app')
         Library.saveDeck(_this.data.name.display, _this.data);
     };
 
-    this.outcome = function (qid, outcome) {
-        _this.cardObj().outcome = outcome;
-        _this.data.history[qid].push(outcome);
+    this.outcome = function (outcome) {
+        _this.cardData().outcome = outcome;
         _this.save();
     };
 
-    this.cardObj = function () {
-        return _this.data.active[_this.data.activeCardIndex];
-    };
-
-    // Randomize within each sequence of indices separated by text-type question indices.
-    var randomizeGroup = function () {
-        var group = [];
-        var seq = [];
-        for (var qObj in _this.data.group) {
-            if (_this.questions[qObj.index].type === 'text') {
-                group = group.concat(_.sample(seq, seq.length));
-                seq = [];
-                group.push(qObj);
-            } else {
-                seq.push(qObj);
-            }
-        }
-        _this.data.group = group.concat(_.sample(seq, seq.length));
-    };
-
-    this.restart = function (restoreRemoved) {
-        _.each(_this.data.active, function (qObject) {
-            qObject.outcome = undefined;
-            if (restoreRemoved && qObject.group === 'removed') {
-                qObject.group = 0;
-            }
-        });
-        _this.data.repIntervalsIndex = 0;
-        // XXX forward/reverse and skipped cards with spaced rep.
-        // XXX _this.data.group =
-        if (settings.randomQuestions) {
-            randomizeGroup();
-        }
-        _this.data.activeCardIndex = 0;
-        _this.save();
-        _this.enterTab();
-        if (!restoreRemoved) {
-            $state.go('tabs.card');
-        }
+    this.cardData = function () {
+        return _this.data.qData[_this.data.cardIndex];
     };
 
     var getActiveProps = function (property) {
         var active = _.filter(_this.data.qData, _.property('active'));
         return _.map(active, _.property(property));
+    };
+
+    var sum = function (a) {
+        var plus = function (n, m) {
+            return n + m;
+        };
+        return _.reduce(a, plus, 0);
+    };
+
+    this.nextCard = function () {
+        while (true) {
+            var i = _this.data.cardIndex;
+            i += 1;
+            if (i === _this.data.qData.length) {
+                break; // XXX
+            }
+            var qd = _this.data.qData[i];
+            if (qd.active && !qd.removed && qd.outcome === undefined) {
+                return i;
+            }
+        // if (Deck.data.activeCardIndex === Deck.data.active.length - 1) {
+        //     Deck.restart(false);
+        //     _this.question = undefined;
+        //     $state.go('tabs.deck');
+        // } else {
+        //     _this.setup(Deck.data.activeCardIndex + 1);
+        //     if (Deck.cardData().removed) {
+        //         this.nextCard();
+        //     }
+        //     Deck.save();
+        //     $state.go('tabs.card');
+        // }
+    };
+
+    this.previousCard = function () {
+        // if (Deck.data.activeCardIndex === 0) {
+        //     _this.setup(Deck.data.active.length - 1);
+        //     $state.go('tabs.deck');
+        // } else {
+        //     _this.setup(Deck.data.activeCardIndex - 1);
+        //     $state.go('tabs.card');
+        // }
     };
 
     this.enterTab = function () {
@@ -244,9 +318,11 @@ angular.module('app')
         };
         if (_this.data) {
             _.extendOwn(_this.count, multiset(getActiveProps('outcome')));
-            _this.count.remaining = _.filter(_this.data.active, function (qObj) {
-                return qObj.outcome === undefined && qObj.group !== 'removed';
+            _this.count.remaining = _.filter(_this.data.qData, function (qd) {
+                return qd.outcome === undefined && qd.active;
             }).length;
+            _this.count.wrong = sum(getActiveProps('wrong'));
+            _this.count.hints = sum(getActiveProps('hints'));
             updateFilterText();
         }
     };

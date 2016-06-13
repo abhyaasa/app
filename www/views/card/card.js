@@ -19,7 +19,7 @@ angular.module('app')
         Deck.data.activeCardIndex = activeCardIndex;
         Deck.save();
         _this.done = false;
-        _this.question = Deck.questions[Deck.cardObj().index];
+        _this.question = Deck.questions[Deck.cardData().index];
         _this.isMA = _.contains(_this.question.tags, '.ma');
         _this.answerClass = 'answer';
         _this.isInput = _.contains(_this.question.tags, '.cs' ||
@@ -122,31 +122,24 @@ angular.module('app')
         if (outcome === 'wrong') {
             _this.answerClass = 'wrong-response';
         }
-        Deck.outcome(_this.question.id, outcome);
+        Deck.outcome(outcome);
     };
 
     this.nextCard = function () {
-        if (Deck.data.activeCardIndex === Deck.data.active.length - 1) {
-            Deck.restart(false);
-            _this.question = undefined;
+        var index = Deck.nextCard();
+        if (index === undefined) {
             $state.go('tabs.deck');
         } else {
-            _this.setup(Deck.data.activeCardIndex + 1);
-            if (Deck.cardObj().group === 'removed') {
-                this.nextCard();
-            }
-            Deck.save();
-            $state.go('tabs.card');
+            _this.setup(index);
         }
     };
 
     this.previousCard = function () {
-        if (Deck.data.activeCardIndex === 0) {
-            _this.setup(Deck.data.active.length - 1);
+        var index = Deck.previousCard();
+        if (index === undefined) {
             $state.go('tabs.deck');
         } else {
-            _this.setup(Deck.data.activeCardIndex - 1);
-            $state.go('tabs.card');
+            _this.setup(index);
         }
     };
 
