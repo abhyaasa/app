@@ -13,12 +13,13 @@ Excluded from the `todo-show` scan are library, auto-generated, and archive file
 - CHANGED /
 
 - TODO
-  - android device testing
-  - android ionic view
-  - enable hints in settings
-  - card load spinner center
-  - try apple archive run
-  - deck filter option +/- https://en.wikipedia.org/wiki/Leitner_system](https://en.wikipedia.org/wiki/Leitner_system) spaced repetition algorithm (Leitner)
+  - session responses not acted upon until session concludes
+    - spaced rep reset level 0
+    - card info has group
+  - at session end with spaced rep if there are wrong answers the questions move to end of session which continues
+  - filter change apply / cancel, filter subpage, include spaced-rep?
+  - with spaced rep, multiple wrong outcomes for same question, so keep wrong count
+  - spaced repetition algorithm [Leitner](https://en.wikipedia.org/wiki/Leitner_system)
     - Enable (toggle)
       - default disabled with all active cards start in 0 group
       - on disable, cards remain in groups and index to first card in last group
@@ -38,8 +39,10 @@ Excluded from the `todo-show` scan are library, auto-generated, and archive file
        - if randomize questions mode, do so for each group before beginning it
     - Session ends when group 0 is reached and empty.
        - then display congratulations in card tab, with message to disable spaced repetition 
-    - Card tab when at session end: display “Disable
-    - Primes to over a year 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 317, 331, 337, 347, 349, 353, 359, 367.
+    - Card tab when at session end: display “Disable??"
+  - script instead of Sanskrit in cdeck.py and script header info
+  - try apple archive run
+  - card load spinner center
 
 - REVIEW
   - use [https://www.npmjs.com/package/gulp-beautify](https://www.npmjs.com/package/gulp-beautify)

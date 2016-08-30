@@ -8,6 +8,8 @@
 
 **Flavor:** {{ config.flavor }}
 
+**Date:** {{ config.date }}
+
 <div class="minor-text">
 
 This app is under development. Interested developers please see

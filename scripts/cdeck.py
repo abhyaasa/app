@@ -152,6 +152,7 @@ The answer of a sequence question is automatically the text of the following que
 
 Header object contains input HEADER contents plus the following keys:
     ".sanskrit": true if any sanskrit text pairs in deck
+    "date": today's date
 
 The names of header object keys with special semantics begin with a dot. "id" is not
 allowed as a header key.

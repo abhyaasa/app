@@ -2,65 +2,6 @@
 
 angular.module('app')
 
-.controller('DeckController', function ($scope, $state, Deck) {
-    $scope.Deck = Deck;
-    $scope.$state = $state;
-
-    $scope.getCount = function (key) {
-        return Deck.count && (key in Deck.count) ? Deck.count[key] : 0;
-    };
-
-    // Adapted from http://codepen.io/ionic/pen/uJkCz?editors=1010
-    /*
-     * if given group is the selected group, deselect it
-     * else, select the given group
-     */
-    $scope.toggleGroup = function (group) {
-        Deck.data.isGroupShown[group] = !Deck.data.isGroupShown[group];
-    };
-})
-
-.controller('DeckTagsController', function ($scope, $state, $stateParams, Deck, _) {
-    var filterKey = $stateParams.filterKey;
-    var tags = Deck.data.tags;
-    var filterTags = Deck.data.filterTags;
-    $scope.filterKey = filterKey;
-    $scope.noCards = false;
-
-    var setup = function () {
-        $scope.tagObjects = _.map(tags, function (tag) {
-            var tagObj = {
-                tag: tag,
-                value: undefined,
-                disabled: false
-            };
-            _.mapObject(filterTags, function (tags, key) {
-                var hasTag = _.contains(tags, tag);
-                if (key === filterKey) {
-                    tagObj.value = hasTag;
-                } else {
-                    tagObj.disabled = tagObj.disabled || hasTag;
-                }
-            });
-            return tagObj;
-        });
-    };
-    setup();
-
-    $scope.save = function () {
-        var selected = _.filter($scope.tagObjects, _.property('value'));
-        var savedTags = filterTags[filterKey];
-        filterTags[filterKey] = _.pluck(selected, 'tag');
-        if (Deck.activeIndices()) {
-            $state.go('tabs.deck');
-        } else {
-            filterTags[filterKey] = savedTags;
-            $scope.noCards = true;
-            setup();
-        }
-    };
-})
-
 .service('Deck', function (Log, $state, $rootScope, settings, getData, Library, _,
     LocalStorage, $filter) {
     var _this = this;
@@ -85,17 +26,28 @@ angular.module('app')
 
     this.tagFilterText = _.mapObject(filterTagsProto, _.constant(''));
 
-    this.updateFilterText = function () {
-        _.mapObject(_this.data.filterTags, function (tags, key) {
-            _this.tagFilterText[key] = (tags.length === 0 ?
-                'Edit to ' + key + ' only cards with selected tags' :
-                $filter('capitalize')(key) + ' tags: ' + tags.join(', '));
-        });
-    };
-
     this.filterNormalTags = function (tags) {
         return _.filter(tags, function (tag) {
             return tag.charAt(0) !== '.';
+        });
+    };
+
+    var setupQuestions = function (fileName) {
+        _this.settingUp = true;
+        return getData('flavor/library/' + fileName).then(function (promise) {
+            _this.questions = promise.data;
+            _this.header = _.clone(defaultHeader);
+            if ('date' in _this.questions[0]) {
+                _.extendOwn(_this.header, _this.questions[0]);
+                _this.questions.splice(0, 1);
+            }
+            _this.headerDisplayKeys = _.filter(_.keys(_this.header).sort(),
+                function (key) {
+                    return key[0] !== '.';
+                });
+            _.each(_this.questions, function (q, index) {
+                q.index = index;
+            });
         });
     };
 
@@ -103,23 +55,24 @@ angular.module('app')
         return q.number === undefined ? 0 : q.number;
     };
 
-    // Randomize within each group of indices separated by text-type question indices.
-    var randomizeIndices = function (questions) {
-        var indices = [];
-        var group = [];
-        for (var q in questions) {
-            if (q.type === 'text') {
-                indices = indices.concat(_.sample(group, group.length));
-                group = [];
-                indices.push(q.id);
-            } else {
-                group.push(q.id);
-            }
-        }
-        return indices.concat(_.sample(group, group.length));
+    var updateFilterText = function () {
+        _.mapObject(_this.data.filterTags, function (tags, key) {
+            _this.tagFilterText[key] = (tags.length === 0 ?
+                'Edit to ' + key + ' only cards with selected tags' :
+                $filter('capitalize')(key) + ' tags: ' + tags.join(', '));
+        });
     };
 
-    this.activeIndices = function () {
+    var spacedRepetition = function () {
+        var sessionIntervals = _.filter(_this.data.repIntervals, function (i) {
+            return i === 0 || _this.data.sessionNumber % i === 0;
+        });
+        _.each(_this.data.qData, function (qd) {
+            qd.active = qd.active && _.contains(sessionIntervals, qd.repInterval);
+        });
+    };
+
+    this.filterQuestions = function () {
         var filterTags = _this.data.filterTags;
         var questions = _.filter(_this.questions, function (q) {
             return ((filterTags.include.length === 0 ||
@@ -129,47 +82,100 @@ angular.module('app')
                 _this.data.range.max >= qNumber(q) &&
                 _this.data.range.min <= qNumber(q));
         });
-        var indices = _.pluck(questions, 'id');
-        if (settings.randomQuestions) {
-            indices = randomizeIndices(questions);
+        var indices = _.pluck(questions, 'index');
+        Log.debug('indices', indices);
+        _.each(_this.data.qData, function (qd) {
+            qd.active = _.contains(indices, qd.id);
+        });
+        updateFilterText();
+        if (_this.data.spacedRepEnabled) {
+            spacedRepetition();
         }
-        _this.updateFilterText();
-        if (indices.length === 0) {
-            return false;
-        } else {
-            _this.data.active = indices;
-            Log.debug('indices', indices);
-            _this.restart(true);
-            return true;
-        }
+        return indices.length !== 0;
     };
 
-    var setupQuestions = function (fileName) {
-        _this.settingUp = true;
-        return getData('flavor/library/' + fileName).then(function (promise) {
-            _this.questions = promise.data;
-            _this.header = _.clone(defaultHeader);
-            if (!('id' in _this.questions[0])) {
-                _.extendOwn(_this.header, _this.questions[0]);
-                _this.questions.splice(0, 1);
+    // Randomize within each group of questions, separated by text-type questions.
+    var randomizeQData = function () {
+        var qData = [];
+        var group = [];
+        for (var qd in _this.data.qData) {
+            if (_this.questions[qd.index].type === 'text') {
+                qData = qData.concat(_.sample(group, group.length));
+                group = [];
+                qData.push(qd);
+            } else {
+                group.push(qd);
             }
-            _this.headerDisplayKeys = _.filter(_.keys(_this.header).sort(),
-                function (key) {
-                    return key[0] !== '.';
-                });
+        }
+        _this.data.qData = qData.concat(_.sample(group, group.length));
+    };
+
+    this.restoreRemoved = function () {
+        _.each(_this.data.qData, function (qd) {
+            qd.removed = false;
+        });
+    };
+
+    this.beginSession = function () {
+        _.each(_this.data.qData, function (qd) {
+            _.extendOwn(qd, {
+                active: false,
+                outcome: undefined, // right, wrong, undefined (skipped), removed
+                hints: 0,
+                wrong: 0
+            });
+        });
+        _this.filterQuestions();
+        _this.data.cardIndex = 0;
+        if (settings.randomQuestions) {
+            randomizeQData();
+        }
+        _this.data.sessionDone = false;
+        _this.data.sessionNumber += 1;
+        _this.save();
+        _this.enterTab();
+        $state.go('tabs.card');
+    };
+
+    this.endSession = function () {
+        var nextInterval = function (interval) {
+            var dri = _this.data.repIntervals;
+            for (var i = 0; i < dri.length; i++) {
+                if (dri[i] > interval) {
+                    return dri[i - 1];
+                }
+            }
+            return dri[dri.length - 1];
+        };
+        _.each(_this.data.qData, function (qd) {
+            for (var i = 0; i < qd.wrong; i++) {
+                qd.history.push('wrong');
+            }
+            if (qd.outcome === 'removed') {
+                qd.removed = true;
+            } else if (qd.outcome !== undefined) {
+                qd.history.push(qd.outocme);
+            }
+            if (_this.data.spacedRepEnabled) {
+                if (qd.outcome === 'right') {
+                    qd.repInterval = nextInterval(qd.repInterval);
+                } else if (qd.outcome === 'wrong') {
+                    qd.repInterval = 0;
+                }
+            }
         });
     };
 
     var finishSetup = function () {
         if (_this.data.haveRange) {
             _this.data.range.options.onEnd = function () {
-                _this.activeIndices();
+                _this.filterQuestions();
             };
-        } else {
-            _this.activeIndices();
         }
+        _this.beginSession();
         _this.isDefined = true;
         _this.settingUp = false;
+        _this.save();
         $state.go('tabs.card');
     };
 
@@ -180,12 +186,8 @@ angular.module('app')
             var min = _.min(numbers);
             var max = _.max(numbers);
             var allTags = _.uniq(_.flatten(_.pluck(_this.questions, 'tags'))).sort();
-            _this.data = {
+            _this.data = { // saved state of open deck
                 name: deckName,
-                history: _.map(_this.questions, function () {
-                    return [];
-                }),
-                haveRange: min !== max,
                 range: {
                     min: min,
                     max: max,
@@ -197,22 +199,33 @@ angular.module('app')
                         precision: max - min === 1 ? 1 : 0
                     }
                 },
-                isGroupShown: {
+                haveRange: min !== max,
+                isUIgroupShown: {
                     header: false,
-                    sanskrit: false,
+                    transliteration: false,
                     filter: false
                 },
                 showTags: false,
                 tags: _this.filterNormalTags(allTags),
                 filterTags: _.clone(filterTagsProto),
                 reverseQandA: false,
-                activeCardIndex: undefined, // initially assigned by Card.setup()
                 devanagari: false,
-                active: undefined, // assigned by _this.activeIndices()
-                outcomes: undefined // assigned by _this.restart()
+                qData: _.map(_this.questions, function (q) {
+                    return { // question data carried across sessions
+                        index: q.index,
+                        history: [],
+                        removed: false,
+                        repInterval: 0 // spaced repetition number
+                    }; // other fields added by beginSession
+                }),
+                sessionDone: false,
+                // indexes qData, initially assigned by Card.setup()
+                cardIndex: undefined,
+                // intervals same as FlashcardDB, ref. leitnerportal.com/LearnMore.aspx
+                repIntervals: [0, 1, 3, 7, 15],
+                spacedRepEnabled: false,
+                sessionNumber: 0
             };
-            _this.activeIndices();
-            _this.save();
             finishSetup();
         });
     };
@@ -233,26 +246,60 @@ angular.module('app')
         Library.saveDeck(_this.data.name.display, _this.data);
     };
 
-    this.outcome = function (qid, outcome) {
-        _this.data.outcomes[_this.data.activeCardIndex] = outcome;
-        _this.data.history[qid].push(outcome);
+    this.outcome = function (outcome) {
+        _this.cardData().outcome = outcome;
         _this.save();
     };
 
-    this.restart = function (restoreRemoved) {
-        if (restoreRemoved) {
-            _this.data.outcomes = new Array(_this.data.active.length);
-        } else {
-            _this.data.outcomes = _.map(_this.data.outcomes, function (outcome) {
-                return outcome === 'removed' ? 'removed' : undefined;
-            });
-        }
-        _this.data.activeCardIndex = 0;
-        _this.save();
-        _this.enterTab();
-        if (!restoreRemoved) {
-            $state.go('tabs.card');
-        }
+    this.cardData = function () {
+        return _this.data.qData[_this.data.cardIndex];
+    };
+
+    var getActiveProps = function (property) {
+        var active = _.filter(_this.data.qData, _.property('active'));
+        return _.map(active, _.property(property));
+    };
+
+    var sum = function (a) {
+        var plus = function (n, m) {
+            return n + m;
+        };
+        return _.reduce(a, plus, 0);
+    };
+
+    this.nextCard = function () {
+        while (true) {
+            var i = _this.data.cardIndex;
+            i += 1;
+            if (i === _this.data.qData.length) {
+                break; // XXX
+            }
+            var qd = _this.data.qData[i];
+            if (qd.active && !qd.removed && qd.outcome === undefined) {
+                return i;
+            }
+        // if (Deck.data.activeCardIndex === Deck.data.active.length - 1) {
+        //     Deck.restart(false);
+        //     _this.question = undefined;
+        //     $state.go('tabs.deck');
+        // } else {
+        //     _this.setup(Deck.data.activeCardIndex + 1);
+        //     if (Deck.cardData().removed) {
+        //         this.nextCard();
+        //     }
+        //     Deck.save();
+        //     $state.go('tabs.card');
+        // }
+    };
+
+    this.previousCard = function () {
+        // if (Deck.data.activeCardIndex === 0) {
+        //     _this.setup(Deck.data.active.length - 1);
+        //     $state.go('tabs.deck');
+        // } else {
+        //     _this.setup(Deck.data.activeCardIndex - 1);
+        //     $state.go('tabs.card');
+        // }
     };
 
     this.enterTab = function () {
@@ -269,13 +316,15 @@ angular.module('app')
             });
             return ms;
         };
-        var isUndefined = function (value) {
-            return value === undefined;
-        };
         if (_this.data) {
-            _.extendOwn(_this.count, multiset(_this.data.outcomes));
-            _this.count.remaining = _.filter(_this.data.outcomes, isUndefined).length;
-            _this.updateFilterText();
+            _.extendOwn(_this.count, multiset(getActiveProps('outcome')));
+            _this.count.remaining = _.filter(_this.data.qData, function (qd) {
+                return qd.outcome === undefined && qd.active;
+            }).length;
+            _this.count.wrong = sum(getActiveProps('wrong'));
+            _this.count.hints = sum(getActiveProps('hints'));
+            updateFilterText();
         }
     };
-});
+})
+;

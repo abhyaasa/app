@@ -24,7 +24,7 @@ var cmdAliases = {
 
 var paths = {
     scss: ['./scss/**/*.scss'],
-    css: ['./www/css/*.css'],
+    css: ['./www/css/*.css', '!.www/css/*.min.css'],
     appJs: ['./www/**/*.js', '!./www/lib/**'],
     py: ['scripts/*.py'],
     xhtml: ['config.xml', 'index.html', 'www/views/**/*.html'],
@@ -250,11 +250,13 @@ gulp.task('bump', '[-v VERSION | -t (major | minor | patch | (prerelease [-n NAM
             var versionObj = {
                 version: newVersion
             };
+            var date = new Date().toLocaleDateString();
             gulp.src(['./package.json'])
                 .pipe(bump(versionObj))
                 .pipe(gulp.dest('./'));
             gulp.src(['./www/data/config.json'])
                 .pipe(bump(versionObj))
+                .pipe(replace(/"date":.*(,?)/, '"date": "' + date + '"$1'))
                 .pipe(gulp.dest('./www/data'));
             gulp.src(['./config.xml'])
                 .pipe(replace(/(<widget.*version=")[^"]*/, '$1' + newVersion))
@@ -290,13 +292,14 @@ var execErrorExit = function (linterName) {
     });
 };
 
-gulp.task('eslint', 'Report js file problems.', function () {
+gulp.task('eslint', 'Report js file problems.', function (done) {
     gulp.src(paths.projectJs)
         .pipe(eslint({
             configFile: 'config/eslintrc.yml'
         }))
         .pipe(eslint.format())
-        .pipe(eslint.failAfterError());
+        .pipe(eslint.failAfterError())
+        .on('finish', done);
 });
 
 gulp.task('scsslint', 'Report scss file problems.', function (done) {

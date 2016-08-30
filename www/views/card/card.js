@@ -2,154 +2,6 @@
 
 angular.module('app')
 
-.controller('CardController', function ($scope, $state, Log, $ionicGesture, _,
-    Deck, Card) {
-
-    $scope.Card = Card;
-    $scope.Deck = Deck;
-    $scope.$on('$ionicView.enter', function () {
-        if (!Deck.isDefined) { // Deck.data undefined by source auto-reload
-            Card.isDefined = false;
-        } else if (!Deck.data.activeCardIndex) {
-            Card.setup(0);
-        } else if (!Card.isDefined) {
-            Card.setup(Deck.data.activeCardIndex);
-        }
-    });
-
-    var gestureSetup = function () {
-        var element = angular.element(document.querySelector('#content'));
-        var finish = function () {
-            if (!Card.done) {
-                Card.outcome('skipped');
-            }
-            Card.done = false;
-        };
-
-        var next = function () {
-            finish();
-            Card.nextCard();
-        };
-        $ionicGesture.on('swipeleft', next, element);
-
-        var previous = function () {
-            finish();
-            Card.previousCard();
-        };
-        $ionicGesture.on('swiperight', previous, element);
-
-        var remove = function () {
-            Card.done = false;
-            Card.outcome('removed');
-            Card.nextCard();
-        };
-        $ionicGesture.on('swipeup', remove, element);
-    };
-    gestureSetup();
-
-    $scope.hint = function () {
-        Deck.count.hints++;
-        Card.hint = Card.hints[Card.hintIndex];
-        Card.hintIndex++;
-        Card.haveHint = Card.hintIndex < Card.hints.length;
-    };
-
-    $scope.setOutcome = function (outcome) {
-        Card.outcome(outcome);
-        Card.done = false;
-        Card.nextCard();
-    };
-
-    $scope.showAnswer = function () {
-        if (Card.type === 'mind') {
-            Card.done = true;
-            Card.isInput = false;
-        }
-    };
-
-    $scope.isText = function () {
-        Card.outcome('text');
-        Card.done = true;
-    };
-
-    var isRight = function (response) {
-        return response[0];
-    };
-    $scope.response = function (index) {
-        var items = Card.responseItems;
-        if (_.contains(Card.question.tags, '.ma')) {
-            Log.debug('multiple answer', index, JSON.stringify(Card.responses));
-            if (Card.responses[index][0]) {
-                items[index].style = 'right-response';
-            } else {
-                items[index].style = 'wrong-response';
-                Card.numWrong += 1;
-            }
-        } else {
-            var rightIndex = _.findIndex(Card.responses, isRight);
-            items[rightIndex].style = 'right-response';
-            if (index !== rightIndex) {
-                items[index].style = 'wrong-response';
-                Card.outcome('wrong');
-            } else {
-                Card.outcome('right');
-            }
-            Card.done = true;
-        }
-        Log.debug('response items', JSON.stringify(items));
-    };
-
-    $scope.submitAnswer = function (submittedAnswer) {
-        var answer = Card.question.answer;
-        if (_.contains(Card.question.tags, '.ci')) {
-            answer = answer.toUpperCase();
-            submittedAnswer = submittedAnswer.toUpperCase();
-        }
-        if (answer === submittedAnswer) {
-            Card.outcome('right');
-        } else {
-            Card.outcome('wrong');
-        }
-        Card.done = true;
-    };
-
-    $scope.maDone = function () {
-        var items = Card.responseItems;
-        for (var i = 0; i < items.length; i++) {
-            if (items[i].style === 'no-response' && Card.responses[i][0]) {
-                items[i].style = 'missed-response';
-                Card.numWrong += 1;
-            }
-        }
-        if (Card.numWrong > items.length / 5) {
-            Card.outcome('close');
-        } else if (Card.numWrong > 0) {
-            Card.outcome('wrong');
-        } else {
-            Card.outcome('right');
-        }
-        Card.done = true;
-        Log.debug('Done items', JSON.stringify(items));
-    };
-})
-
-.filter('unsafe', function ($sce, _, settings, Deck) {
-    return function (valArray) {
-        var strArray = _.map(valArray, function (value) {
-            var text = value;
-            if (_.isArray(value)) {
-                text = value[Deck.data.devanagari ? 1 : 0];
-                if (Deck.data.devanagari === 'both') {
-                    text += (valArray.length === 1 && value[0].length > 20) ? '\n' : ' ';
-                    text += value[0];
-                }
-            }
-            return text;
-        });
-        return $sce.trustAsHtml(strArray.join(''));
-    };
-})
-
 .service('Card', function ($sce, Log, $state, Deck, Library, settings, MediaSrv, _) {
     var _this = this;
 
@@ -167,7 +19,7 @@ angular.module('app')
         Deck.data.activeCardIndex = activeCardIndex;
         Deck.save();
         _this.done = false;
-        _this.question = Deck.questions[Deck.data.active[activeCardIndex]];
+        _this.question = Deck.questions[Deck.cardData().index];
         _this.isMA = _.contains(_this.question.tags, '.ma');
         _this.answerClass = 'answer';
         _this.isInput = _.contains(_this.question.tags, '.cs' ||
@@ -259,7 +111,7 @@ angular.module('app')
             }
         }
         _this.hints = _this.question.hints;
-        _this.haveHint = _this.hints !== undefined;
+        _this.haveHint = _this.hints !== undefined && settings.enableHints;
         _this.hintIndex = _this.haveHint ? 0 : undefined;
         _this.hint = null;
         _this.isDefined = true;
@@ -270,31 +122,24 @@ angular.module('app')
         if (outcome === 'wrong') {
             _this.answerClass = 'wrong-response';
         }
-        Deck.outcome(_this.question.id, outcome);
+        Deck.outcome(outcome);
     };
 
     this.nextCard = function () {
-        if (Deck.data.activeCardIndex === Deck.data.active.length - 1) {
-            Deck.restart(false);
-            _this.question = undefined;
+        var index = Deck.nextCard();
+        if (index === undefined) {
             $state.go('tabs.deck');
         } else {
-            _this.setup(Deck.data.activeCardIndex + 1);
-            if (Deck.data.outcomes[Deck.data.activeCardIndex] === 'removed') {
-                this.nextCard();
-            }
-            Deck.save();
-            $state.go('tabs.card');
+            _this.setup(index);
         }
     };
 
     this.previousCard = function () {
-        if (Deck.data.activeCardIndex === 0) {
-            _this.setup(Deck.data.active.length - 1);
+        var index = Deck.previousCard();
+        if (index === undefined) {
             $state.go('tabs.deck');
         } else {
-            _this.setup(Deck.data.activeCardIndex - 1);
-            $state.go('tabs.card');
+            _this.setup(index);
         }
     };
 
@@ -307,4 +152,5 @@ angular.module('app')
         _this.reset();
         Library.resetAllDecks();
     };
-});
+})
+;

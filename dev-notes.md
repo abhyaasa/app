@@ -206,7 +206,8 @@ Python and shell scripts. All but `g` are in the `scripts` directory.
 ### Shell scripts
 
 - `g ALIAS` is a shortcut for invoking via `gulp cmd` the script associated with `ALIAS` in the `cmdAliases` dictionary defined early in `gulpfile.js`.
-- `tidylint.py` provides a custom interface to the `tidy` html/xml linter.
+- `scripts/newflavor.sh` creates file structure for a new flavor.
+- `scripts/tidylint.py` provides a custom interface to the `tidy` html/xml linter.
 - `scripts/setup.sh` installs local dependencies.
 - `scripts/term.sh` is used by `gulp itest`.
 - `scripts/scapp.sh` creates shallow clone of the app.
