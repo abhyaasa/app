@@ -36,6 +36,9 @@ resources/ios/
 # compiled python
 *.pyc
 
+# OSX directory data
+**/.DS_Store
+
 # proprietary content of Datta Deepam flavor
 **/datta-deepam/
 

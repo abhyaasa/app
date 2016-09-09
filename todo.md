@@ -4,7 +4,7 @@ There are lots of things to do. Some are recorded as Atom todo-show (ctrl-shift-
 
 Order within groups sometimes reflects decreasing priority. Items are only listed here if they do not have a more meaningful location in other files. 
 
-Excluded from the `todo-show` scan are library, auto-generated, and archive files, and for the time being `**spec.js` files. (See the `ignoreTheseTodos` and `ignoreThesePaths` properties of the `todo-show` configuration.)
+Excluded from the `todo-show` scan are library, auto-generated, archive files, and for the time being `**spec.js` files. (See the `ignoreTheseTodos` and `ignoreThesePaths` properties of the `todo-show` configuration.)
 
 - XXX /
 
@@ -13,10 +13,11 @@ Excluded from the `todo-show` scan are library, auto-generated, and archive file
 - CHANGED /
 
 - TODO
+  - spaced rep session restart rep intervals changed
   - session responses not acted upon until session concludes
     - spaced rep reset level 0
     - card info has group
-  - at session end with spaced rep if there are wrong answers the questions move to end of session which continues
+  - at session end with spaced rep if there are wrong answers the questions move to end of session and session continues
   - filter change apply / cancel, filter subpage, include spaced-rep?
   - with spaced rep, multiple wrong outcomes for same question, so keep wrong count
   - spaced repetition algorithm [Leitner](https://en.wikipedia.org/wiki/Leitner_system)

@@ -5,40 +5,13 @@ angular.module('app')
 .service('Card', function ($sce, Log, $state, Deck, Library, settings, MediaSrv, _) {
     var _this = this;
 
-    this.isDefined = false;
-
-    this.submittedAnswer = undefined;
-
-    this.setup = function (activeCardIndex) {
+    var setupQuestionType = function () {
         var makeItem = function (response) {
             return {
                 text: response[1],
                 style: 'no-response'
             };
         };
-        Deck.data.activeCardIndex = activeCardIndex;
-        Deck.save();
-        _this.done = false;
-        _this.question = Deck.questions[Deck.cardData().index];
-        _this.isMA = _.contains(_this.question.tags, '.ma');
-        _this.answerClass = 'answer';
-        _this.isInput = _.contains(_this.question.tags, '.cs' ||
-            _.contains(_this.question.tags, '.ci'));
-        if (_this.isInput) {
-            _this.submittedAnswer = undefined;
-        }
-        _this.text = _this.question.text;
-        _this.type = _this.question.type;
-        _this.responses = _this.question.responses;
-        _this.answer = _this.question.answer;
-        var number = _this.question.number;
-        var numString = number === undefined ? '' : number.toString();
-        var tags = Deck.filterNormalTags(_this.question.tags);
-        _this.tagList = [numString].concat(tags).join(', ');
-        var mp3File = _this.question.mp3;
-        if (mp3File !== undefined) {
-            MediaSrv.playSound(mp3File);
-        }
         if (_this.type === 'true-false') {
             // Rewrite true-false as multiple-choice
             _this.responses = [
@@ -90,25 +63,59 @@ angular.module('app')
             _this.responseItems = _.map(_this.responses, makeItem);
             _this.numWrong = 0;
         }
-        if (Deck.data.reverseQandA) {
-            _this.haveHint = false;
-            var answer = _this.text;
-            if (_this.type === 'mind' && _this.question.answer) {
-                _this.text = _this.answer;
-                _this.answer = answer;
-            } else if (_this.type === 'multiple-choice') {
-                var rightAnswers = _.filter(_this.responses, function (pair) {
-                    return pair[0];
-                });
-                if (rightAnswers) {
-                    var text = _.sample(rightAnswers)[1];
-                    if (!_.contains(['True', 'False'], text)) {
-                        _this.type = 'mind';
-                        _this.text = text;
-                        _this.answer = answer;
-                    }
+    };
+
+    var reverseQandA = function () {
+        _this.haveHint = false;
+        var answer = _this.text;
+        if (_this.type === 'mind' && _this.question.answer) {
+            _this.text = _this.answer;
+            _this.answer = answer;
+        } else if (_this.type === 'multiple-choice') {
+            var rightAnswers = _.filter(_this.responses, function (pair) {
+                return pair[0];
+            });
+            if (rightAnswers) {
+                var text = _.sample(rightAnswers)[1];
+                if (!_.contains(['True', 'False'], text)) {
+                    _this.type = 'mind';
+                    _this.text = text;
+                    _this.answer = answer;
                 }
             }
+        }
+    };
+
+    this.isDefined = false;
+
+    this.submittedAnswer = undefined;
+
+    this.setup = function (activeCardIndex) {
+        Deck.data.activeCardIndex = activeCardIndex;
+        Deck.save();
+        _this.done = false;
+        _this.question = Deck.questions[Deck.cardData().index];
+        _this.isMA = _.contains(_this.question.tags, '.ma');
+        _this.answerClass = 'answer';
+        _this.isInput = _.contains(_this.question.tags, '.cs' ||
+            _.contains(_this.question.tags, '.ci'));
+        if (_this.isInput) {
+            _this.submittedAnswer = undefined;
+        }
+        _this.text = _this.question.text;
+        _this.type = _this.question.type;
+        _this.responses = _this.question.responses;
+        _this.answer = _this.question.answer;
+        var number = _this.question.number;
+        var numString = number === undefined ? '' : number.toString();
+        var tags = Deck.filterNormalTags(_this.question.tags);
+        _this.tagList = [numString].concat(tags).join(', ');
+        if (_this.question.mp3 !== undefined) {
+            MediaSrv.playSound(_this.question.mp3);
+        }
+        setupQuestionType();
+        if (Deck.data.reverseQandA) {
+            reverseQandA();
         }
         _this.hints = _this.question.hints;
         _this.haveHint = _this.hints !== undefined && settings.enableHints;

@@ -8,6 +8,7 @@ angular.module('app')
         Deck.setupClosedDeck(deckName);
     };
 
+    /* An open deck has state saved in Deck.data. */
     $scope.selectOpenDeck = function (displayName) {
         Card.question = undefined;
         Deck.setupOpenDeck(displayName);

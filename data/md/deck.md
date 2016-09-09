@@ -17,7 +17,7 @@ Below the session progress numbers are controls more information and deck-specif
 
 ## Filter cards
 
-A card may have any number of alpha-numeric tags and one numeric tag. Controls on this page allow you to limit the active cards to those that satisfy certain conditions. 
+A card may have any number of alpha-numeric tags and one numeric tag. Controls on this page allow you to limit the active cards to those that satisfy specified conditions. 
 
 **Range slider:** Use to limit active cards to those whose with numeric values within a selected range.
 
@@ -33,11 +33,11 @@ You may select a collection of alpha-numeric tags associated with each of the fo
 
 Spaced repetition presents cards at varying intervals, which become longer with correct responses. This utilizes the spacing effect of memory to enhance learning, especially long term recall.
 
-Intervals are measured in sessions. Typically one session is practiced each day. Only those cards whose intervals end in that end are presented. Cards are presented in decreasing interval order.
+Intervals are measured in sessions. Typically one session is practiced each day, in which case cards with interval three are reviewed every third day. A session may be at the end of more than one interval, in which case cards are presented in decreasing interval order.
 
-When a card is answered correctly it is promoted to the next longer interval (or returned to the same interval if it is the longest). With an incorrect response, the card is moved to the special 0 interval. A session ends when the 0 interval is reached and is empty. (This popular approach to spaced repetition is known as the [Leitner system](https://en.wikipedia.org/wiki/Leitner_system).)
+When a card is answered correctly it is promoted to the next longer interval, or returned to the same interval if it is the longest. With an incorrect response, the card is moved to the special 0 interval. A session ends when the 0 interval is emptied. (This popular approach to spaced repetition is known as the [Leitner system](https://en.wikipedia.org/wiki/Leitner_system).)
 
-The number of intervals and their lengths default to commonly used values, which may be customized. To reduce the incidence of multiple intervals ending on the same day, interval lengths are prime numbers (up to 367). Cards start in interval 0 when spaced repetition is first enabled, and retain their interval when spaced repetition is disabled.
+The number of intervals and their lengths default to commonly used values, which you may customize. To reduce the incidence of multiple intervals ending in the same session, interval lengths are prime numbers (up to 367). Cards start in interval 0 when spaced repetition is first enabled, and retain their interval when spaced repetition is disabled.
 
 ## Transliteration
 
