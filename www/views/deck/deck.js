@@ -83,7 +83,7 @@ angular.module('app')
         var indices = _.pluck(questions, 'index');
         Log.debug('indices', indices);
         _.each(_this.data.qData, function (qd) {
-            qd.passFilter = _.contains(indices, qd.id);
+            qd.passedFilter = _.contains(indices, qd.id);
         });
         updateFilterText();
         return indices.length !== 0;
@@ -96,10 +96,6 @@ angular.module('app')
             };
         }
         _this.beginSession();
-        _this.isDefined = true;
-        _this.settingUp = false;
-        _this.save();
-        $state.go('tabs.card');
     };
 
     // State of open deck, initialized by this.setupClosedDeck() and saved by this.save().
@@ -140,19 +136,25 @@ angular.module('app')
     this.beginSession = function () {
         _.each(_this.data.qData, function (qd) {
             _.extendOwn(qd, {
-                passFilter: undefined, // set by filterQuestions()
+                passedFilter: undefined, // set by filterQuestions()
                 outcome: undefined, // right, wrong, undefined (skipped), removed
                 hints: 0,
                 wrong: 0
             });
         });
+        _.extendOwn(_this.data.session, {
+            cardIndex: 0, // qData index
+            done: false,
+            viewedCards: [], // qData indices of session cards in view order
+            interval: _this.data.intervals.slice(-1)[0] // last, and largest, interval
+        });
+        _this.data.session.number += 1;
         filterQuestions();
-        _this.data.cardIndex = 0;
         if (settings.randomQuestions) {
             randomizeQData();
         }
-        _this.data.sessionDone = false;
-        _this.data.sessionNumber += 1;
+        _this.isDefined = true;
+        _this.settingUp = false;
         _this.save();
         _this.enterTab();
         $state.go('tabs.card');
@@ -229,19 +231,17 @@ angular.module('app')
                         history: [],
                         removed: false,
                         repInterval: 0 // spaced repetition number
-                        // other fields added by beginSession
+                        // other fields added by beginSession()
                     };
                 }),
-                sessionDone: false,
-                // indexes qData, initially assigned by Card.setup()
-                cardIndex: undefined,
                 // default spaced repetition intervals same as FlashcardDB
                 // ref. leitnerportal.com/LearnMore.aspx
-                intervals: [0, 1, 3, 7, 15],
-                // starting greater than any interval forces scan for last active interval
-                currentInterval: _.max(_this.intervalChoices) + 1,
+                intervals: [1, 3, 7, 15], // non-empty sorted list of positive integers
                 spacedRepEnabled: false,
-                sessionNumber: 0
+                session: {
+                    number: 0
+                    // other fields added by beginSession()
+                }
             };
             finishSetup();
         });
@@ -277,40 +277,46 @@ angular.module('app')
         return _this.data.qData[_this.data.cardIndex];
     };
 
-    this.nextCard = function () {
+    this.nextCardIndex = function () {
+        // Returns the largest value smaller than value in the array of numbers, or 0
+        // if no such.
+        var smaller = function (numbers, value) {
+            var a = _.filter(numbers, function (x) {
+                return x < value;
+            });
+            return a.length > 0 ? _.max(a) : 0;
+        };
+        var data = _this.data;
+        var newScan = false;
         for (;;) {
-            var i = _this.data.cardIndex;
-            i += 1;
-            if (i === _this.data.qData.length) {
-                break; // XXX
+            var initialCardIndex = data.session.cardIndex;
+            for (var i = initialCardIndex; i < data.qData.length; i++) {
+                var qd = data.qData[i];
+                if (qd.passedFilter && !qd.removed) {
+                    data.session.cardIndex = i;
+                    if (!data.spacedRepEnabled ||
+                        (data.session.interval <= qd.interval &&
+                            qd.outcome === undefined) ||
+                        (data.session.interval === 0 &&
+                            qd.outcome === 'wrong')) {
+                        return i;
+                    }
+                }
             }
-            var qd = _this.data.qData[i];
-            if (qd.passFilter && !qd.removed && qd.outcome === undefined) { // XXX
-                return i;
+            if (!data.spacedRepEnabled ||
+                (newScan && data.session.interval === 0)) {
+                return undefined;
             }
-        // if (Deck.data.passFilterCardIndex === Deck.data.passFilter.length - 1) {
-        //     Deck.restart(false);
-        //     _this.question = undefined;
-        //     $state.go('tabs.deck');
-        // } else {
-        //     _this.setup(Deck.data.passFilterCardIndex + 1);
-        //     if (Deck.cardData().removed) {
-        //         this.nextCard();
-        //     }
-        //     Deck.save();
-        //     $state.go('tabs.card');
+            data.session.cardIndex = 0;
+            newScan = true;
+            data.session.interval = smaller(data.intervals, data.session.interval);
         }
-        return null; // XXX for ESLint
     };
 
-    this.previousCard = function () {
-        // if (Deck.data.passFilterCardIndex === 0) {
-        //     _this.setup(Deck.data.passFilter.length - 1);
-        //     $state.go('tabs.deck');
-        // } else {
-        //     _this.setup(Deck.data.passFilterCardIndex - 1);
-        //     $state.go('tabs.card');
-        // }
+    this.previousCardIndex = function () {
+        var index = _this.data.viewedCards.pop();
+        _this.data.qdata.outcome = undefined;
+        return index;
     };
 
     this.enterTab = function () {
@@ -327,9 +333,9 @@ angular.module('app')
             });
             return ms;
         };
-        var getpassFilterProps = function (property) {
-            var passFilter = _.filter(_this.data.qData, _.property('passFilter'));
-            return _.map(passFilter, _.property(property));
+        var getpassedFilterProps = function (property) {
+            var passedFilter = _.filter(_this.data.qData, _.property('passedFilter'));
+            return _.map(passedFilter, _.property(property));
         };
         var sum = function (a) {
             var plus = function (n, m) {
@@ -338,12 +344,12 @@ angular.module('app')
             return _.reduce(a, plus, 0);
         };
         if (_this.data) {
-            _.extendOwn(_this.count, multiset(getpassFilterProps('outcome')));
+            _.extendOwn(_this.count, multiset(getpassedFilterProps('outcome')));
             _this.count.remaining = _.filter(_this.data.qData, function (qd) {
-                return qd.outcome === undefined && qd.passFilter;
+                return qd.outcome === undefined && qd.passedFilter;
             }).length;
-            _this.count.wrong = sum(getpassFilterProps('wrong'));
-            _this.count.hints = sum(getpassFilterProps('hints'));
+            _this.count.wrong = sum(getpassedFilterProps('wrong'));
+            _this.count.hints = sum(getpassedFilterProps('hints'));
             updateFilterText();
         }
     };

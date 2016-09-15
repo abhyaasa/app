@@ -90,8 +90,8 @@ angular.module('app')
 
     this.submittedAnswer = undefined;
 
-    this.setup = function (activeCardIndex) {
-        Deck.data.activeCardIndex = activeCardIndex;
+    this.setup = function (cardIndex) {
+        Deck.data.cardIndex = cardIndex;
         Deck.save();
         _this.done = false;
         _this.question = Deck.questions[Deck.cardData().index];
@@ -133,7 +133,7 @@ angular.module('app')
     };
 
     this.nextCard = function () {
-        var index = Deck.nextCard();
+        var index = Deck.nextCardIndex();
         if (index === undefined) {
             $state.go('tabs.deck');
         } else {
@@ -142,7 +142,7 @@ angular.module('app')
     };
 
     this.previousCard = function () {
-        var index = Deck.previousCard();
+        var index = Deck.previousCardIndex();
         if (index === undefined) {
             $state.go('tabs.deck');
         } else {

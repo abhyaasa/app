@@ -60,7 +60,7 @@
           <i class="icon" ng-class="Deck.data.isUIgroupShown['filter'] ? 'ion-minus' : 'ion-plus'"></i>          Filter cards
         </ion-item>
         <div ng-show="Deck.data.isUIgroupShown['filter']">
-          <ion-list ng-show="Deck.data.activeCardIndex !== undefined">
+          <ion-list ng-show="Deck.data.session.cardIndex !== undefined">
             <!-- see https://github.com/angular-slider/angularjs-slider -->
             <ion-item>
               <rzslider ng-show="Deck.data.range" class="range-slider" rz-slider-model="Deck.data.range.min"

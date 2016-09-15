@@ -10,10 +10,10 @@ angular.module('app')
     $scope.$on('$ionicView.enter', function () {
         if (!Deck.isDefined) { // Deck.data undefined by source auto-reload
             Card.isDefined = false;
-        } else if (!Deck.data.activeCardIndex) {
+        } else if (!Deck.data.cardIndex) {
             Card.setup(0);
         } else if (!Card.isDefined) {
-            Card.setup(Deck.data.activeCardIndex);
+            Card.setup(Deck.data.cardIndex);
         }
     });
 

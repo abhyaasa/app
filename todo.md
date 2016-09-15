@@ -1,10 +1,10 @@
 # Things To Do
 
-There are lots of things to do. Some are recorded as Atom todo-show (ctrl-shift-T) tagged entries (mostly in comments). The `todo-show` tag list in `~/.atom/config.cson` is mirrored by the top-level items below, in roughly decreasing order of priority. Tags below with trailing `/` are place holders. 
+There are lots of things to do. Some are recorded as Atom todo-show (ctrl-shift-T) tagged entries (mostly in comments). The `todo-show` tag list in `~/.atom/config.cson` is mirrored by the top-level items below, in roughly decreasing order of priority. The trailing `/` on tags indicate absence of content in this page, without which a dash is automatically inserted in the tag's entry in the `todo-show` tag list.
 
 Order within groups sometimes reflects decreasing priority. Items are only listed here if they do not have a more meaningful location in other files. 
 
-Excluded from the `todo-show` scan are library, auto-generated, archive files, and for the time being `**spec.js` files. (See the `ignoreTheseTodos` and `ignoreThesePaths` properties of the `todo-show` configuration.)
+Excluded from the `todo-show` scan are library, auto-generated, archive files, and for the time being `**spec.js` files. (See the `ignoreTheseTodos` and `ignoreThesePaths` properties of the `todo-show` configuration.) The XXX tag flags the most immediate issues, which generally need to be fixed before testing.
 
 - XXX /
 
@@ -13,14 +13,12 @@ Excluded from the `todo-show` scan are library, auto-generated, archive files, a
 - CHANGED /
 
 - TODO
-  - spaced rep session restart rep intervals changed
+  - won't go past first card
   - session responses not acted upon until session concludes
-    - spaced rep reset level 0
-    - card info has group
-  - at session end with spaced rep if there are wrong answers the questions move to end of session and session continues
   - filter change apply / cancel, filter subpage, include spaced-rep?
   - with spaced rep, multiple wrong outcomes for same question, so keep wrong count
-  - spaced repetition algorithm [Leitner](https://en.wikipedia.org/wiki/Leitner_system)
+  - spaced repetition algorithm
+    - card info has rep interval
     - Enable (toggle)
       - default disabled with all active cards start in 0 group
       - on disable, cards remain in groups and index to first card in last group
@@ -30,7 +28,6 @@ Excluded from the `todo-show` scan are library, auto-generated, archive files, a
       - header: Interval | Remaining | Cards
     - Group list elements
       - N days (interval up/down widgets) | N days (remaining) | N (cards) | +
-      - intervals are prime numbers, default groups: 0, 1, 7, 15
       - if up/down interval change reaches adjoining group, then $ionicPopup dialog with Confirm/Cancel for merging with encountered group
       - + icon adds group, absent if interval is 0 or next prime
         - initial interval is prime halfway between current and next group, or third-past for last

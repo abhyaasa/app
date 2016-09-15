@@ -42,7 +42,7 @@
             </form>
           </div>
 
-          <div ng-show="Card.done && Deck.data.activeCardIndex !== undefined" ng-class="Card.answerClass">
+          <div ng-show="Card.done && Deck.data.session.cardIndex !== undefined" ng-class="Card.answerClass">
             <p ng-bind-html="Card.answer | unsafe"></p>
             <div ng-hide="Card.isInput" class="button-bar">
               <button class="button button-stable button-block" ng-click="setOutcome('right')">

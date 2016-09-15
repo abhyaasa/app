@@ -3,7 +3,7 @@
 angular.module('app')
 
 .controller('DeckController', function ($scope, $state, Deck, settings) {
-    // XXX spaced repetition disable confirmation
+    // REVIEW spaced repetition disable confirmation
     $scope.Deck = Deck;
     $scope.$state = $state;
     $scope.settings = settings;
