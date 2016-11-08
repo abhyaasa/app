@@ -12,6 +12,7 @@ var cmdAliases = {
     cd2: 'cd data/cdecks/test; update.sh deck_2',
     ct: 'cd scripts; cdeck.py -t -m "prefix"',
     si: 'gulp si -i',
+    psi: 'gulp psi -i'
     sa: 'gulp si -a',
     sl: 'gulp si -l',
     bi: 'gulp build',
@@ -98,7 +99,15 @@ var logError = function () {
     gutil.log(gutil.colors.magenta(Array.prototype.slice.apply(arguments).join(' ')));
 };
 
-gulp.task('default',
+var si = function () {
+    var platform = argv.a ? '-t android' + devBrowser :
+        argv.i ? '-t ios' + devBrowser :
+        argv.l ? '-l' : '';
+    var command = 'ionic serve -c ' + platform;
+    sh.exec(command);
+};
+
+gulp.task('prebuild',
     'Run by ionic app build and serve commands', ['sass', 'index', 'md']
 );
 
@@ -154,16 +163,11 @@ gulp.task('md', 'Process markdown files', function () {
         .pipe(gulp.dest('./www/data/md'));
 });
 
+gulp.task('psi', 'plain si: like si, but without prebuild', [], si);
+
 gulp.task('si',
     '[-a|-i|-l] : serve ionic for android, ios, or both, with devBrowser, or default: ' +
-    'serve ios with default browser', ['default'],
-    function () {
-        var platform = argv.a ? '-t android' + devBrowser :
-            argv.i ? '-t ios' + devBrowser :
-            argv.l ? '-l' : '';
-        var command = 'ionic serve -c ' + platform;
-        sh.exec(command);
-    });
+    'serve ios with default browser', ['prebuild'], si);
 
 gulp.task('mincss', 'Minify css', function (done) {
     gulp.src(paths.css)
@@ -177,7 +181,7 @@ gulp.task('mincss', 'Minify css', function (done) {
         .on('end', done);
 });
 
-gulp.task('build', '[-a] for Android, default iOS', ['default', 'mincss', 'lint'],
+gulp.task('build', '[-a] for Android, default iOS', ['prebuild', 'mincss', 'lint'],
     function (done) {
         sh.exec('ionic build ' + (argv.a ? 'android' : 'ios'));
         if (!argv.a) {

@@ -11,7 +11,7 @@ angular.module('app')
         if (!Deck.isDefined) { // Deck.data undefined by source auto-reload
             Card.isDefined = false;
         } else if (!Deck.data.cardIndex) {
-            Card.setup(0);
+            Card.nextCard();
         } else if (!Card.isDefined) {
             Card.setup(Deck.data.cardIndex);
         }
@@ -20,10 +20,9 @@ angular.module('app')
     var gestureSetup = function () {
         var element = angular.element(document.querySelector('#content'));
         var finish = function () {
-            if (!Card.done) {
+            if (!Card.showAnswer) {
                 Card.outcome('skipped');
             }
-            Card.done = false;
         };
 
         var next = function () {
@@ -39,7 +38,6 @@ angular.module('app')
         $ionicGesture.on('swiperight', previous, element);
 
         var remove = function () {
-            Card.done = false;
             Card.outcome('removed');
             Card.nextCard();
         };
@@ -56,20 +54,19 @@ angular.module('app')
 
     $scope.setOutcome = function (outcome) {
         Card.outcome(outcome);
-        Card.done = false;
         Card.nextCard();
     };
 
     $scope.showAnswer = function () {
         if (Card.type === 'mind') {
-            Card.done = true;
+            Card.showAnswer = true;
             Card.isInput = false;
         }
     };
 
     $scope.isText = function () {
         Card.outcome('text');
-        Card.done = true;
+        Card.showAnswer = true;
     };
 
     var isRight = function (response) {
@@ -94,7 +91,7 @@ angular.module('app')
             } else {
                 Card.outcome('right');
             }
-            Card.done = true;
+            Card.showAnswer = true;
         }
         Log.debug('response items', JSON.stringify(items));
     };
@@ -110,10 +107,10 @@ angular.module('app')
         } else {
             Card.outcome('wrong');
         }
-        Card.done = true;
+        Card.showAnswer = true;
     };
 
-    $scope.maDone = function () {
+    $scope.maShowAnswer = function () {
         var items = Card.responseItems;
         for (var i = 0; i < items.length; i++) {
             if (items[i].style === 'no-response' && Card.responses[i][0]) {
@@ -128,8 +125,8 @@ angular.module('app')
         } else {
             Card.outcome('right');
         }
-        Card.done = true;
-        Log.debug('Done items', JSON.stringify(items));
+        Card.showAnswer = true;
+        Log.debug('showAnswer items', JSON.stringify(items));
     };
 })
 

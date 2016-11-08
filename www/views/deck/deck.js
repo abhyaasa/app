@@ -83,7 +83,7 @@ angular.module('app')
         var indices = _.pluck(questions, 'index');
         Log.debug('indices', indices);
         _.each(_this.data.qData, function (qd) {
-            qd.passedFilter = _.contains(indices, qd.id);
+            qd.passFilter = _.contains(indices, qd.index);
         });
         updateFilterText();
         return indices.length !== 0;
@@ -136,15 +136,15 @@ angular.module('app')
     this.beginSession = function () {
         _.each(_this.data.qData, function (qd) {
             _.extendOwn(qd, {
-                passedFilter: undefined, // set by filterQuestions()
+                passFilter: undefined, // set by filterQuestions()
                 outcome: undefined, // right, wrong, undefined (skipped), removed
                 hints: 0,
                 wrong: 0
             });
         });
         _.extendOwn(_this.data.session, {
-            cardIndex: 0, // qData index
-            done: false,
+            cardIndex: -1, // qData index, incremented by nextCard() before card display
+            done: false, // REVIEW used anywhere?
             viewedCards: [], // qData indices of session cards in view order
             interval: _this.data.intervals.slice(-1)[0] // last, and largest, interval
         });
@@ -288,33 +288,37 @@ angular.module('app')
         };
         var data = _this.data;
         var newScan = false;
+        var cardIndex = data.session.cardIndex + 1;
         for (;;) {
-            var initialCardIndex = data.session.cardIndex;
-            for (var i = initialCardIndex; i < data.qData.length; i++) {
-                var qd = data.qData[i];
-                if (qd.passedFilter && !qd.removed) {
-                    data.session.cardIndex = i;
+            while (cardIndex < data.qData.length) {
+                var qd = data.qData[cardIndex];
+                if (qd.passFilter && !qd.removed) {
+                    data.session.cardIndex = cardIndex;
                     if (!data.spacedRepEnabled ||
                         (data.session.interval <= qd.interval &&
                             qd.outcome === undefined) ||
                         (data.session.interval === 0 &&
                             qd.outcome === 'wrong')) {
-                        return i;
+                        return cardIndex;
                     }
                 }
+                cardIndex++;
             }
             if (!data.spacedRepEnabled ||
                 (newScan && data.session.interval === 0)) {
                 return undefined;
             }
-            data.session.cardIndex = 0;
+            cardIndex = 0;
             newScan = true;
             data.session.interval = smaller(data.intervals, data.session.interval);
         }
     };
 
     this.previousCardIndex = function () {
-        var index = _this.data.viewedCards.pop();
+        if (_this.data.session.viewedCards.length === 0) {
+            return undefined;
+        }
+        var index = _this.data.session.viewedCards.pop();
         _this.data.qdata.outcome = undefined;
         return index;
     };
@@ -333,9 +337,9 @@ angular.module('app')
             });
             return ms;
         };
-        var getpassedFilterProps = function (property) {
-            var passedFilter = _.filter(_this.data.qData, _.property('passedFilter'));
-            return _.map(passedFilter, _.property(property));
+        var getpassFilterProps = function (property) {
+            var passFilter = _.filter(_this.data.qData, _.property('passFilter'));
+            return _.map(passFilter, _.property(property));
         };
         var sum = function (a) {
             var plus = function (n, m) {
@@ -344,12 +348,12 @@ angular.module('app')
             return _.reduce(a, plus, 0);
         };
         if (_this.data) {
-            _.extendOwn(_this.count, multiset(getpassedFilterProps('outcome')));
+            _.extendOwn(_this.count, multiset(getpassFilterProps('outcome')));
             _this.count.remaining = _.filter(_this.data.qData, function (qd) {
-                return qd.outcome === undefined && qd.passedFilter;
+                return qd.outcome === undefined && qd.passFilter;
             }).length;
-            _this.count.wrong = sum(getpassedFilterProps('wrong'));
-            _this.count.hints = sum(getpassedFilterProps('hints'));
+            _this.count.wrong = sum(getpassFilterProps('wrong'));
+            _this.count.hints = sum(getpassFilterProps('hints'));
             updateFilterText();
         }
     };

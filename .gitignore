@@ -39,6 +39,9 @@ resources/ios/
 # OSX directory data
 **/.DS_Store
 
+# private notes
+ignore
+
 # proprietary content of Datta Deepam flavor
 **/datta-deepam/
 

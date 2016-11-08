@@ -93,7 +93,7 @@ angular.module('app')
     this.setup = function (cardIndex) {
         Deck.data.cardIndex = cardIndex;
         Deck.save();
-        _this.done = false;
+        _this.showAnswer = false;
         _this.question = Deck.questions[Deck.cardData().index];
         _this.isMA = _.contains(_this.question.tags, '.ma');
         _this.answerClass = 'answer';
@@ -133,6 +133,7 @@ angular.module('app')
     };
 
     this.nextCard = function () {
+        _this.showAnswer = false;
         var index = Deck.nextCardIndex();
         if (index === undefined) {
             $state.go('tabs.deck');

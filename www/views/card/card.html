@@ -18,17 +18,17 @@
               {{ item.text | unsafe }}
             </ion-item>
           </ion-list>
-          <button ng-hide="Card.done" class="button button-stable button-block" ng-if="Card.isMA"
-              ng-click="maDone()">
+          <button ng-hide="Card.showAnswer" class="button button-stable button-block" ng-if="Card.isMA"
+              ng-click="maShowAnswer()">
             Done
           </button>
         </div>
         <div ng-switch-when="mind">
-          <button ng-hide="Card.done" class="button button-stable button-block" ng-click="showAnswer()">
+          <button ng-hide="Card.showAnswer" class="button button-stable button-block" ng-click="showAnswer()">
             Show answer
           </button>
 
-          <div ng-show="Card.isInput && !Card.done" class="list">
+          <div ng-show="Card.isInput && !Card.showAnswer" class="list">
             <form ng-submit="submitAnswer(Card.submittedAnswer)" name="inputForm">
               <div class="item item-input-inset">
                 <label class="item-input-wrapper">
@@ -42,15 +42,18 @@
             </form>
           </div>
 
-          <div ng-show="Card.done && Deck.data.session.cardIndex !== undefined" ng-class="Card.answerClass">
+          <div ng-show="Card.showAnswer && Deck.data.session.cardIndex !== undefined" ng-class="Card.answerClass">
             <p ng-bind-html="Card.answer | unsafe"></p>
             <div ng-hide="Card.isInput" class="button-bar">
+              &nbsp;
               <button class="button button-stable button-block" ng-click="setOutcome('right')">
                 Right
               </button>
+              &nbsp;
               <button class="button button-stable button-block" ng-click="setOutcome('wrong')">
                 Wrong
               </button>
+              &nbsp;
             </div>
           </div>
         </div>

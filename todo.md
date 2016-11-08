@@ -4,7 +4,7 @@ There are lots of things to do. Some are recorded as Atom todo-show (ctrl-shift-
 
 Order within groups sometimes reflects decreasing priority. Items are only listed here if they do not have a more meaningful location in other files. 
 
-Excluded from the `todo-show` scan are library, auto-generated, archive files, and for the time being `**spec.js` files. (See the `ignoreTheseTodos` and `ignoreThesePaths` properties of the `todo-show` configuration.) The XXX tag flags the most immediate issues, which generally need to be fixed before testing.
+Excluded from the `todo-show` scan are library, auto-generated, archive files, and for the time being `**spec.js` files. (See the `ignoreTheseTodos` and `ignoreThesePaths` properties of the `todo-show` configuration.) `XXX` tags flag immediate issues, to be fixed before testing.
 
 - XXX /
 
@@ -13,7 +13,7 @@ Excluded from the `todo-show` scan are library, auto-generated, archive files, a
 - CHANGED /
 
 - TODO
-  - won't go past first card
+  - no advance from 3rd card of deck1
   - session responses not acted upon until session concludes
   - filter change apply / cancel, filter subpage, include spaced-rep?
   - with spaced rep, multiple wrong outcomes for same question, so keep wrong count
@@ -51,6 +51,7 @@ Excluded from the `todo-show` scan are library, auto-generated, archive files, a
   - Chrome developer > angularjs > hints
   - convert to Python 3
   - consider ESLint [http://www.sitepoint.com/comparison-javascript-linting-tools/](http://www.sitepoint.com/comparison-javascript-linting-tools/)
+  - 60x60 www/favicon.ico to avoid chrome error: copy of resources/ios/icon/icon-60.png ?
 
 - PUBLISH
   - check for unused variables: .jshintrc "unused": true

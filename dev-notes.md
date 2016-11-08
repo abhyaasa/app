@@ -146,7 +146,7 @@ Running `gulp help` provides an annotated list of gulp project management tasks.
 
 `gulp index` generates `./www/index.html` from `./index.html`, so edit only the latter. This avoids superfluous version control changes, as script injection order is unpredictable.
 
-The `g` script runs shortcuts in the gulp `cmdAliases` configuration variable. For example, `$ g si` initiates the most common debugging run. This runs `gulp cmd si | tee temp/cmd.txt`, which runs `gulp si -i`, which runs the default gulp test build tasks and then `$ ionic serve -c -t ios --browser /Applications/Google\ Chrome\ Canary.app`, with output appearing on the console and saved in `temp/cmd.txt`. `$ g help` lists the aliases.
+The `g` script runs shortcuts in the gulp `cmdAliases` configuration variable. For example, `$ g si` initiates the most common debugging run. This runs `gulp cmd si | tee ignore/cmd.txt`, which runs `gulp si -i`, which runs the default gulp test build tasks and then `$ ionic serve -c -t ios --browser /Applications/Google\ Chrome\ Canary.app`, with output appearing on the console and saved in `ignore/cmd.txt`. `$ g help` lists the aliases.
 
 
 ## Config
